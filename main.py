@@ -36,6 +36,10 @@ def main():
                 pygame.quit()
                 print("Game Over")
                 main()
+            for shot in shots:
+                if CircleShape.collide(shot, asteroid):
+                    shot.kill()
+                    asteroid.split()
 
         screen.fill((0, 0, 0))
 
