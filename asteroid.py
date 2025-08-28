@@ -2,10 +2,13 @@ import pygame
 import random
 from circleshape import CircleShape
 from constants import *
-from AsteroidField import *
 
 class Asteroid(CircleShape):
-    def __init__(self, x, y, radius):
+    def __init__(self, x=None, y=None, radius=ASTEROID_MIN_RADIUS):
+        if x is None:
+            x = random.randint(0, SCREEN_WIDTH)
+        if y is None:
+            y = random.randint(0, SCREEN_HEIGHT)
         super().__init__(x, y, radius)
         self.rotation = 0
 

@@ -3,12 +3,17 @@ SCREEN_HEIGHT = 720
 
 ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
-ASTEROID_SPAWN_RATE = 0.8  # seconds
+ASTEROID_SPAWN_RATE = 0.3  # seconds
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
 
 PLAYER_RADIUS = 20
 PLAYER_TURN_SPEED = 300 # degrees per second
 PLAYER_SPEED = 200
+PLAYER_TURBO_MULTIPLIER = 1.5  # Speed multiplier when in turbo mode
 SHOT_RADIUS = 5
 PLAYER_SHOT_SPEED = 500  # pixels per second
 PLAYER_SHOT_COOLDOWN = 0.3  # DECIDED TO IGNORE COOLDOWN
+TURBO_PARTICLE_COOLDOWN = 0.02  # seconds between turbo particles
+TURBO_PARTICLE_SPEED = 50  # speed of exhaust particles
+TURBO_PARTICLE_LIFETIME = 0.5  # seconds before particle disappears
+TURBO_PARTICLE_SPREAD = 30  # degree spread of particles
