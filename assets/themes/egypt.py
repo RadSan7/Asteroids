@@ -22,9 +22,9 @@ def gold(name="gold", **kw):
 
 
 def bronze(name="bronze", **kw):
-    kw.setdefault("rough", 0.35)
-    return M.metal(name, "bronze", wear=0.7, dirt=0.6, patina=(0.06, 0.24, 0.17), patina_amt=0.6, pitting=0.3,
-                   scale=3, **kw)
+    kw.setdefault("rough", 0.3)
+    kw.setdefault("patina_amt", 0.22)
+    return M.metal(name, "bronze", wear=0.7, dirt=0.6, patina=(0.06, 0.24, 0.17), pitting=0.2, scale=3, **kw)
 
 
 def lapis(name="lapis", scale=20):

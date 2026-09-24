@@ -208,73 +208,73 @@
   "tris": 8044
  },
  "jade_dynasty/bi_disc": {
-  "hash": "f651532182ab",
-  "kb": 643,
+  "hash": "ce12bf6865ed",
+  "kb": 874,
   "ok": true,
-  "secs": 80,
+  "secs": 79,
   "tris": 3520
  },
  "jade_dynasty/buyao_hairpin": {
-  "hash": "2e6a64ba9180",
-  "kb": 627,
+  "hash": "82a4e4d53cff",
+  "kb": 613,
   "ok": true,
   "secs": 39,
   "tris": 8748
  },
  "jade_dynasty/celadon_bowl": {
-  "hash": "a7648c761b3a",
+  "hash": "337b80b6a489",
   "kb": 1487,
   "ok": true,
-  "secs": 54,
+  "secs": 52,
   "tris": 37376
  },
  "jade_dynasty/ding_censer": {
-  "hash": "e031bebc8f8e",
-  "kb": 1306,
+  "hash": "599d897d5c29",
+  "kb": 1172,
   "ok": true,
-  "secs": 181,
+  "secs": 178,
   "tris": 10760
  },
  "jade_dynasty/folding_fan": {
-  "hash": "6c835d8de5de",
-  "kb": 1222,
+  "hash": "85ad8ce1cb6d",
+  "kb": 1186,
   "ok": true,
-  "secs": 80,
+  "secs": 86,
   "tris": 6424
  },
  "jade_dynasty/jade_abacus": {
-  "hash": "b0e5201346a6",
-  "kb": 1892,
+  "hash": "e099f5aea297",
+  "kb": 1836,
   "ok": true,
   "secs": 70,
   "tris": 12308
  },
  "jade_dynasty/jade_jian": {
-  "hash": "7902aea0ad3d",
-  "kb": 889,
+  "hash": "c03644cc2c37",
+  "kb": 861,
   "ok": true,
   "secs": 50,
   "tris": 11552
  },
  "jade_dynasty/jade_seal": {
-  "hash": "da0f09310464",
-  "kb": 1107,
+  "hash": "8b8ae6ffae96",
+  "kb": 1075,
   "ok": true,
-  "secs": 110,
+  "secs": 111,
   "tris": 14904
  },
  "jade_dynasty/silk_lantern": {
-  "hash": "82f6a53db0dc",
-  "kb": 3707,
+  "hash": "f5e8a7868df4",
+  "kb": 3706,
   "ok": true,
-  "secs": 64,
+  "secs": 63,
   "tris": 52640
  },
  "jade_dynasty/zisha_teapot": {
-  "hash": "2bbc1e4b8cc6",
-  "kb": 1785,
+  "hash": "d06ac3cdd869",
+  "kb": 1784,
   "ok": true,
-  "secs": 104,
+  "secs": 103,
   "tris": 33288
  },
  "nordic/bearded_axe": {
