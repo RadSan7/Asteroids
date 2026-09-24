@@ -1,0 +1,21 @@
+{
+ "theme": "viking_hall",
+ "name": "stones_loose",
+ "title": "Fieldstones",
+ "kind": "prop",
+ "tris": 9984,
+ "dims_m": [
+  1.2217,
+  1.4795,
+  0.29
+ ],
+ "texture": 2048,
+ "materials": [
+  "stones_loose_mat"
+ ],
+ "glb_kb": 1620,
+ "seconds": 129.7,
+ "t_build": 0,
+ "t_bake": 101,
+ "t_render": 28
+}

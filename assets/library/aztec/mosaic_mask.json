@@ -3,11 +3,11 @@
  "name": "mosaic_mask",
  "title": "Turquoise mosaic mask",
  "kind": "artifact",
- "tris": 8880,
+ "tris": 22682,
  "dims_m": [
-  0.16,
-  0.0868,
-  0.2
+  0.169,
+  0.0961,
+  0.1907
  ],
  "texture": 2048,
  "materials": [
@@ -15,11 +15,12 @@
   "mosaic_mask_mat",
   "mosaic_mask_mat",
   "mosaic_mask_mat",
+  "mosaic_mask_mat",
   "mosaic_mask_mat"
  ],
- "glb_kb": 2436,
- "seconds": 79.4,
+ "glb_kb": 3239,
+ "seconds": 80.6,
  "t_build": 0,
- "t_bake": 54,
- "t_render": 24
+ "t_bake": 55,
+ "t_render": 25
 }

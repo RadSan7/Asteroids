@@ -3,20 +3,20 @@
  "name": "codex",
  "title": "Screenfold codex",
  "kind": "artifact",
- "tris": 152,
+ "tris": 268,
  "dims_m": [
-  0.8888,
-  0.204,
-  0.0326
+  1.0019,
+  0.206,
+  0.1602
  ],
  "texture": 2048,
  "materials": [
   "codex_mat",
   "codex_mat"
  ],
- "glb_kb": 531,
- "seconds": 81.8,
- "t_build": 1,
- "t_bake": 54,
- "t_render": 27
+ "glb_kb": 647,
+ "seconds": 150.5,
+ "t_build": 2,
+ "t_bake": 102,
+ "t_render": 46
 }

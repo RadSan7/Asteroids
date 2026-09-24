@@ -16,8 +16,8 @@
   "chimalli_mat"
  ],
  "glb_kb": 1217,
- "seconds": 50.6,
- "t_build": 0,
- "t_bake": 24,
- "t_render": 26
+ "seconds": 66.2,
+ "t_build": 1,
+ "t_bake": 30,
+ "t_render": 36
 }

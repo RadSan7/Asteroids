@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "log_pile",
+ "title": "Firewood pile",
+ "kind": "prop",
+ "tris": 2520,
+ "dims_m": [
+  0.6335,
+  0.7861,
+  0.5724
+ ],
+ "texture": 2048,
+ "materials": [
+  "log_pile_mat",
+  "log_pile_mat"
+ ],
+ "glb_kb": 1335,
+ "seconds": 135.1,
+ "t_build": 0,
+ "t_bake": 107,
+ "t_render": 28
+}

@@ -134,7 +134,16 @@ def _emit_setup(mat, mode, ao_dist):
         if nrm.is_linked:
             nt.links.new(nrm.links[0].from_socket, ao.inputs["Normal"])
         tmp += [comb, ao]
-        nt.links.new(ao.outputs["AO"], comb.inputs[0])
+        tex_ao = next((n for n in nt.nodes if n.label == "tex_ao"), None)
+        if tex_ao is not None:
+            mul = nt.nodes.new("ShaderNodeMath")
+            mul.operation = "MULTIPLY"
+            tmp.append(mul)
+            nt.links.new(ao.outputs["AO"], mul.inputs[0])
+            nt.links.new(tex_ao.outputs["Color"], mul.inputs[1])
+            nt.links.new(mul.outputs[0], comb.inputs[0])
+        else:
+            nt.links.new(ao.outputs["AO"], comb.inputs[0])
         for i, key in ((1, "Roughness"), (2, "Metallic")):
             s = _src(nt, b.inputs[key])
             if isinstance(s, (int, float)):
@@ -377,8 +386,9 @@ def run(theme, name, outroot, workroot):
         for o in list(bpy.context.scene.objects):
             if o is not ob:
                 bpy.data.objects.remove(o, do_unlink=True)
-        spec = dict(spec, samples=12)
-        render_preview(ob, spec, os.path.join(qdir, f"{name}.jpg"), res=560)
+        zoom = float(os.environ.get("FORGE_ZOOM", "1"))
+        spec = dict(spec, samples=16, dist=spec["dist"] / zoom)
+        render_preview(ob, spec, os.path.join(qdir, f"{name}.jpg"), res=int(os.environ.get("FORGE_RES", "560")))
         return dict(theme=theme, name=name, title=spec["title"], tris=_tris(ob), glb_kb=0,
                     dims_m=[round(float(x), 3) for x in (hi - lo)])
     if os.environ.get("FORGE_DRY"):

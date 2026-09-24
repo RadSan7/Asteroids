@@ -583,3 +583,13 @@ def lathe_v(profile, z):
             f = (z - z0) / (z1 - z0)
             return float(v[i] + f * (v[i + 1] - v[i]))
     return float(v[top] if z > P[top, 1] else 0.0)
+
+
+def tag_random(ob, value=None, rng=None):
+    """Write a per-part random float attribute "rand" (used by texmat to offset textures)."""
+    import random
+    v = value if value is not None else (rng.random() if rng is not None else random.random())
+    me = ob.data
+    a = me.attributes.get("rand") or me.attributes.new("rand", "FLOAT", "POINT")
+    a.data.foreach_set("value", [v] * len(me.vertices))
+    return ob

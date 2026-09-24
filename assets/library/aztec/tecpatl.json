@@ -5,9 +5,9 @@
  "kind": "weapon",
  "tris": 4828,
  "dims_m": [
-  0.0852,
+  0.0821,
   0.0645,
-  0.3181
+  0.3154
  ],
  "texture": 2048,
  "materials": [
@@ -15,9 +15,9 @@
   "tecpatl_mat",
   "tecpatl_mat"
  ],
- "glb_kb": 1590,
- "seconds": 81.8,
+ "glb_kb": 1335,
+ "seconds": 112.2,
  "t_build": 0,
- "t_bake": 54,
- "t_render": 27
+ "t_bake": 75,
+ "t_render": 37
 }

@@ -17,9 +17,9 @@
   "usekh_collar_mat",
   "usekh_collar_mat"
  ],
- "glb_kb": 5510,
- "seconds": 45.5,
+ "glb_kb": 5492,
+ "seconds": 65.3,
  "t_build": 0,
- "t_bake": 15,
- "t_render": 29
+ "t_bake": 20,
+ "t_render": 44
 }

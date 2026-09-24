@@ -5,7 +5,7 @@
  "kind": "weapon",
  "tris": 12052,
  "dims_m": [
-  0.112,
+  0.1511,
   0.0649,
   0.9624
  ],
@@ -15,9 +15,9 @@
   "macuahuitl_mat",
   "macuahuitl_mat"
  ],
- "glb_kb": 1406,
- "seconds": 64.5,
+ "glb_kb": 1411,
+ "seconds": 77.1,
  "t_build": 0,
- "t_bake": 41,
- "t_render": 23
+ "t_bake": 48,
+ "t_render": 28
 }

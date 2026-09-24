@@ -25,6 +25,7 @@ import numpy as np
 from forge import decal as D
 from forge import geo as G
 from forge import mat as M
+from forge import texsynth as T
 from forge.pipeline import asset
 
 pi = math.pi
@@ -35,84 +36,57 @@ VERT = (pi / 2, -pi / 2, 0)      # plank(): length -> Z, width -> X, thickness -
 
 
 # ================================================================ materials
+def _moss(zmax, amount=1.0):
+    return [dict(mask=M.axis_mask("Z", zmax, 0.0, noise=0.25, nscale=4), color=(0.05, 0.055, 0.03), rough=0.9,
+                 opacity=0.7 * amount, height=0.1),
+            dict(mask=lambda nb: nb.mul(nb.ss(nb.sep(nb.co())[2], zmax * 0.6, 0.0),
+                                        nb.ss(nb.noise(9, 8, 0.7), 0.55, 0.65)),
+                 color=(0.05, 0.09, 0.025), rough=0.95, height=0.5, opacity=amount)]
+
+
+def adze_layer(strength=0.6, axis="X"):
+    st = {"X": (0.8, 3.0, 3.0), "Y": (3.0, 0.8, 3.0), "Z": (3.0, 3.0, 0.8)}[axis]
+    return dict(mask=lambda nb: nb.math("POWER", nb.voronoi(14, nb.mapv(scale=st), feature="F1"), 2.0),
+                height=strength)
+
+
 def oak(name, axis="Z", weather=0.6, cracks=0.5, adze=0.0, damp=0.0, **kw):
-    kw.setdefault("dirt", 0.7)
-    kw.setdefault("bump_strength", 0.35)
-    layers = kw.pop("layers", []) or []
+    """Oak from synthesized boards: weathered (silver, checked) or fresh (interior)."""
+    tex = T.get("oak_weathered" if weather >= 0.5 else "oak_aged")
+    layers = list(kw.pop("layers", []) or [])
+    if adze:
+        layers.append(adze_layer(adze, axis))
     if damp:
-        layers = layers + [dict(mask=M.axis_mask("Z", damp, 0.0, noise=0.25, nscale=4), color=(0.035, 0.04, 0.02),
-                                rough=0.9, height=0.2),
-                           dict(mask=lambda nb: nb.mul(nb.ss(nb.sep(nb.co())[2], damp * 0.6, 0.0),
-                                                       nb.ss(nb.noise(9, 8, 0.7), 0.55, 0.65)),
-                                color=(0.04, 0.075, 0.02), rough=0.95, height=0.4)]
-    ax = "XYZ".index(axis)
-    st = [5.0, 5.0, 5.0]
-    st[ax] = 0.35
-    layers = [dict(mask=M.noise_mask(1.1, 0.35, 0.75, detail=3), color=(0.09, 0.06, 0.035), opacity=0.55),
-              dict(mask=M.noise_mask(0.8, 0.55, 0.8, detail=3), color=(0.30, 0.22, 0.13), opacity=0.35),
-              dict(mask=lambda nb, st=tuple(st): nb.ss(nb.noise(3.0, 6, 0.6, nb.mapv(scale=st)), 0.55, 0.75),
-                   color=(0.07, 0.062, 0.055), rough=0.85, opacity=0.6)] + layers
-    return M.wood(name, light=(0.25, 0.17, 0.10), dark=(0.05, 0.034, 0.02), axis=axis, weather=weather * 0.7,
-                  cracks=cracks, adze=adze, wear=0.3, pores=0.45, grain_stretch=16, ring_scale=45,
-                  weather_color=(0.22, 0.21, 0.19), layers=layers, **kw)
+        layers += _moss(damp)
+    return M.texmat(name, tex, "box", axis=axis, bump=0.9 if weather >= 0.5 else 0.5, dirt=0.45, wear=0.25,
+                    layers=layers)
 
 
 def beam_oak(name, axis="X"):
-    return oak(name, axis=axis, weather=0.45, cracks=0.8, adze=0.9, bump_strength=0.35)
+    return oak(name, axis=axis, weather=0.6, adze=0.8)
 
 
 def fieldstone(name, moss_z=0.18):
-    lichen = dict(mask=M.noise_mask(5.0, 0.64, 0.68), color=(0.30, 0.32, 0.23), rough=0.9, height=0.15)
-    orange = dict(mask=M.noise_mask(28.0, 0.73, 0.76), color=(0.42, 0.17, 0.03), rough=0.9)
-    moss = dict(mask=lambda nb: nb.mul(nb.ss(nb.sep(nb.co())[2], moss_z, 0.0), nb.ss(nb.noise(7, 8, 0.7), 0.45, 0.6)),
-                color=(0.035, 0.07, 0.02), rough=0.95, height=0.3)
-    tint = dict(mask=M.noise_mask(0.9, 0.45, 0.7, detail=2), color=(0.26, 0.225, 0.2), opacity=0.45)
-    cold = dict(mask=M.noise_mask(1.3, 0.6, 0.8, detail=2), color=(0.13, 0.14, 0.15), opacity=0.8)
-    return M.stone(name, c1=(0.27, 0.26, 0.245), c2=(0.10, 0.098, 0.095), kind="granite", rough=0.72, chips=0.6,
-                   dirt=0.8, scale=1.0, layers=[tint, cold, lichen, orange, moss], bump_strength=0.7)
+    return M.texmat(name, T.get("granite"), "box", axis="Z", bump=0.8, dirt=0.5, wear=0.2,
+                    layers=_moss(moss_z) if moss_z > 0 else None)
 
 
-def thatch(name):
-    nb = M.NB(name)
-    x, y, z = nb.sep(nb.co())
-    s = nb.mul(nb.sub(z, y), 0.7071)                   # coordinate running up the -Y slope
-    v = nb.combine(nb.mul(x, 160.0), nb.mul(s, 3.0), nb.mul(nb.add(y, z), 120.0))
-    strands = nb.noise(1.0, 6, 0.55, v)
-    fine = nb.noise(3.0, 4, 0.5, nb.combine(nb.mul(x, 400.0), nb.mul(s, 8.0), 0.0))
-    base = nb.ramp(nb.add(nb.mul(strands, 0.8), nb.mul(fine, 0.3)),
-                   [(0.25, (0.07, 0.055, 0.035)), (0.5, (0.17, 0.13, 0.07)), (0.75, (0.30, 0.23, 0.12))])
-    weather = nb.ss(nb.noise(1.5, 8, 0.65), 0.4, 0.7)
-    col = nb.mix(base, nb.mul(nb.gray(base), 0.9), nb.mul(weather, 0.6))
-    moss = nb.mul(nb.ss(nb.noise(2.2, 10, 0.7), 0.56, 0.66), nb.ss(z, 1.5, -0.4))
-    col = nb.mix(col, (0.03, 0.055, 0.015), moss)
-    col = nb.mix(col, (0.02, 0.015, 0.01), nb.mul(nb.cavity(0.08), 0.8, clamp=True))
-    height = nb.add(nb.mul(strands, 1.0), nb.mul(fine, 0.4))
-    r = nb.mixf(0.85, 0.95, moss)
-    return nb.done(col, r, 0.0, nb.bump(height, 1.1, 0.006))
+def thatch(name, mode="slope"):
+    moss = dict(mask=lambda nb: nb.mul(nb.ss(nb.noise(2.2, 10, 0.7), 0.58, 0.68),
+                                       nb.ss(nb.sep(nb.co())[2], 2.0, -0.4)),
+                color=(0.045, 0.065, 0.02), rough=0.95, height=0.3)
+    patchy = dict(mask=lambda nb: nb.ss(nb.noise(1.1, 6, 0.6), 0.45, 0.7), color=(0.20, 0.18, 0.15),
+                  opacity=0.35)
+    return M.texmat(name, T.get("thatch"), mode, bump=0.9, dirt=0.3, wear=0.0, layers=[patchy, moss])
 
 
 def earth(name):
-    straw = dict(mask=lambda nb: nb.ss(nb.noise(60, 2, 0.5, nb.mapv(scale=(1, 12, 1), rot=(0, 0, 0.7))), 0.7, 0.74),
-                 color=(0.30, 0.22, 0.10), rough=0.7, height=0.4)
-    straw2 = dict(mask=lambda nb: nb.ss(nb.noise(60, 2, 0.5, nb.mapv(scale=(12, 1, 1), rot=(0, 0, -0.4))), 0.7, 0.74),
-                  color=(0.26, 0.19, 0.09), rough=0.7, height=0.4)
-    pebbles = dict(mask=lambda nb: nb.ss(nb.voronoi(45, feature="F1"), 0.12, 0.05), color=(0.13, 0.12, 0.11),
-                   rough=0.6, height=0.8)
-    patches = dict(mask=M.noise_mask(1.2, 0.5, 0.7), color=(0.025, 0.02, 0.015), rough=0.8, opacity=0.8)
-    return M.stone(name, c1=(0.075, 0.058, 0.042), c2=(0.03, 0.024, 0.018), kind="limestone", rough=0.9,
-                   chips=0.0, dirt=0.4, scale=1.5, layers=[patches, pebbles, straw, straw2], bump_strength=0.8)
+    return M.texmat(name, T.get("earth"), "planar", bump=1.5, dirt=0.0, wear=0.0)
 
 
 def daub(name):
-    cracks = dict(mask=lambda nb: nb.mul(nb.mr(nb.voronoi(6, feature="DISTANCE_TO_EDGE"), 0, 0.006, 1, 0),
-                                         nb.ss(nb.noise(3, 4), 0.4, 0.6)), color=(0.05, 0.04, 0.03), height=-1.0)
-    lime = dict(mask=lambda nb: nb.ss(nb.noise(1.6, 8, 0.65), 0.5, 0.62), color=(0.34, 0.31, 0.26), rough=0.95,
-                opacity=0.6)
-    grime = dict(mask=M.axis_mask("Z", 0.8, 0.1, noise=0.3, nscale=3), color=(0.06, 0.045, 0.03), opacity=0.7)
-    straw_bits = dict(mask=lambda nb: nb.ss(nb.noise(50, 2, 0.5, nb.mapv(scale=(1, 1, 10))), 0.72, 0.76),
-                      color=(0.28, 0.2, 0.08), height=0.3)
-    return M.stone(name, c1=(0.27, 0.215, 0.15), c2=(0.12, 0.095, 0.065), kind="limestone", rough=0.93, chips=0.4,
-                   dirt=0.7, scale=1.2, layers=[lime, cracks, straw_bits, grime], bump_strength=0.9)
+    grime = dict(mask=M.axis_mask("Z", 0.8, 0.1, noise=0.3, nscale=3), color=(0.12, 0.09, 0.06), opacity=0.5)
+    return M.texmat(name, T.get("daub"), "box", axis="Z", bump=1.3, dirt=0.4, wear=0.3, layers=[grime])
 
 
 def iron(name="iron"):
@@ -121,7 +95,7 @@ def iron(name="iron"):
 
 
 def straw(name="straw"):
-    return M.plastic(name, color=(0.30, 0.22, 0.09), marble=(0.17, 0.13, 0.06), rough=0.55, wear=0.0, dirt=0.5,
+    return M.plastic(name, color=(0.22, 0.17, 0.08), marble=(0.12, 0.095, 0.05), rough=0.65, wear=0.0, dirt=0.6,
                      scale=20)
 
 
@@ -172,6 +146,7 @@ def plank(name, L, W, T, loc, rot, mat, seed, bow=0.008, twist=0.02):
         return co
     deform(ob, f)
     G._box_uv(ob)
+    G.tag_random(ob, (seed * 0.61803) % 1.0)
     return G.xform(ob, loc, rot)
 
 
@@ -188,6 +163,7 @@ def hewn(name, L, w, h, loc, rot, mat, seed, bow=0.012):
         return co
     deform(ob, f)
     G._box_uv(ob)
+    G.tag_random(ob, (seed * 0.4142 + 0.3) % 1.0)
     return G.xform(ob, loc, rot)
 
 
@@ -217,6 +193,7 @@ def rock(name, dims, loc, mat, seed, rot=(0, 0, 0), flat_top=None, flat_bottom=T
         return co
     deform(ob, f)
     G._box_uv(ob)
+    G.tag_random(ob, (seed * 0.7548) % 1.0)
     return G.xform(ob, loc, rot)
 
 
@@ -291,8 +268,8 @@ def floor_earth_2x2():
     deform(bpy_grid, f)
     stm = straw("floor_straw")
     rng = np.random.default_rng(3)
-    for i in range(140):
-        p = np.array([0.05 + 1.9 * rng.random(), 0.05 + 1.9 * rng.random(), 0.009])
+    for i in range(45):
+        p = np.array([0.05 + 1.9 * rng.random(), 0.05 + 1.9 * rng.random(), 0.007])
         a = rng.random() * pi
         L = 0.05 + 0.12 * rng.random()
         d = np.array([math.cos(a), math.sin(a), 0]) * L / 2
@@ -421,8 +398,9 @@ def gable_wall_8m():
         if abs((y0 + y1) / 2) < 0.45:
             top0 = top1 = min(top0, top1, 3.05)        # smoke hole under the ridge
         poly = [(y0, -0.12), (y1, -0.12), (y1, top1), (y0, top0)]
-        b = G.extrude(f"g{i}", [poly], 0.06, bev=0.005, plane="YZ", mat=boards)
-        _ = b
+        b = G.extrude(f"g{i}", [poly], 0.055, bev=0.006, plane="YZ", mat=boards)
+        G.tag_random(b, (i * 0.618) % 1.0)
+        G.xform(b, (0.004 * ((i * 7) % 3 - 1), 0, 0))
         y += w + 0.004
     bat = beam_oak("gable_batten", axis="Y")
     for zb, Lb in ((1.2, 5.4), (2.55, 2.6)):
@@ -536,7 +514,7 @@ def roof_thatch_2m():
 
 @asset(res=2048, view=(-30, 25), pivot="origin", kind="kit", title="Ridge 2m")
 def roof_ridge_2m():
-    th = thatch("ridge_thatch")
+    th = thatch("ridge_thatch", mode="planar")
     W = 1.05
 
     def top(y):
@@ -583,7 +561,7 @@ def gable_finial():
         pts += [p0 + d * Lb + nrm * w / 2, p0 + nrm * w / 2]
         poly = [(float(p[0]), float(p[1])) for p in pts]
         from shapely.geometry import Polygon
-        pg = Polygon(poly).buffer(0.01).buffer(-0.01).difference(_dragon_eye(p0 + d * Lb, d, -s))
+        pg = Polygon(poly).buffer(0.01).buffer(-0.01).difference(_dragon_eye(p0 + d * Lb, d, -s)).difference(_dragon_eye(p0 + d * Lb, d, -s))
         b = G.extrude(f"board{s}", G.shape_polys(pg), 0.06, bev=0.01, bres=2, plane="YZ", mat=board_m)
         G.xform(b, (0.03 * s, 0, 0))
 
@@ -594,13 +572,12 @@ def _dragon(base, d, side):
     spec = [(0.0, 0.18), (0.22, 0.24), (0.4, 0.33), (0.5, 0.46), (0.56, 0.5), (0.6, 0.4), (0.72, 0.3),
             (0.92, 0.24), (1.08, 0.17), (1.16, 0.08), (1.1, 0.03), (0.96, 0.03), (0.82, 0.0), (0.98, -0.04),
             (1.1, -0.07), (1.12, -0.12), (0.96, -0.16), (0.7, -0.19), (0.4, -0.21), (0.15, -0.2), (0.0, -0.18)]
-    sc = 0.95
-    return [base + d * a * sc + n * b * sc for (a, b) in spec]
+    return [base + d * a * 0.95 + n * b * 0.95 for (a, b) in spec]
 
 
 def _dragon_eye(base, d, side):
     n = np.array([-d[1], d[0]]) * side
-    c = base + d * 0.8 * 0.95 + n * 0.15 * 0.95
+    c = base + d * 0.76 + n * 0.14
     return G.circle2d(float(c[0]), float(c[1]), 0.035, 24)
 
 

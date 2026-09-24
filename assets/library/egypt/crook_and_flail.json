@@ -17,9 +17,9 @@
   "crook_and_flail_mat",
   "crook_and_flail_mat"
  ],
- "glb_kb": 1333,
- "seconds": 87.8,
+ "glb_kb": 1301,
+ "seconds": 131.4,
  "t_build": 0,
- "t_bake": 64,
- "t_render": 23
+ "t_bake": 92,
+ "t_render": 39
 }

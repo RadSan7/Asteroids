@@ -658,3 +658,65 @@ def radial_mask(r0, r1, axes="XY"):
         d = nb.math("SQRT", nb.add(nb.mul(a, a), nb.mul(b, b)))
         return nb.ss(d, r1, r0)
     return f
+
+
+def texmat(name, tex, mode="box", axis="Z", bump=0.5, rough_mul=1.0, tint=None, dirt=0.4, wear=0.25,
+           layers=None, blend=0.25, slope_sign=-1, scale=1.0):
+    """PBR material from a synthesized texture set (forge.texsynth.get()).
+
+    mode: "box"    object-space box projection; grain / V axis aligned with `axis`
+          "planar" top-down XY
+          "slope"  roof slope running up the -Y (slope_sign=-1) or +Y side at 45 deg
+    Albedo, roughness and height come from the maps; geometry-aware dirt/wear/moss
+    are added on top (these change material colour, they are not lighting)."""
+    import math as _m
+    nb = NB(name)
+    su, sv = tex["size_m"]
+    su, sv = su * scale, sv * scale
+    co = nb.co()
+    proj = "FLAT"
+    # per-part random offset (mesh attribute "rand", written by plank()/hewn()/rock()) breaks tiling
+    attr = nb.node("ShaderNodeAttribute", attribute_type="GEOMETRY", attribute_name="rand")
+    off = nb.node("ShaderNodeVectorMath", operation="SCALE")
+    nb.set(off.inputs[0], (37.13, 11.71, 23.37))
+    nb.set(off.inputs["Scale"], attr.outputs["Fac"])
+    add = nb.node("ShaderNodeVectorMath", operation="ADD")
+    nb.set(add.inputs[0], co)
+    nb.set(add.inputs[1], off.outputs[0])
+    co = add.outputs[0]
+    if mode == "box":
+        rot = {"Z": (0, 0, 0), "X": (0, _m.pi / 2, 0), "Y": (_m.pi / 2, 0, 0)}[axis]
+        r = nb.mapv(co, rot=rot)
+        vec = nb.mapv(r, scale=(1 / su, 1 / su, 1 / sv))
+        proj = "BOX"
+    elif mode == "planar":
+        x, y, _ = nb.sep(co)
+        vec = nb.combine(nb.mul(x, 1 / su), nb.mul(y, 1 / sv), 0.0)
+    else:
+        x, y, z = nb.sep(co)
+        s = nb.mul(nb.add(z, nb.mul(y, -slope_sign)), 0.7071)
+        vec = nb.combine(nb.mul(x, 1 / su), nb.mul(s, 1 / sv), 0.0)
+
+    def img(path, cs):
+        n = nb.node("ShaderNodeTexImage", interpolation="Cubic", extension="REPEAT")
+        n.image = __import__("bpy").data.images.load(path, check_existing=True)
+        n.image.colorspace_settings.name = cs
+        n.projection = proj
+        n.projection_blend = blend
+        nb.set(n.inputs["Vector"], vec)
+        return n
+    col = img(tex["color"], "sRGB").outputs["Color"]
+    if tint is not None:
+        col = nb.mix(col, nb.mix(col, tint, 1.0, blend="MULTIPLY"), 0.6)
+    rough = nb.mul(nb.gray(img(tex["rough"], "Non-Color").outputs["Color"]), rough_mul, clamp=True)
+    height = nb.gray(img(tex["height"], "Non-Color").outputs["Color"])
+    aon = img(tex["ao"], "Non-Color")
+    aon.label = "tex_ao"
+    if dirt:
+        d = nb.mul(nb.cavity(0.04), dirt, clamp=True)
+        col = nb.mix(col, nb.mix(col, (0.05, 0.04, 0.03), 1.0, blend="MULTIPLY"), d)
+    if wear:
+        e = nb.mul(nb.edges(0.005), wear, clamp=True)
+        col = nb.mix(col, nb.hsv(col, 0.5, 0.9, 1.25), e)
+    col, rough, metal, height = apply_layers(nb, col, rough, 0.0, height, layers)
+    return nb.done(col, rough, 0.0, nb.bump(height, bump, 0.004))

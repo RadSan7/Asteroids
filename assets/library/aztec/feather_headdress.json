@@ -3,22 +3,24 @@
  "name": "feather_headdress",
  "title": "Quetzal feather headdress",
  "kind": "clothing",
- "tris": 40068,
+ "tris": 65808,
  "dims_m": [
-  1.1394,
-  0.204,
-  0.6016
+  1.1693,
+  0.6763,
+  0.735
  ],
  "texture": 2048,
  "materials": [
   "feather_headdress_mat",
   "feather_headdress_mat",
   "feather_headdress_mat",
+  "feather_headdress_mat",
+  "feather_headdress_mat",
   "feather_headdress_mat"
  ],
- "glb_kb": 2776,
- "seconds": 87.8,
- "t_build": 0,
- "t_bake": 50,
- "t_render": 37
+ "glb_kb": 3720,
+ "seconds": 132.3,
+ "t_build": 3,
+ "t_bake": 51,
+ "t_render": 78
 }

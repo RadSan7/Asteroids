@@ -6,14 +6,20 @@ import numpy as np
 from forge import decal as D
 from forge import geo as G
 from forge import mat as M
+from forge import texsynth as T
 from forge.pipeline import asset
 
 pi = math.pi
 
 
-def walnut(name="walnut", **kw):
-    kw.setdefault("varnish", 0.6)
-    return M.wood(name, light=(0.16, 0.085, 0.04), dark=(0.05, 0.025, 0.012), axis="X", wear=0.4, dirt=0.5, **kw)
+def walnut(name="walnut", axis="X", **kw):
+    """French-polished walnut veneer (synthesized flat-sawn figure), low-gloss varnish."""
+    return M.texmat(name, T.get("walnut"), "box", axis=axis, bump=0.25, rough_mul=0.45, dirt=0.35, wear=0.35,
+                    scale=0.6)
+
+
+def oak_polished(name, axis="X"):
+    return M.texmat(name, T.get("oak_fresh"), "box", axis=axis, bump=0.25, rough_mul=0.5, dirt=0.3, wear=0.3)
 
 
 def bakelite(name="bakelite", color=(0.012, 0.009, 0.007), **kw):
@@ -38,8 +44,7 @@ def tube_radio():
     W, Dp, H = 0.36, 0.22, 0.42
     arch = G.poly2d([(-W / 2, 0), (W / 2, 0)] + [(W / 2 * math.cos(t), H - W / 2 + W / 2 * math.sin(t) * 0.85)
                                                   for t in np.linspace(0, pi, 60)])
-    wal = M.wood("radio_walnut", light=(0.16, 0.085, 0.04), dark=(0.05, 0.025, 0.012), axis="Z", varnish=0.65,
-                 wear=0.35, dirt=0.4, grain_stretch=20)
+    wal = walnut("radio_walnut", axis="Z")
     shell = G.extrude("cabinet", G.shape_polys(arch), Dp, bev=0.008, bres=3, plane="XZ", mat=wal)
     _ = shell
     # front fretwork panel with art-deco slots, cloth behind
@@ -52,11 +57,13 @@ def tube_radio():
         cut = slot if cut is None else cut.union(slot)
     panel = fret.difference(G.poly2d([(-1, 0), (1, 0), (1, 0.16), (-1, 0.16)])).difference(cut)
     fp = G.extrude("fret", G.shape_polys(panel.simplify(0.0003)), 0.008, bev=0.0015, plane="XZ",
-                   mat=walnut("fret_walnut", ring_scale=40, paint=None))
+                   mat=walnut("fret_walnut", axis="Z"))
     G.xform(fp, (0, -Dp / 2 - 0.004, 0))
-    cloth = M.fabric("grille_cloth", color=(0.32, 0.25, 0.14), color2=(0.25, 0.2, 0.12), weave=500, rough=0.9,
+    cloth = M.fabric("grille_cloth", color=(0.22, 0.17, 0.10), color2=(0.18, 0.14, 0.09), weave=2200, rough=0.9,
                      fuzz=0.4)
-    G.box("cloth", (W - 0.07, 0.004, H - 0.23), loc=(0, -Dp / 2 + 0.001, 0.17 + (H - 0.23) / 2), mat=cloth)
+    cl_shape = arch.buffer(-0.026).difference(G.poly2d([(-1, 0), (1, 0), (1, 0.165), (-1, 0.165)]))
+    cl = G.extrude("cloth", G.shape_polys(cl_shape), 0.004, plane="XZ", mat=cloth)
+    G.xform(cl, (0, -Dp / 2 + 0.001, 0))
     # dial
     dial = D.Canvas(2048, 512)
     stations = ["PARIS-PTT", "RADIO-CITÉ", "LONDRES", "POSTE PARISIEN", "LYON", "RADIO-PARIS", "GENÈVE"]
@@ -88,51 +95,49 @@ def tube_radio():
 @asset(res=2048, view=(-28, 26), kind="device", title="Bakelite telephone")
 def telephone():
     bk = bakelite("phone_bakelite")
-    secs = []
-    for z in np.linspace(0, 0.085, 24):
-        t = z / 0.085
-        w = 0.105 - 0.035 * t ** 1.3
-        d = 0.16 - 0.06 * t ** 1.2
-        ring = []
-        for a in np.linspace(0, 2 * pi, 64, endpoint=False):
-            ca, sa = math.cos(a), math.sin(a)
-            ring.append((math.copysign(abs(ca) ** 0.45, ca) * w, math.copysign(abs(sa) ** 0.45, sa) * d / 2 +
-                         0.01 * t, z))
-        secs.append(ring)
-    G.loft("body", secs, bk)
+    body = G.box("body", (0.2, 0.15, 0.075), loc=(0, 0, 0.0375), bev=0.018, segs=4, mat=bk)
+    cut = G.box("slope_cut", (0.4, 0.2, 0.2), loc=(0, -0.075 - 0.1 * 0.62 + 0.035, 0.075 + 0.1 * 0.78 - 0.035),
+                rot=G.rotd(-50, 0, 0))
+    G.boolean(body, cut)
+    G.bevel(body, 0.004, 2, angle=30)
+    G.box("neck", (0.11, 0.065, 0.04), loc=(0, 0.035, 0.09), bev=0.012, segs=3, mat=bk)
+    G.box("felt_base", (0.19, 0.14, 0.004), loc=(0, 0, -0.002), bev=0.001,
+          mat=M.fabric("felt_green", color=(0.03, 0.08, 0.04), weave=1500, rough=0.95))
     # rotary dial on the sloped front
     ring = D.Canvas(1024)
     for k in range(10):
         a = math.radians(60 + 28 * k)
-        ring.text(0.5 + 0.33 * math.cos(a), 0.5 + 0.33 * math.sin(a), str((k + 1) % 10), size=0.08, font="sans_bold")
+        ring.text(0.5 + 0.37 * math.cos(a), 0.5 + 0.37 * math.sin(a), str((k + 1) % 10), size=0.08, font="sans_bold")
     rp = ring.save("dial_numbers")
     card = M.plastic("dial_card", color=(0.65, 0.6, 0.5), rough=0.5, wear=0.0, layers=[dict(mask=rp,
                                                                                             color=(0.02, 0.02, 0.02))])
-    card_ob = G.cyl("dial_card", 0.037, 0.003, segs=64, mat=card)
+    card_ob = G.cyl("dial_card", 0.044, 0.003, segs=64, mat=card)
     G.planar_uv(card_ob, "Z")
-    disc = G.cyl("dial_disc", 0.038, 0.005, loc=(0, 0, 0.003), segs=64, bev=0.0015, mat=chrome("dial_chrome"))
+    disc = G.cyl("dial_disc", 0.045, 0.005, loc=(0, 0, 0.003), segs=64, bev=0.0015, mat=chrome("dial_chrome"))
     for k in range(10):
         a = math.radians(60 + 28 * k)
-        h = G.cyl(f"hole{k}", 0.0068, 0.02, loc=(0.027 * math.cos(a), 0.027 * math.sin(a), -0.005), segs=24)
+        h = G.cyl(f"hole{k}", 0.0075, 0.02, loc=(0.033 * math.cos(a), 0.033 * math.sin(a), -0.005), segs=24)
         G.boolean(disc, h)
-    stop = G.box("stop", (0.012, 0.003, 0.003), loc=(0.03, -0.028, 0.009), bev=0.0008, mat=chrome("stop_chrome"))
-    parts = [card_ob, disc, stop]
+    stop = G.box("stop", (0.014, 0.003, 0.004), loc=(0.036, -0.034, 0.009), bev=0.0008, mat=chrome("stop_chrome"))
+    G.cyl("dial_hub", 0.012, 0.009, loc=(0, 0, 0.004), segs=32, bev=0.002, mat=chrome("hub_chrome"))
+    parts_extra = [o for o in G.all_meshes() if o.name == "dial_hub"]
+    parts = [card_ob, disc, stop] + parts_extra
     for p in parts:
-        G.xform(p, (0, 0, 0), rot=G.rotd(-28, 0, 0))
-        G.xform(p, (0, -0.058, 0.064))
+        G.xform(p, (0, 0, 0), rot=G.rotd(50, 0, 0))
+        G.xform(p, (0, -0.058, 0.057))
     # cradle forks
     for s in (1, -1):
-        fork = G.curve_pts([(s * 0.06, 0.02, 0.083), (s * 0.062, 0.02, 0.1), (s * 0.08, 0.02, 0.112),
-                            (s * 0.09, 0.02, 0.104)], 20)
+        fork = G.curve_pts([(s * 0.04, 0.035, 0.105), (s * 0.05, 0.035, 0.118), (s * 0.07, 0.035, 0.125),
+                            (s * 0.08, 0.035, 0.118)], 20)
         G.tube(f"fork{s}", fork, 0.006, n=16, mat=bk)
     # handset resting on the cradle
-    hs = G.curve_pts([(-0.105, 0.02, 0.1), (-0.06, 0.02, 0.125), (0.0, 0.02, 0.13), (0.06, 0.02, 0.125),
-                      (0.105, 0.02, 0.1)], 60)
+    hs = G.curve_pts([(-0.11, 0.035, 0.11), (-0.06, 0.035, 0.135), (0.0, 0.035, 0.14), (0.06, 0.035, 0.135),
+                      (0.11, 0.035, 0.11)], 60)
     G.tube("handset", hs, 0.011, n=24, mat=bk, scale2=0.8)
     for s in (1, -1):
         cup = G.lathe(f"cup{s}", G.curve_pts([(0.0, 0), (0.012, 0), (0.026, 0.018), (0.028, 0.03), (0.024, 0.034),
                                              (0.0, 0.03)], 30), segs=48, mat=bk)
-        G.xform(cup, (s * 0.108, 0.02, 0.078), rot=G.rotd(0, s * 18, 0))
+        G.xform(cup, (s * 0.113, 0.035, 0.088), rot=G.rotd(0, s * 18, 0))
     cord = M.fabric("cord_cloth", color=(0.06, 0.045, 0.03), weave=1500, rough=0.8)
     guide = np.array(G.curve_pts([(-0.105, 0.03, 0.08), (-0.14, 0.05, 0.03), (-0.12, 0.11, 0.006),
                                   (-0.02, 0.12, 0.006), (0.05, 0.08, 0.02)], 200))
@@ -223,7 +228,7 @@ def club_chair():
             ring.append(tuple(p + nrm * px + np.array([0, 0, pz])))
         secs.append(ring)
     G.loft("back_arms", secs, lea)
-    wal = walnut("chair_legs")
+    wal = walnut("chair_legs", axis="Z")
     for x in (0.26, -0.26):
         for y in (0.25, -0.25):
             G.cyl(f"leg{x}{y}", 0.025, 0.09, loc=(x, y, 0.0), r2=0.02, segs=24, bev=0.004, mat=wal)
@@ -237,7 +242,7 @@ def club_chair():
 # ------------------------------------------------------------------ 5 ------
 @asset(res=2048, view=(-35, 18), kind="device", title="Horn gramophone")
 def gramophone():
-    oak = M.wood("gramo_oak", light=(0.26, 0.15, 0.07), dark=(0.09, 0.05, 0.02), axis="X", varnish=0.6, wear=0.4)
+    oak = oak_polished("gramo_oak", axis="X")
     G.box("case", (0.32, 0.32, 0.13), loc=(0, 0, 0.065), bev=0.006, mat=oak)
     G.box("plinth", (0.34, 0.34, 0.02), loc=(0, 0, 0.01), bev=0.004, mat=oak)
     felt = M.fabric("felt", color=(0.12, 0.02, 0.02), weave=900, rough=0.95, fuzz=0.6)
@@ -281,7 +286,7 @@ def gramophone():
     G.xform(bell, tuple(hp[-1]))
     G.tube("crank", [(0.16, 0.0, 0.07), (0.2, 0.0, 0.07), (0.2, 0.0, 0.03)], 0.004, n=10, mat=ni)
     G.cyl("crank_knob", 0.008, 0.03, loc=(0.2, 0.0, 0.03), rot=G.rotd(0, 90, 0), segs=16,
-          mat=M.wood("knob_wood", varnish=0.5))
+          mat=walnut("knob_wood", axis="Z"))
 
 
 # ------------------------------------------------------------------ 6 ------

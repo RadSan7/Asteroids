@@ -13,9 +13,9 @@
  "materials": [
   "ankh_mat"
  ],
- "glb_kb": 993,
- "seconds": 87.3,
+ "glb_kb": 927,
+ "seconds": 118.5,
  "t_build": 1,
- "t_bake": 64,
- "t_render": 22
+ "t_bake": 85,
+ "t_render": 32
 }

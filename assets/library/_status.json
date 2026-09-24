@@ -1,121 +1,119 @@
 {
  "aztec/chimalli": {
-  "hash": "b6e0c5d88956",
+  "hash": "3943457b0981",
   "kb": 1217,
   "ok": true,
-  "secs": 51,
+  "secs": 67,
   "tris": 7332
  },
  "aztec/codex": {
-  "hash": "f3550f50d7cd",
-  "kb": 531,
+  "hash": "6db57bace581",
+  "kb": 647,
   "ok": true,
-  "secs": 82,
-  "tris": 152
+  "secs": 151,
+  "tris": 268
  },
  "aztec/feather_headdress": {
-  "hash": "c4825a51b74d",
-  "kb": 2776,
+  "hash": "dd609ce768da",
+  "kb": 3720,
   "ok": true,
-  "secs": 88,
-  "tris": 40068
+  "secs": 133,
+  "tris": 65808
  },
  "aztec/macuahuitl": {
-  "hash": "f89c63e4ce43",
-  "kb": 1406,
+  "hash": "c0d7ced10678",
+  "kb": 1411,
   "ok": true,
-  "secs": 65,
+  "secs": 78,
   "tris": 12052
  },
  "aztec/metate_mano": {
-  "hash": "b8f1daea131f",
+  "hash": "c6a7946ccb44",
   "kb": 1353,
   "ok": true,
-  "secs": 130,
+  "secs": 149,
   "tris": 7488
  },
  "aztec/mosaic_mask": {
-  "hash": "c537a756215c",
-  "kb": 2436,
+  "hash": "067fa545a59b",
+  "kb": 3239,
   "ok": true,
-  "secs": 80,
-  "tris": 8880
+  "secs": 81,
+  "tris": 22682
  },
  "aztec/sun_stone": {
-  "hash": "a99fe5c097a3",
-  "kb": 2319,
+  "hash": "8f498b6b342a",
+  "kb": 2971,
   "ok": true,
-  "secs": 79,
+  "secs": 96,
   "tris": 23040
  },
  "aztec/tecpatl": {
-  "hash": "df971716923b",
-  "kb": 1590,
+  "hash": "2ce4d0badadc",
+  "kb": 1335,
   "ok": true,
-  "secs": 82,
+  "secs": 113,
   "tris": 4828
  },
  "aztec/teponaztli": {
-  "hash": "facc8a4fb902",
+  "hash": "503821b27d2c",
   "kb": 1270,
   "ok": true,
-  "secs": 101,
+  "secs": 119,
   "tris": 11062
  },
  "aztec/tripod_bowl": {
-  "hash": "fb1b4c898cd0",
+  "hash": "41f3dc729547",
   "kb": 1831,
   "ok": true,
-  "secs": 136,
+  "secs": 181,
   "tris": 35152
  },
  "egypt/ankh": {
-  "hash": "3b06c3b46ab6",
-  "kb": 993,
+  "hash": "551c71779112",
+  "kb": 927,
   "ok": true,
-  "secs": 88,
+  "secs": 119,
   "tris": 7520
  },
  "egypt/blue_painted_jar": {
-  "hash": "d3da45e7a02b",
+  "hash": "edf9d33b709e",
   "kb": 1495,
   "ok": true,
-  "secs": 115,
+  "secs": 155,
   "tris": 27008
  },
  "egypt/crook_and_flail": {
-  "hash": "96309a8f6297",
-  "kb": 1333,
+  "hash": "588019c4a6d0",
+  "kb": 1301,
   "ok": true,
-  "secs": 88,
+  "secs": 132,
   "tris": 11224
  },
  "egypt/heart_scarab": {
-  "hash": "63d1dcff523d",
-  "kb": 572,
+  "hash": "341bc0663f86",
+  "kb": 563,
   "ok": true,
-  "secs": 45,
+  "secs": 54,
   "tris": 9072
  },
  "egypt/khopesh": {
-  "hash": "e599a37c86ee",
-  "kb": 1093,
-  "ok": true,
-  "secs": 60,
-  "tris": 10212
+  "error": "TypeError: forge.mat.metal() got multiple values for keyword argument 'patina_amt'",
+  "hash": "c67a81d0c2b2",
+  "ok": false
  },
  "egypt/lotus_chalice": {
-  "hash": "3d93489b0b18",
-  "kb": 1641,
+  "hash": "0db4dd55f88b",
+  "kb": 1643,
   "ok": true,
-  "secs": 116,
+  "secs": 170,
   "tris": 29368
  },
  "egypt/papyrus_scroll": {
-  "hash": "311bee89b198",
+  "hash": "af826a576aee",
   "kb": 1865,
   "ok": true,
-  "secs": 94,
+  "secs": 122,
   "tris": 25844
  },
  "egypt/senet_board": {
@@ -126,17 +124,17 @@
   "tris": 2980
  },
  "egypt/sistrum": {
-  "hash": "31bcfb581b9e",
-  "kb": 817,
+  "hash": "c1dd9e4b48d2",
+  "kb": 802,
   "ok": true,
-  "secs": 44,
+  "secs": 50,
   "tris": 14608
  },
  "egypt/usekh_collar": {
-  "hash": "46ec0e9ad892",
-  "kb": 5510,
+  "hash": "541a67435f41",
+  "kb": 5492,
   "ok": true,
-  "secs": 46,
+  "secs": 66,
   "tris": 69780
  },
  "greece/amphora": {
@@ -503,6 +501,13 @@
   "secs": 94,
   "tris": 47336
  },
+ "viking_hall/log_pile": {
+  "hash": "28f5f2952d1d",
+  "kb": 1335,
+  "ok": true,
+  "secs": 136,
+  "tris": 2520
+ },
  "viking_hall/plank_stack": {
   "hash": "d74898e6acc9",
   "kb": 1936,
@@ -544,6 +549,13 @@
   "ok": true,
   "secs": 250,
   "tris": 16328
+ },
+ "viking_hall/stones_loose": {
+  "hash": "f89acb5ba678",
+  "kb": 1620,
+  "ok": true,
+  "secs": 130,
+  "tris": 9984
  },
  "viking_hall/tie_beam_8m": {
   "hash": "de1abd093ef0",

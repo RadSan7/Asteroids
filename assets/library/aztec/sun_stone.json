@@ -13,9 +13,9 @@
  "materials": [
   "sun_stone_mat"
  ],
- "glb_kb": 2319,
- "seconds": 79.0,
- "t_build": 1,
- "t_bake": 50,
- "t_render": 28
+ "glb_kb": 2971,
+ "seconds": 95.9,
+ "t_build": 3,
+ "t_bake": 59,
+ "t_render": 34
 }
