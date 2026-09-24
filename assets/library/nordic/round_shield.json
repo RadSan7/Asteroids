@@ -16,6 +16,9 @@
   "round_shield_mat",
   "round_shield_mat"
  ],
- "glb_kb": 1052,
- "seconds": 322.7
+ "glb_kb": 1158,
+ "seconds": 140.3,
+ "t_build": 1,
+ "t_bake": 110,
+ "t_render": 29
 }
