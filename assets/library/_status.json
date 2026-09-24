@@ -369,25 +369,25 @@
   "tris": 20716
  },
  "paris_1940/gramophone": {
-  "hash": "705c041d9326",
-  "kb": 1776,
+  "hash": "0f74c91a0810",
+  "kb": 1816,
   "ok": true,
-  "secs": 114,
+  "secs": 135,
   "tris": 23356
  },
  "paris_1940/table_lamp": {
-  "hash": "dd9b233cea1c",
-  "kb": 1884,
+  "hash": "ff358894e201",
+  "kb": 1844,
   "ok": true,
-  "secs": 78,
+  "secs": 80,
   "tris": 20412
  },
  "paris_1940/telephone": {
-  "hash": "aa637c8c99ac",
-  "kb": 1692,
+  "hash": "6833a2ec8062",
+  "kb": 1680,
   "ok": true,
   "secs": 81,
-  "tris": 21400
+  "tris": 16216
  },
  "paris_1940/tube_radio": {
   "hash": "16514f800f64",
@@ -404,11 +404,11 @@
   "tris": 27492
  },
  "paris_1940/walther_p38": {
-  "hash": "29123c36ea63",
-  "kb": 813,
+  "hash": "21987a2c6097",
+  "kb": 1217,
   "ok": true,
-  "secs": 128,
-  "tris": 1864
+  "secs": 145,
+  "tris": 6632
  },
  "paris_1940/wine_and_glass": {
   "hash": "6b2782437a92",

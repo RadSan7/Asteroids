@@ -3,11 +3,11 @@
  "name": "telephone",
  "title": "Bakelite telephone",
  "kind": "device",
- "tris": 21400,
+ "tris": 16216,
  "dims_m": [
-  0.2929,
-  0.2237,
-  0.1388
+  0.2984,
+  0.2226,
+  0.1532
  ],
  "texture": 2048,
  "materials": [
@@ -15,11 +15,13 @@
   "telephone_mat",
   "telephone_mat",
   "telephone_mat",
+  "telephone_mat",
+  "telephone_mat",
   "telephone_mat"
  ],
- "glb_kb": 1692,
- "seconds": 80.7,
+ "glb_kb": 1680,
+ "seconds": 79.8,
  "t_build": 1,
- "t_bake": 50,
- "t_render": 29
+ "t_bake": 46,
+ "t_render": 33
 }
