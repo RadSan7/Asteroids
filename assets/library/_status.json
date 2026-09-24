@@ -98,9 +98,11 @@
   "tris": 9072
  },
  "egypt/khopesh": {
-  "error": "TypeError: forge.mat.metal() got multiple values for keyword argument 'patina_amt'",
-  "hash": "c67a81d0c2b2",
-  "ok": false
+  "hash": "75742a6e27de",
+  "kb": 1025,
+  "ok": true,
+  "secs": 57,
+  "tris": 10212
  },
  "egypt/lotus_chalice": {
   "hash": "0db4dd55f88b",
@@ -124,10 +126,10 @@
   "tris": 2980
  },
  "egypt/sistrum": {
-  "hash": "c1dd9e4b48d2",
-  "kb": 802,
+  "hash": "b3966c7493ed",
+  "kb": 768,
   "ok": true,
-  "secs": 50,
+  "secs": 41,
   "tris": 14608
  },
  "egypt/usekh_collar": {

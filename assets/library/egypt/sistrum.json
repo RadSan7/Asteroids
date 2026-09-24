@@ -14,9 +14,9 @@
   "sistrum_mat",
   "sistrum_mat"
  ],
- "glb_kb": 802,
- "seconds": 49.7,
+ "glb_kb": 768,
+ "seconds": 40.0,
  "t_build": 0,
- "t_bake": 20,
- "t_render": 30
+ "t_bake": 19,
+ "t_render": 21
 }
