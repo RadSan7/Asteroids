@@ -418,5 +418,103 @@
   "ok": true,
   "secs": 48,
   "tris": 25940
+ },
+ "viking_hall/beam_2m": {
+  "hash": "25b42273d619",
+  "kb": 216,
+  "ok": true,
+  "secs": 40,
+  "tris": 1448
+ },
+ "viking_hall/door_plank": {
+  "hash": "d1cfb3a4b73b",
+  "kb": 698,
+  "ok": true,
+  "secs": 52,
+  "tris": 10132
+ },
+ "viking_hall/floor_earth_2x2": {
+  "hash": "ac4787d1a7cb",
+  "kb": 1195,
+  "ok": true,
+  "secs": 76,
+  "tris": 13688
+ },
+ "viking_hall/floor_planks_2x2": {
+  "hash": "69c3eb253617",
+  "kb": 1508,
+  "ok": true,
+  "secs": 123,
+  "tris": 14416
+ },
+ "viking_hall/foundation_2m": {
+  "hash": "96a6f5a41305",
+  "kb": 1860,
+  "ok": true,
+  "secs": 130,
+  "tris": 15360
+ },
+ "viking_hall/foundation_corner": {
+  "hash": "b5e97142e945",
+  "kb": 355,
+  "ok": true,
+  "secs": 55,
+  "tris": 1536
+ },
+ "viking_hall/gable_wall_8m": {
+  "hash": "83f70fbcec2e",
+  "kb": 1180,
+  "ok": true,
+  "secs": 69,
+  "tris": 4104
+ },
+ "viking_hall/post_corner": {
+  "hash": "fc5a84dbd191",
+  "kb": 208,
+  "ok": true,
+  "secs": 37,
+  "tris": 1448
+ },
+ "viking_hall/post_hall": {
+  "hash": "bae84e1c04ee",
+  "kb": 504,
+  "ok": true,
+  "secs": 63,
+  "tris": 4648
+ },
+ "viking_hall/rafter_pair_8m": {
+  "hash": "deb6065714e3",
+  "kb": 656,
+  "ok": true,
+  "secs": 56,
+  "tris": 4704
+ },
+ "viking_hall/tie_beam_8m": {
+  "hash": "de1abd093ef0",
+  "kb": 446,
+  "ok": true,
+  "secs": 44,
+  "tris": 1688
+ },
+ "viking_hall/wall_plank_2m": {
+  "hash": "17267c01d1b7",
+  "kb": 1352,
+  "ok": true,
+  "secs": 128,
+  "tris": 14416
+ },
+ "viking_hall/wall_plank_door_2m": {
+  "hash": "aeb0824161c7",
+  "kb": 1678,
+  "ok": true,
+  "secs": 136,
+  "tris": 18760
+ },
+ "viking_hall/wall_wattle_2m": {
+  "hash": "85be2dde8895",
+  "kb": 3162,
+  "ok": true,
+  "secs": 100,
+  "tris": 53398
  }
 }

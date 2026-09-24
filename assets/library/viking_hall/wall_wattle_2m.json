@@ -1,0 +1,23 @@
+{
+ "theme": "viking_hall",
+ "name": "wall_wattle_2m",
+ "title": "Wall wattle and daub 2m",
+ "kind": "kit",
+ "tris": 53398,
+ "dims_m": [
+  2.0067,
+  0.323,
+  2.5118
+ ],
+ "texture": 2048,
+ "materials": [
+  "wall_wattle_2m_mat",
+  "wall_wattle_2m_mat",
+  "wall_wattle_2m_mat"
+ ],
+ "glb_kb": 3162,
+ "seconds": 99.2,
+ "t_build": 1,
+ "t_bake": 70,
+ "t_render": 28
+}

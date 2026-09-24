@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "tie_beam_8m",
+ "title": "Tie beam 8m",
+ "kind": "kit",
+ "tris": 1688,
+ "dims_m": [
+  0.32,
+  8.6,
+  0.3316
+ ],
+ "texture": 2048,
+ "materials": [
+  "tie_beam_8m_mat",
+  "tie_beam_8m_mat"
+ ],
+ "glb_kb": 446,
+ "seconds": 43.3,
+ "t_build": 0,
+ "t_bake": 21,
+ "t_render": 22
+}

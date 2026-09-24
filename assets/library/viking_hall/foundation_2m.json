@@ -1,0 +1,21 @@
+{
+ "theme": "viking_hall",
+ "name": "foundation_2m",
+ "title": "Foundation 2m",
+ "kind": "kit",
+ "tris": 15360,
+ "dims_m": [
+  2.0448,
+  0.5995,
+  0.496
+ ],
+ "texture": 2048,
+ "materials": [
+  "foundation_2m_mat"
+ ],
+ "glb_kb": 1860,
+ "seconds": 129.2,
+ "t_build": 0,
+ "t_bake": 100,
+ "t_render": 29
+}

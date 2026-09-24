@@ -1,0 +1,23 @@
+{
+ "theme": "viking_hall",
+ "name": "door_plank",
+ "title": "Plank door",
+ "kind": "kit",
+ "tris": 10132,
+ "dims_m": [
+  0.886,
+  0.2623,
+  1.84
+ ],
+ "texture": 1024,
+ "materials": [
+  "door_plank_mat",
+  "door_plank_mat",
+  "door_plank_mat"
+ ],
+ "glb_kb": 698,
+ "seconds": 51.3,
+ "t_build": 1,
+ "t_bake": 26,
+ "t_render": 24
+}

@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "wall_plank_door_2m",
+ "title": "Wall plank door 2m",
+ "kind": "kit",
+ "tris": 18760,
+ "dims_m": [
+  2.0,
+  0.3388,
+  2.5118
+ ],
+ "texture": 2048,
+ "materials": [
+  "wall_plank_door_2m_mat",
+  "wall_plank_door_2m_mat"
+ ],
+ "glb_kb": 1678,
+ "seconds": 135.8,
+ "t_build": 1,
+ "t_bake": 108,
+ "t_render": 27
+}

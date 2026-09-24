@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "floor_planks_2x2",
+ "title": "Floor planks 2x2",
+ "kind": "kit",
+ "tris": 14416,
+ "dims_m": [
+  2.0,
+  2.011,
+  0.192
+ ],
+ "texture": 2048,
+ "materials": [
+  "floor_planks_2x2_mat",
+  "floor_planks_2x2_mat"
+ ],
+ "glb_kb": 1508,
+ "seconds": 122.6,
+ "t_build": 0,
+ "t_bake": 94,
+ "t_render": 28
+}

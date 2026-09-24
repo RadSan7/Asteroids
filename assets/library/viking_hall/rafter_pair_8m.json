@@ -1,0 +1,21 @@
+{
+ "theme": "viking_hall",
+ "name": "rafter_pair_8m",
+ "title": "Rafter pair 8m",
+ "kind": "kit",
+ "tris": 4704,
+ "dims_m": [
+  0.3936,
+  9.3905,
+  4.8528
+ ],
+ "texture": 2048,
+ "materials": [
+  "rafter_pair_8m_mat"
+ ],
+ "glb_kb": 656,
+ "seconds": 55.9,
+ "t_build": 0,
+ "t_bake": 35,
+ "t_render": 20
+}

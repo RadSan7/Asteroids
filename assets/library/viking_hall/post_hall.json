@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "post_hall",
+ "title": "Carved hall post",
+ "kind": "kit",
+ "tris": 4648,
+ "dims_m": [
+  0.5,
+  0.3585,
+  4.0036
+ ],
+ "texture": 2048,
+ "materials": [
+  "post_hall_mat",
+  "post_hall_mat"
+ ],
+ "glb_kb": 504,
+ "seconds": 62.8,
+ "t_build": 1,
+ "t_bake": 42,
+ "t_render": 19
+}
