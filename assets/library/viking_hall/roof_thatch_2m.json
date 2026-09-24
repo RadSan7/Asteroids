@@ -3,19 +3,19 @@
  "name": "roof_thatch_2m",
  "title": "Thatch roof 2m",
  "kind": "kit",
- "tris": 16328,
+ "tris": 28152,
  "dims_m": [
   2.06,
-  4.9248,
-  4.758
+  4.9416,
+  4.8853
  ],
  "texture": 4096,
  "materials": [
   "roof_thatch_2m_mat"
  ],
- "glb_kb": 7194,
- "seconds": 249.6,
- "t_build": 0,
- "t_bake": 218,
+ "glb_kb": 12071,
+ "seconds": 314.3,
+ "t_build": 13,
+ "t_bake": 270,
  "t_render": 30
 }

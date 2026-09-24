@@ -3,20 +3,20 @@
  "name": "roof_ridge_2m",
  "title": "Ridge 2m",
  "kind": "kit",
- "tris": 4820,
+ "tris": 7020,
  "dims_m": [
-  2.0647,
-  0.8524,
-  0.3963
+  2.0886,
+  2.1,
+  1.4423
  ],
  "texture": 2048,
  "materials": [
   "roof_ridge_2m_mat",
   "roof_ridge_2m_mat"
  ],
- "glb_kb": 1512,
- "seconds": 81.2,
+ "glb_kb": 2359,
+ "seconds": 74.0,
  "t_build": 0,
- "t_bake": 52,
- "t_render": 29
+ "t_bake": 44,
+ "t_render": 30
 }

@@ -3,19 +3,19 @@
  "name": "gable_finial",
  "title": "Gable dragon finials",
  "kind": "kit",
- "tris": 1544,
+ "tris": 2572,
  "dims_m": [
   0.12,
-  9.5391,
-  6.257
+  9.5815,
+  6.3824
  ],
  "texture": 2048,
  "materials": [
   "gable_finial_mat"
  ],
- "glb_kb": 542,
- "seconds": 49.5,
+ "glb_kb": 874,
+ "seconds": 46.2,
  "t_build": 1,
- "t_bake": 26,
- "t_render": 23
+ "t_bake": 23,
+ "t_render": 22
 }

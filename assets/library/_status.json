@@ -467,11 +467,11 @@
   "tris": 7680
  },
  "viking_hall/gable_finial": {
-  "hash": "eb7def357a4d",
-  "kb": 542,
+  "hash": "f5e32988ba5a",
+  "kb": 874,
   "ok": true,
-  "secs": 50,
-  "tris": 1544
+  "secs": 47,
+  "tris": 2572
  },
  "viking_hall/gable_wall_8m": {
   "hash": "e75c6fab9ed0",
@@ -495,11 +495,11 @@
   "tris": 11276
  },
  "viking_hall/hearth_long": {
-  "hash": "de309836926d",
-  "kb": 3696,
+  "hash": "348c5112c7f3",
+  "kb": 3272,
   "ok": true,
-  "secs": 94,
-  "tris": 47336
+  "secs": 83,
+  "tris": 33512
  },
  "viking_hall/log_pile": {
   "hash": "28f5f2952d1d",
@@ -537,18 +537,18 @@
   "tris": 4704
  },
  "viking_hall/roof_ridge_2m": {
-  "hash": "a52a5492ffc3",
-  "kb": 1512,
+  "hash": "0678693abcd0",
+  "kb": 2359,
   "ok": true,
-  "secs": 82,
-  "tris": 4820
+  "secs": 75,
+  "tris": 7020
  },
  "viking_hall/roof_thatch_2m": {
-  "hash": "e9bbf8e56717",
-  "kb": 7194,
+  "hash": "8f9c090bb968",
+  "kb": 12071,
   "ok": true,
-  "secs": 250,
-  "tris": 16328
+  "secs": 315,
+  "tris": 28152
  },
  "viking_hall/stones_loose": {
   "hash": "f89acb5ba678",
