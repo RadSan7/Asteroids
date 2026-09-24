@@ -25,8 +25,8 @@
   "chelys_lyre_mat"
  ],
  "glb_kb": 1269,
- "seconds": 52.4,
- "t_build": 1,
- "t_bake": 26,
- "t_render": 25
+ "seconds": 52.0,
+ "t_build": 0,
+ "t_bake": 27,
+ "t_render": 24
 }

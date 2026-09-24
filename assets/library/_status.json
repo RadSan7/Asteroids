@@ -138,73 +138,73 @@
   "tris": 69780
  },
  "greece/amphora": {
-  "hash": "324b1a310ac2",
+  "hash": "480f6dfc7ae4",
   "kb": 1605,
   "ok": true,
-  "secs": 124,
+  "secs": 123,
   "tris": 31608
  },
  "greece/chelys_lyre": {
-  "hash": "a2d5682b1948",
+  "hash": "af3073d13c4c",
   "kb": 1269,
   "ok": true,
   "secs": 53,
   "tris": 10288
  },
  "greece/corinthian_helmet": {
-  "hash": "e583cb8027ca",
-  "kb": 1505,
+  "hash": "616a5cceeed3",
+  "kb": 1623,
   "ok": true,
-  "secs": 151,
-  "tris": 18274
+  "secs": 145,
+  "tris": 21154
  },
  "greece/hoplon": {
-  "hash": "a9db35f3771c",
-  "kb": 1880,
+  "hash": "bb08efd4b159",
+  "kb": 1879,
   "ok": true,
-  "secs": 129,
+  "secs": 126,
   "tris": 38824
  },
  "greece/kylix": {
-  "hash": "6f0c9741a590",
-  "kb": 1570,
+  "hash": "f0c4e1252be1",
+  "kb": 1613,
   "ok": true,
-  "secs": 123,
+  "secs": 122,
   "tris": 39560
  },
  "greece/laurel_wreath": {
-  "hash": "e04312cec23f",
+  "hash": "696ea8b79448",
   "kb": 2299,
   "ok": true,
-  "secs": 42,
+  "secs": 40,
   "tris": 39384
  },
  "greece/oil_lamp": {
-  "hash": "14a9b2a1a2ff",
-  "kb": 365,
+  "hash": "d43eae4c01b8",
+  "kb": 370,
   "ok": true,
   "secs": 53,
   "tris": 6464
  },
  "greece/thunderbolt": {
-  "hash": "7b552e2d1796",
+  "hash": "25aad91fac7d",
   "kb": 1712,
   "ok": true,
   "secs": 89,
   "tris": 10520
  },
  "greece/trident": {
-  "hash": "fbdd9172fd50",
+  "hash": "6f685728c84c",
   "kb": 807,
   "ok": true,
   "secs": 53,
   "tris": 5468
  },
  "greece/xiphos": {
-  "hash": "1394d24380e3",
-  "kb": 683,
+  "hash": "b970d94ae256",
+  "kb": 672,
   "ok": true,
-  "secs": 76,
+  "secs": 75,
   "tris": 8044
  },
  "jade_dynasty/bi_disc": {
