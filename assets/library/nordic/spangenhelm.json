@@ -13,6 +13,9 @@
  "materials": [
   "spangenhelm_mat"
  ],
- "glb_kb": 2038,
- "seconds": 362.1
+ "glb_kb": 2066,
+ "seconds": 187.5,
+ "t_build": 0,
+ "t_bake": 161,
+ "t_render": 25
 }

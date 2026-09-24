@@ -287,8 +287,8 @@
   "tris": 32868
  },
  "nordic/drinking_horn": {
-  "hash": "da14b688cf8e",
-  "kb": 1895,
+  "hash": "66c3c05535e0",
+  "kb": 1870,
   "ok": true,
   "secs": 71,
   "tris": 31636
@@ -329,10 +329,10 @@
   "tris": 14396
  },
  "nordic/spangenhelm": {
-  "hash": "cd33722afd9a",
-  "kb": 2038,
+  "hash": "a167a67ea5c1",
+  "kb": 2066,
   "ok": true,
-  "secs": 363,
+  "secs": 188,
   "tris": 25174
  },
  "nordic/stave_tankard": {
@@ -343,11 +343,11 @@
   "tris": 6252
  },
  "nordic/viking_sword": {
-  "hash": "621cbbec6025",
-  "kb": 1913,
+  "hash": "7bf48fc3ebee",
+  "kb": 2100,
   "ok": true,
-  "secs": 433,
-  "tris": 28028
+  "secs": 95,
+  "tris": 31404
  },
  "paris_1940/club_chair": {
   "hash": "f82c7692643b",

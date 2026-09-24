@@ -3,11 +3,11 @@
  "name": "viking_sword",
  "title": "Viking sword",
  "kind": "weapon",
- "tris": 28028,
+ "tris": 31404,
  "dims_m": [
-  0.1433,
-  0.026,
-  0.889
+  0.118,
+  0.028,
+  0.9297
  ],
  "texture": 2048,
  "materials": [
@@ -16,6 +16,9 @@
   "viking_sword_mat",
   "viking_sword_mat"
  ],
- "glb_kb": 1913,
- "seconds": 432.5
+ "glb_kb": 2100,
+ "seconds": 94.1,
+ "t_build": 1,
+ "t_bake": 73,
+ "t_render": 20
 }
