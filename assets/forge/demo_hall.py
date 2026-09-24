@@ -40,6 +40,7 @@ def put(name, loc, rz=0.0, group="hall"):
     bpy.context.scene.collection.objects.link(o)
     o.hide_render = o.hide_viewport = False
     o.location = loc
+    o.rotation_mode = "XYZ"          # glTF import leaves QUATERNION mode, which ignores rotation_euler
     o.rotation_euler = Euler((0, 0, rz))
     o["group"] = group
     PLACED.append(o)
@@ -110,9 +111,9 @@ def environment():
     sky.sun_elevation = math.radians(24)
     sky.sun_rotation = math.radians(215)
     nt.links.new(sky.outputs[0], nt.nodes["Background"].inputs[0])
-    nt.nodes["Background"].inputs[1].default_value = 0.35
+    nt.nodes["Background"].inputs[1].default_value = 0.18
     sun = bpy.data.lights.new("sun", "SUN")
-    sun.energy = 3.2
+    sun.energy = 1.6
     sun.angle = math.radians(1.5)
     so = bpy.data.objects.new("sun", sun)
     sc.collection.objects.link(so)
@@ -139,6 +140,7 @@ def environment():
     g.data.materials.append(m)
     sc.view_settings.view_transform = "AgX"
     sc.view_settings.look = "AgX - Medium High Contrast"
+    sc.view_settings.exposure = -0.3
     sc.cycles.use_denoising = True
 
 
