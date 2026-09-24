@@ -1,0 +1,24 @@
+{
+ "theme": "jade_dynasty",
+ "name": "zisha_teapot",
+ "title": "Zisha teapot",
+ "kind": "vessel",
+ "tris": 33288,
+ "dims_m": [
+  0.2328,
+  0.1457,
+  0.1209
+ ],
+ "texture": 2048,
+ "materials": [
+  "zisha_teapot_mat",
+  "zisha_teapot_mat",
+  "zisha_teapot_mat",
+  "zisha_teapot_mat"
+ ],
+ "glb_kb": 1785,
+ "seconds": 103.7,
+ "t_build": 0,
+ "t_bake": 74,
+ "t_render": 29
+}

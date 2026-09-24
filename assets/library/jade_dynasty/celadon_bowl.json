@@ -1,0 +1,23 @@
+{
+ "theme": "jade_dynasty",
+ "name": "celadon_bowl",
+ "title": "Celadon bowl",
+ "kind": "vessel",
+ "tris": 37376,
+ "dims_m": [
+  0.1967,
+  0.1967,
+  0.0764
+ ],
+ "texture": 1024,
+ "materials": [
+  "celadon_bowl_mat",
+  "celadon_bowl_mat",
+  "celadon_bowl_mat"
+ ],
+ "glb_kb": 1487,
+ "seconds": 53.3,
+ "t_build": 0,
+ "t_bake": 20,
+ "t_render": 33
+}

@@ -1,0 +1,23 @@
+{
+ "theme": "jade_dynasty",
+ "name": "bi_disc",
+ "title": "Bi disc on stand",
+ "kind": "artifact",
+ "tris": 3520,
+ "dims_m": [
+  0.2,
+  0.06,
+  0.228
+ ],
+ "texture": 2048,
+ "materials": [
+  "bi_disc_mat",
+  "bi_disc_mat",
+  "bi_disc_mat"
+ ],
+ "glb_kb": 643,
+ "seconds": 79.9,
+ "t_build": 1,
+ "t_bake": 50,
+ "t_render": 29
+}

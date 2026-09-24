@@ -69,12 +69,33 @@
   "secs": 46,
   "tris": 69780
  },
+ "jade_dynasty/bi_disc": {
+  "hash": "f651532182ab",
+  "kb": 643,
+  "ok": true,
+  "secs": 80,
+  "tris": 3520
+ },
+ "jade_dynasty/celadon_bowl": {
+  "hash": "a7648c761b3a",
+  "kb": 1487,
+  "ok": true,
+  "secs": 54,
+  "tris": 37376
+ },
  "jade_dynasty/jade_jian": {
   "hash": "7902aea0ad3d",
   "kb": 889,
   "ok": true,
   "secs": 50,
   "tris": 11552
+ },
+ "jade_dynasty/zisha_teapot": {
+  "hash": "2bbc1e4b8cc6",
+  "kb": 1785,
+  "ok": true,
+  "secs": 104,
+  "tris": 33288
  },
  "nordic/bearded_axe": {
   "hash": "9b6f6728eee6",
