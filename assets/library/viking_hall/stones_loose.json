@@ -13,9 +13,9 @@
  "materials": [
   "stones_loose_mat"
  ],
- "glb_kb": 1620,
- "seconds": 129.7,
+ "glb_kb": 2555,
+ "seconds": 83.6,
  "t_build": 0,
- "t_bake": 101,
- "t_render": 28
+ "t_bake": 56,
+ "t_render": 27
 }

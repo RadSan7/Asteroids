@@ -502,10 +502,10 @@
   "tris": 33512
  },
  "viking_hall/log_pile": {
-  "hash": "28f5f2952d1d",
+  "hash": "54aa0d4447bb",
   "kb": 1335,
   "ok": true,
-  "secs": 136,
+  "secs": 121,
   "tris": 2520
  },
  "viking_hall/plank_stack": {
@@ -551,10 +551,10 @@
   "tris": 28152
  },
  "viking_hall/stones_loose": {
-  "hash": "f89acb5ba678",
-  "kb": 1620,
+  "hash": "2dfea26750bb",
+  "kb": 2555,
   "ok": true,
-  "secs": 130,
+  "secs": 84,
   "tris": 9984
  },
  "viking_hall/tie_beam_8m": {
