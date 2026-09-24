@@ -226,8 +226,9 @@ def _box_uv(ob):
             lay.data[li].uv = (co[a], co[b])
 
 
-def planar_uv(ob, axis="Y", fit=True):
-    """Project design UVs along an axis; fit=True normalises to 0..1 over bbox."""
+def planar_uv(ob, axis="Y", fit=True, stretch=False):
+    """Project design UVs along an axis; fit=True normalises to 0..1 over bbox
+    (keeping aspect), stretch=True fills 0..1 on both axes."""
     me = ob.data
     lay = me.uv_layers.get(DESIGN) or me.uv_layers.new(name=DESIGN)
     a, b = {"X": (1, 2), "Y": (0, 2), "Z": (0, 1)}[axis]
@@ -236,7 +237,9 @@ def planar_uv(ob, axis="Y", fit=True):
     span = max(hi[a] - lo[a], hi[b] - lo[b]) or 1.0
     for li, loop in enumerate(me.loops):
         c = co[loop.vertex_index]
-        if fit:
+        if stretch:
+            lay.data[li].uv = ((c[a] - lo[a]) / ((hi[a] - lo[a]) or 1), (c[b] - lo[b]) / ((hi[b] - lo[b]) or 1))
+        elif fit:
             lay.data[li].uv = ((c[a] - lo[a]) / span, (c[b] - lo[b]) / span)
         else:
             lay.data[li].uv = (c[a], c[b])

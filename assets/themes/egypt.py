@@ -9,16 +9,16 @@ from forge import mat as M
 from forge.pipeline import asset
 
 pi = math.pi
-LAPIS = (0.035, 0.07, 0.30)
+LAPIS = (0.012, 0.022, 0.11)
 TURQ = (0.10, 0.45, 0.42)
 CARN = (0.45, 0.06, 0.02)
-EBLUE = (0.05, 0.22, 0.55)   # Egyptian blue pigment
+EBLUE = (0.02, 0.07, 0.26)   # Egyptian blue pigment
 
 
 def gold(name="gold", **kw):
     kw.setdefault("rough", 0.24)
     kw.setdefault("scale", 4)
-    return M.metal(name, "gold", wear=0.4, dirt=0.7, dirt_color=(0.05, 0.03, 0.01), scratches=0.3, **kw)
+    return M.metal(name, "gold", wear=0.4, dirt=0.5, dirt_color=(0.05, 0.03, 0.01), scratches=0.3, rough_var=0.04, **kw)
 
 
 def bronze(name="bronze", **kw):
@@ -28,7 +28,7 @@ def bronze(name="bronze", **kw):
 
 
 def lapis(name="lapis", scale=20):
-    return M.gem(name, color=LAPIS, color2=(0.10, 0.16, 0.45), veins=0.2, rough=0.18, scale=scale,
+    return M.gem(name, color=LAPIS, color2=(0.04, 0.07, 0.22), veins=0.25, rough=0.3, scale=scale,
                  layers=[dict(mask=lambda nb: nb.ss(nb.noise(900, 2, 0.5), 0.72, 0.76), color=(0.8, 0.65, 0.3),
                               metal=1.0, rough=0.2)])
 
@@ -53,7 +53,7 @@ def khopesh():
     c.d.rounded_rectangle([c.px(cu - 0.035, cv + 0.14), c.px(cu + 0.035, cv - 0.14)], radius=60, outline=255,
                           width=c.pw(0.004))
     eng = c.blur(0.8).save("cartouche")
-    br = bronze("blade_bronze", rough=0.3, layers=[dict(mask=eng, height=-0.6, color=(0.10, 0.05, 0.02), rough=0.7)])
+    br = bronze("blade_bronze", rough=0.28, patina_amt=0.2, layers=[dict(mask=eng, height=-0.6, color=(0.10, 0.05, 0.02), rough=0.7)])
     G.extrude("blade", G.shape_polys(blade), 0.0065, bev=0.0026, bres=3, plane="XZ", mat=br)
     ebony = M.wood("ebony", light=(0.035, 0.025, 0.02), dark=(0.01, 0.008, 0.006), axis="Z", varnish=0.5, dirt=0.3)
     grip = G.poly2d([(-0.017, -0.125), (0.017, -0.125), (0.0165, -0.005), (-0.0165, -0.005)]).buffer(0.002)
@@ -237,7 +237,7 @@ def heart_scarab():
 
 
 def _scarab_mat(grooves):
-    return M.gem("scarab_shell", color=LAPIS, color2=(0.12, 0.2, 0.5), veins=0.25, rough=0.15, scale=60,
+    return M.gem("scarab_shell", color=LAPIS, color2=(0.04, 0.07, 0.22), veins=0.3, rough=0.28, scale=60,
                  layers=[dict(mask=grooves, height=-0.8, color=(0.02, 0.02, 0.05)),
                          dict(mask=lambda nb: nb.ss(nb.noise(900, 2, 0.5), 0.72, 0.76), color=(0.8, 0.65, 0.3),
                               metal=1.0, rough=0.2)])
@@ -383,16 +383,21 @@ def senet_board():
                       layers=[dict(mask=iv, invert=True, color=(0.03, 0.02, 0.012), rough=0.3),
                               dict(mask=mk, color=(0.03, 0.02, 0.015), height=-0.6)])
     top = G.box("top", (W - 0.012, Dp - 0.012, 0.004), loc=(0, 0, H + 0.001), bev=0.001, mat=ivory)
-    G.planar_uv(top, "Z")
+    G.planar_uv(top, "Z", stretch=True)
     pieces = [M.ceramic("piece_blue", color=(0.05, 0.25, 0.45), glaze=True, rough=0.25, crackle=0.2, scale=30),
               M.ceramic("piece_white", color=(0.6, 0.55, 0.45), glaze=True, rough=0.3, crackle=0.2, scale=30)]
-    for i in range(5):
-        cone = G.lathe(f"cone{i}", [(0, 0), (0.0085, 0), (0.009, 0.004), (0.0045, 0.02), (0.0055, 0.024),
-                                    (0, 0.026)], segs=24, mat=pieces[0])
-        G.xform(cone, (-0.16 + i * 0.075, 0.1 + 0.01 * (i % 2), 0.0))
-        spool = G.lathe(f"spool{i}", [(0, 0), (0.008, 0), (0.0085, 0.003), (0.006, 0.008), (0.0085, 0.013),
-                                      (0.008, 0.016), (0, 0.016)], segs=24, mat=pieces[1])
-        G.xform(spool, (-0.13 + i * 0.075, 0.14 - 0.01 * (i % 2), 0.0))
+    cell_w, cell_h = (W - 0.012) / 10, (Dp - 0.012) / 3
+    spots = [(0, 0), (2, 0), (4, 1), (6, 0), (9, 2), (1, 2), (3, 1), (5, 2), (7, 1), (8, 0)]
+    for i, (cx, cy) in enumerate(spots):
+        x = -(W - 0.012) / 2 + cell_w * (cx + 0.5)
+        y = -(Dp - 0.012) / 2 + cell_h * (cy + 0.5)
+        if i < 5:
+            pc = G.lathe(f"cone{i}", [(0, 0), (0.0085, 0), (0.009, 0.004), (0.0045, 0.02), (0.0055, 0.024),
+                                      (0, 0.026)], segs=24, mat=pieces[0])
+        else:
+            pc = G.lathe(f"spool{i}", [(0, 0), (0.008, 0), (0.0085, 0.003), (0.006, 0.008), (0.0085, 0.013),
+                                       (0.008, 0.016), (0, 0.016)], segs=24, mat=pieces[1])
+        G.xform(pc, (x, y, H + 0.003))
     stick_m = M.wood("throw_sticks", light=(0.42, 0.30, 0.18), dark=(0.2, 0.12, 0.06), axis="X", dirt=0.5,
                      paint=None)
     for i in range(4):

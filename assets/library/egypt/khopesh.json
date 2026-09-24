@@ -1,0 +1,23 @@
+{
+ "theme": "egypt",
+ "name": "khopesh",
+ "title": "Khopesh",
+ "kind": "weapon",
+ "tris": 10212,
+ "dims_m": [
+  0.2202,
+  0.0294,
+  0.5944
+ ],
+ "texture": 2048,
+ "materials": [
+  "khopesh_mat",
+  "khopesh_mat",
+  "khopesh_mat"
+ ],
+ "glb_kb": 1093,
+ "seconds": 59.4,
+ "t_build": 1,
+ "t_bake": 39,
+ "t_render": 19
+}

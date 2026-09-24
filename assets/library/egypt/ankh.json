@@ -1,0 +1,21 @@
+{
+ "theme": "egypt",
+ "name": "ankh",
+ "title": "Ankh",
+ "kind": "artifact",
+ "tris": 7520,
+ "dims_m": [
+  0.181,
+  0.014,
+  0.251
+ ],
+ "texture": 2048,
+ "materials": [
+  "ankh_mat"
+ ],
+ "glb_kb": 993,
+ "seconds": 87.3,
+ "t_build": 1,
+ "t_bake": 64,
+ "t_render": 22
+}

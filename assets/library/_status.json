@@ -1,4 +1,81 @@
 {
+ "egypt/ankh": {
+  "hash": "3b06c3b46ab6",
+  "kb": 993,
+  "ok": true,
+  "secs": 88,
+  "tris": 7520
+ },
+ "egypt/blue_painted_jar": {
+  "hash": "d3da45e7a02b",
+  "kb": 1495,
+  "ok": true,
+  "secs": 115,
+  "tris": 27008
+ },
+ "egypt/crook_and_flail": {
+  "hash": "96309a8f6297",
+  "kb": 1333,
+  "ok": true,
+  "secs": 88,
+  "tris": 11224
+ },
+ "egypt/heart_scarab": {
+  "hash": "63d1dcff523d",
+  "kb": 572,
+  "ok": true,
+  "secs": 45,
+  "tris": 9072
+ },
+ "egypt/khopesh": {
+  "hash": "e599a37c86ee",
+  "kb": 1093,
+  "ok": true,
+  "secs": 60,
+  "tris": 10212
+ },
+ "egypt/lotus_chalice": {
+  "hash": "3d93489b0b18",
+  "kb": 1641,
+  "ok": true,
+  "secs": 116,
+  "tris": 29368
+ },
+ "egypt/papyrus_scroll": {
+  "hash": "311bee89b198",
+  "kb": 1865,
+  "ok": true,
+  "secs": 94,
+  "tris": 25844
+ },
+ "egypt/senet_board": {
+  "hash": "83578da8cb52",
+  "kb": 747,
+  "ok": true,
+  "secs": 93,
+  "tris": 2980
+ },
+ "egypt/sistrum": {
+  "hash": "31bcfb581b9e",
+  "kb": 817,
+  "ok": true,
+  "secs": 44,
+  "tris": 14608
+ },
+ "egypt/usekh_collar": {
+  "hash": "46ec0e9ad892",
+  "kb": 5510,
+  "ok": true,
+  "secs": 46,
+  "tris": 69780
+ },
+ "jade_dynasty/jade_jian": {
+  "hash": "7902aea0ad3d",
+  "kb": 889,
+  "ok": true,
+  "secs": 50,
+  "tris": 11552
+ },
  "nordic/bearded_axe": {
   "hash": "9b6f6728eee6",
   "kb": 1696,

@@ -1,0 +1,22 @@
+{
+ "theme": "egypt",
+ "name": "lotus_chalice",
+ "title": "Lotus chalice",
+ "kind": "vessel",
+ "tris": 29368,
+ "dims_m": [
+  0.2373,
+  0.1705,
+  0.183
+ ],
+ "texture": 2048,
+ "materials": [
+  "lotus_chalice_mat",
+  "lotus_chalice_mat"
+ ],
+ "glb_kb": 1641,
+ "seconds": 115.9,
+ "t_build": 1,
+ "t_bake": 83,
+ "t_render": 32
+}

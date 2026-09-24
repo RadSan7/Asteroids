@@ -1,0 +1,24 @@
+{
+ "theme": "egypt",
+ "name": "heart_scarab",
+ "title": "Heart scarab",
+ "kind": "artifact",
+ "tris": 9072,
+ "dims_m": [
+  0.0514,
+  0.0711,
+  0.026
+ ],
+ "texture": 1024,
+ "materials": [
+  "heart_scarab_mat",
+  "heart_scarab_mat",
+  "heart_scarab_mat",
+  "heart_scarab_mat"
+ ],
+ "glb_kb": 572,
+ "seconds": 44.0,
+ "t_build": 0,
+ "t_bake": 13,
+ "t_render": 31
+}

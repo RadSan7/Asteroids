@@ -1,0 +1,22 @@
+{
+ "theme": "egypt",
+ "name": "sistrum",
+ "title": "Sistrum",
+ "kind": "instrument",
+ "tris": 14608,
+ "dims_m": [
+  0.1259,
+  0.0722,
+  0.2984
+ ],
+ "texture": 1024,
+ "materials": [
+  "sistrum_mat",
+  "sistrum_mat"
+ ],
+ "glb_kb": 817,
+ "seconds": 43.2,
+ "t_build": 0,
+ "t_bake": 20,
+ "t_render": 23
+}

@@ -1,0 +1,21 @@
+{
+ "theme": "egypt",
+ "name": "papyrus_scroll",
+ "title": "Papyrus scroll",
+ "kind": "artifact",
+ "tris": 25844,
+ "dims_m": [
+  0.3783,
+  0.26,
+  0.0525
+ ],
+ "texture": 2048,
+ "materials": [
+  "papyrus_scroll_mat"
+ ],
+ "glb_kb": 1865,
+ "seconds": 93.6,
+ "t_build": 4,
+ "t_bake": 60,
+ "t_render": 28
+}

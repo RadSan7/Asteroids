@@ -1,0 +1,25 @@
+{
+ "theme": "egypt",
+ "name": "crook_and_flail",
+ "title": "Crook and flail",
+ "kind": "artifact",
+ "tris": 11224,
+ "dims_m": [
+  0.2027,
+  0.0775,
+  0.3409
+ ],
+ "texture": 2048,
+ "materials": [
+  "crook_and_flail_mat",
+  "crook_and_flail_mat",
+  "crook_and_flail_mat",
+  "crook_and_flail_mat",
+  "crook_and_flail_mat"
+ ],
+ "glb_kb": 1333,
+ "seconds": 87.8,
+ "t_build": 0,
+ "t_bake": 64,
+ "t_render": 23
+}

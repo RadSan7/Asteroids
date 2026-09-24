@@ -312,12 +312,12 @@ def render_preview(ob, spec, path, res=900):
     mp.inputs["Rotation"].default_value = (0, math.radians(-90), 0)
     ramp = nt.nodes.new("ShaderNodeValToRGB")
     ramp.color_ramp.elements[0].color = (0.015, 0.015, 0.017, 1)
-    ramp.color_ramp.elements[1].color = (0.5, 0.52, 0.56, 1)
+    ramp.color_ramp.elements[1].color = (0.9, 0.9, 0.92, 1)
     nt.links.new(tc.outputs["Generated"], mp.inputs["Vector"])
     nt.links.new(mp.outputs["Vector"], grad.inputs["Vector"])
     nt.links.new(grad.outputs["Fac"], ramp.inputs["Fac"])
     nt.links.new(ramp.outputs["Color"], bg.inputs["Color"])
-    bg.inputs["Strength"].default_value = 0.35
+    bg.inputs["Strength"].default_value = 0.45
     # camera framed on the bounding sphere
     az, el = (math.radians(a) for a in spec["view"])
     lens = spec["lens"]

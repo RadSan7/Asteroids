@@ -1,0 +1,22 @@
+{
+ "theme": "egypt",
+ "name": "blue_painted_jar",
+ "title": "Blue-painted jar",
+ "kind": "vessel",
+ "tris": 27008,
+ "dims_m": [
+  0.3207,
+  0.3207,
+  0.6013
+ ],
+ "texture": 2048,
+ "materials": [
+  "blue_painted_jar_mat",
+  "blue_painted_jar_mat"
+ ],
+ "glb_kb": 1495,
+ "seconds": 114.2,
+ "t_build": 1,
+ "t_bake": 87,
+ "t_render": 25
+}

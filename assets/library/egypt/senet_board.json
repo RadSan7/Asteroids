@@ -1,0 +1,26 @@
+{
+ "theme": "egypt",
+ "name": "senet_board",
+ "title": "Senet board",
+ "kind": "game",
+ "tris": 2980,
+ "dims_m": [
+  0.4335,
+  0.2262,
+  0.068
+ ],
+ "texture": 2048,
+ "materials": [
+  "senet_board_mat",
+  "senet_board_mat",
+  "senet_board_mat",
+  "senet_board_mat",
+  "senet_board_mat",
+  "senet_board_mat"
+ ],
+ "glb_kb": 747,
+ "seconds": 92.7,
+ "t_build": 0,
+ "t_bake": 64,
+ "t_render": 28
+}

@@ -1,0 +1,25 @@
+{
+ "theme": "egypt",
+ "name": "usekh_collar",
+ "title": "Usekh collar",
+ "kind": "clothing",
+ "tris": 69780,
+ "dims_m": [
+  0.352,
+  0.3106,
+  0.0081
+ ],
+ "texture": 2048,
+ "materials": [
+  "usekh_collar_mat",
+  "usekh_collar_mat",
+  "usekh_collar_mat",
+  "usekh_collar_mat",
+  "usekh_collar_mat"
+ ],
+ "glb_kb": 5510,
+ "seconds": 45.5,
+ "t_build": 0,
+ "t_bake": 15,
+ "t_render": 29
+}

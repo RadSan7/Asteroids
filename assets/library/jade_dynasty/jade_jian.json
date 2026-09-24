@@ -1,0 +1,25 @@
+{
+ "theme": "jade_dynasty",
+ "name": "jade_jian",
+ "title": "Jade jian",
+ "kind": "weapon",
+ "tris": 11552,
+ "dims_m": [
+  0.118,
+  0.03,
+  0.9655
+ ],
+ "texture": 2048,
+ "materials": [
+  "jade_jian_mat",
+  "jade_jian_mat",
+  "jade_jian_mat",
+  "jade_jian_mat",
+  "jade_jian_mat"
+ ],
+ "glb_kb": 889,
+ "seconds": 49.3,
+ "t_build": 1,
+ "t_bake": 28,
+ "t_render": 20
+}

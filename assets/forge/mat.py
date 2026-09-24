@@ -303,7 +303,7 @@ METALS = {
 }
 
 
-def metal(name, kind="iron", color=None, rough=0.32, rough_var=0.12, wear=0.6, dirt=0.5,
+def metal(name, kind="iron", color=None, rough=0.32, rough_var=0.06, wear=0.6, dirt=0.5,
           dirt_color=(0.03, 0.025, 0.02), patina=None, patina_amt=0.0, patina_scale=6.0,
           scratches=0.4, hammer=0.0, pitting=0.0, rust=0.0, scale=1.0, layers=None,
           bump_strength=0.25, edge_radius=0.003):
