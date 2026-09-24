@@ -6,8 +6,8 @@
  "tris": 2980,
  "dims_m": [
   0.4335,
-  0.2262,
-  0.068
+  0.1688,
+  0.094
  ],
  "texture": 2048,
  "materials": [
@@ -18,9 +18,9 @@
   "senet_board_mat",
   "senet_board_mat"
  ],
- "glb_kb": 747,
- "seconds": 92.7,
+ "glb_kb": 764,
+ "seconds": 134.2,
  "t_build": 0,
- "t_bake": 64,
- "t_render": 28
+ "t_bake": 95,
+ "t_render": 38
 }
