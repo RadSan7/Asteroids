@@ -111,7 +111,7 @@ def viking_sword():
     ins.text(0.75, 0.46, "+++ I + I +++", size=0.018, font="serif_bold", angle=90)
     inlay = ins.blur(0.8).save("inlay")
     steel = M.metal("blade_steel", "steel", rough=0.26, wear=0.35, dirt=0.45, scratches=0.7,
-                    patina=(0.06, 0.055, 0.05), patina_amt=0.3, pitting=0.25, rust=0.08, scale=2,
+                    patina=(0.08, 0.075, 0.07), patina_amt=0.12, pitting=0.2, rust=0.04, scale=2,
                     layers=[dict(mask=inlay, color=(0.9, 0.88, 0.84), metal=1.0, rough=0.2, height=-0.3)])
     G.loft("blade", secs, steel)
     irn = iron("hilt_iron", rust=0.12, scale=3, edge_radius=0.0015,
@@ -231,8 +231,8 @@ def _horn_material():
     x, y, _ = nb.sep(nb.co(M.UV))
     streak = nb.noise(4, 8, 0.6, nb.mapv(nb.co(M.UV), scale=(40, 1.5, 1)))
     col = nb.ramp(nb.add(nb.mul(y, 0.9), nb.mul(streak, 0.25)),
-                  [(0.1, (0.50, 0.33, 0.13)), (0.45, (0.30, 0.16, 0.05)), (0.8, (0.06, 0.035, 0.02)),
-                   (1.0, (0.02, 0.015, 0.012))])
+                  [(0.0, (0.46, 0.30, 0.12)), (0.22, (0.30, 0.16, 0.05)), (0.45, (0.10, 0.05, 0.02)),
+                   (0.7, (0.03, 0.02, 0.014))])
     col = nb.mix(col, nb.hsv(col, 0.5, 1.0, 0.7), nb.ss(streak, 0.55, 0.7))
     height = nb.mul(nb.noise(30, 6, 0.6, nb.mapv(nb.co(M.UV), scale=(80, 3, 1))), 0.3)
     return nb.done(col, nb.mr(streak, 0, 1, 0.22, 0.4), 0.0, nb.bump(height, 0.2, 0.001), **{"Coat Weight": 0.5})
@@ -277,13 +277,13 @@ def mjolnir_pendant():
     from shapely.geometry import Polygon
     head = []
     for t in np.linspace(0, 1, 30):
-        head.append((-0.0065 - 0.0105 * t ** 1.6, 0.021 - 0.021 * t))
+        head.append((-0.0045 - 0.0135 * t ** 2.4, 0.014 - 0.014 * t))
     for t in np.linspace(0, 1, 30):
-        x = -0.017 + 0.034 * t
-        head.append((x, -0.0035 * math.sin(pi * t)))
+        x = -0.018 + 0.036 * t
+        head.append((x, 0.0015 * math.sin(pi * t)))
     for t in np.linspace(1, 0, 30):
-        head.append((0.0065 + 0.0105 * t ** 1.6, 0.021 - 0.021 * t))
-    shape = Polygon(head).union(G.poly2d([(-0.005, 0.02), (0.005, 0.02), (0.004, 0.032), (-0.004, 0.032)]))
+        head.append((0.0045 + 0.0135 * t ** 2.4, 0.014 - 0.014 * t))
+    shape = Polygon(head).union(G.poly2d([(-0.0045, 0.012), (0.0045, 0.012), (0.004, 0.032), (-0.004, 0.032)]))
     c = D.Canvas(1024)
     # engraved triquetra-like interlace on the head (design UV = normalised bbox)
     for k in range(3):
@@ -307,8 +307,8 @@ def mjolnir_pendant():
 # ------------------------------------------------------------------ 7 ------
 @asset(res=1024, view=(30, 28), kind="vessel", title="Soapstone pot")
 def soapstone_pot():
-    soot = dict(mask=M.axis_mask("Z", 0.07, 0.0, noise=0.05), color=(0.02, 0.018, 0.016), rough=0.9, height=0.2)
-    stone = M.stone("soapstone", c1=(0.30, 0.31, 0.27), c2=(0.16, 0.17, 0.15), kind="limestone", rough=0.55,
+    soot = dict(mask=M.axis_mask("Z", 0.09, 0.02, noise=0.06), color=(0.008, 0.007, 0.006), rough=0.95, height=0.2)
+    stone = M.stone("soapstone", c1=(0.13, 0.14, 0.12), c2=(0.06, 0.065, 0.058), kind="limestone", rough=0.5,
                     scale=2, chips=0.5, layers=[soot, dict(mask=_tool_marks(), height=-0.4)])
     prof = [(0, 0), (0.08, 0.002), (0.13, 0.03), (0.152, 0.08), (0.158, 0.125), (0.155, 0.13), (0.145, 0.13),
             (0.143, 0.085), (0.12, 0.04), (0.07, 0.016), (0, 0.014)]
@@ -349,27 +349,23 @@ def sea_chest():
     for s in (1, -1):
         G.box(f"end{s}", (t * 1.6, Dp + 0.02, H + 0.01), loc=(s * (W / 2 + t * 0.3), 0, H / 2), bev=0.004, mat=oak)
     G.box("bottom", (W, Dp, t), loc=(0, 0, t / 2), bev=0.002, mat=oak)
-    lid = G.box("lid", (W + 0.06, Dp + 0.05, 0.03), loc=(0, 0, 0), bev=0.006, mat=oak, subdiv=3)
-    G.deform(lid, "BEND", angle=20, axis="X")
-    G.xform(lid, (0, 0, H + 0.022))
+    G.box("lid", (W + 0.05, Dp + 0.05, 0.03), loc=(0, 0, H + 0.02), bev=0.006, mat=oak)
     irn = iron("chest_iron", rust=0.4, scale=1.5)
-    # straps over lid and down the front
+    # iron straps: across the lid and down front and back
+    lt = H + 0.037
     for i, x in enumerate((-0.27, 0.0, 0.27)):
-        path = [(x, Dp / 2 + 0.028, H - 0.05)] + [(x, y, H + 0.036 + 0.018 * math.cos(pi * y / (Dp + 0.05)))
-                                                 for y in np.linspace(Dp / 2 + 0.028, -Dp / 2 - 0.028, 40)]
-        path += [(x, -Dp / 2 - 0.028, H - 0.02), (x, -Dp / 2 - 0.003, H * 0.35)] if i != 1 else \
-            [(x, -Dp / 2 - 0.028, H - 0.01)]
-        path = G.curve_pts(path, 80)
-        P = np.array(path)
-        nrm = np.zeros_like(P)
-        nrm[:, 2] = 1
-        nrm[P[:, 1] > Dp / 2 + 0.02, :] = (0, 1, 0)
-        nrm[P[:, 1] < -Dp / 2 - 0.0, :] = (0, -1, 0)
-        G.strap(f"strap{i}", path, nrm, 0.034, 0.003, irn)
-        rv = [p for p in path[5:-3:9]]
+        G.box(f"strap_top{i}", (0.034, Dp + 0.056, 0.004), loc=(x, 0, lt), bev=0.0012, mat=irn)
+        for sgn in (1, -1):
+            G.box(f"strap_v{i}{sgn}", (0.034, 0.004, 0.09 if i == 1 else 0.2),
+                  loc=(x, sgn * (Dp / 2 + 0.03), lt - (0.045 if i == 1 else 0.1)), bev=0.0012, mat=irn)
+            if i != 1:
+                G.box(f"strap_b{i}{sgn}", (0.034, 0.004, 0.19), loc=(x, sgn * (Dp / 2 + 0.002), H * 0.36),
+                      bev=0.0012, mat=irn)
+        rv = [(x, y, lt + 0.002) for y in np.linspace(-Dp / 2, Dp / 2, 6)]
         rivets(rv, 0.0045, irn, name=f"srv{i}")
-    hasp = G.box("hasp_plate", (0.11, 0.006, 0.12), loc=(0, -Dp / 2 - 0.006, H * 0.62), bev=0.003, mat=irn)
-    G.box("hasp", (0.03, 0.01, 0.1), loc=(0, -Dp / 2 - 0.014, H * 0.8), bev=0.003, mat=irn)
+    G.box("hasp_plate", (0.11, 0.006, 0.12), loc=(0, -Dp / 2 - 0.004, H * 0.6), bev=0.003, mat=irn)
+    G.box("hasp", (0.03, 0.008, 0.11), loc=(0, -Dp / 2 - 0.03, H - 0.02), bev=0.003, mat=irn)
+    G.box("hasp_top", (0.03, 0.03, 0.006), loc=(0, -Dp / 2 - 0.016, H + 0.034), bev=0.002, mat=irn)
     for s in (1, -1):
         G.torus(f"handle{s}", 0.04, 0.005, loc=(s * (W / 2 + 0.045), 0, H * 0.58), rot=G.rotd(90, 0, 90), mat=irn)
         G.box(f"staple{s}", (0.012, 0.05, 0.03), loc=(s * (W / 2 + 0.035), 0, H * 0.64), bev=0.003, mat=irn)

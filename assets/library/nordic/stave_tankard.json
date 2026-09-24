@@ -3,7 +3,7 @@
  "name": "stave_tankard",
  "title": "Stave tankard",
  "kind": "vessel",
- "tris": 6300,
+ "tris": 6252,
  "dims_m": [
   0.1971,
   0.1356,
@@ -15,6 +15,9 @@
   "stave_tankard_mat",
   "mead"
  ],
- "glb_kb": 500,
- "seconds": 134.5
+ "glb_kb": 523,
+ "seconds": 51.6,
+ "t_build": 0,
+ "t_bake": 19,
+ "t_render": 32
 }

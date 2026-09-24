@@ -1,0 +1,22 @@
+{
+ "theme": "nordic",
+ "name": "sea_chest",
+ "title": "Sea chest",
+ "kind": "furniture",
+ "tris": 11056,
+ "dims_m": [
+  0.88,
+  0.4661,
+  0.4203
+ ],
+ "texture": 2048,
+ "materials": [
+  "sea_chest_mat",
+  "sea_chest_mat"
+ ],
+ "glb_kb": 1529,
+ "seconds": 117.2,
+ "t_build": 0,
+ "t_bake": 84,
+ "t_render": 33
+}

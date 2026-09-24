@@ -1,0 +1,22 @@
+{
+ "theme": "nordic",
+ "name": "drinking_horn",
+ "title": "Drinking horn",
+ "kind": "vessel",
+ "tris": 31636,
+ "dims_m": [
+  0.2752,
+  0.1171,
+  0.4086
+ ],
+ "texture": 2048,
+ "materials": [
+  "drinking_horn_mat",
+  "drinking_horn_mat"
+ ],
+ "glb_kb": 1895,
+ "seconds": 70.1,
+ "t_build": 0,
+ "t_bake": 42,
+ "t_render": 27
+}

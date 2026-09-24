@@ -1,0 +1,23 @@
+{
+ "theme": "nordic",
+ "name": "bearded_axe",
+ "title": "Bearded axe",
+ "kind": "weapon",
+ "tris": 32868,
+ "dims_m": [
+  0.1976,
+  0.0371,
+  0.714
+ ],
+ "texture": 2048,
+ "materials": [
+  "bearded_axe_mat",
+  "bearded_axe_mat",
+  "bearded_axe_mat"
+ ],
+ "glb_kb": 1696,
+ "seconds": 34.0,
+ "t_build": 0,
+ "t_bake": 13,
+ "t_render": 21
+}

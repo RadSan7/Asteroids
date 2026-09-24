@@ -1,0 +1,21 @@
+{
+ "theme": "nordic",
+ "name": "mjolnir_pendant",
+ "title": "Mjolnir pendant",
+ "kind": "artifact",
+ "tris": 12796,
+ "dims_m": [
+  0.0387,
+  0.011,
+  0.0416
+ ],
+ "texture": 1024,
+ "materials": [
+  "mjolnir_pendant_mat"
+ ],
+ "glb_kb": 976,
+ "seconds": 52.4,
+ "t_build": 0,
+ "t_bake": 29,
+ "t_render": 23
+}

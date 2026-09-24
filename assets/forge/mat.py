@@ -370,7 +370,7 @@ def wood(name, light=(0.30, 0.19, 0.095), dark=(0.11, 0.065, 0.03), rough=0.55, 
     rings = nb.wave(ring_scale, v, kind="RINGS", axis=axis, distort=8, detail=5, dscale=0.08, profile="SAW")
     fine = nb.noise(90, 8, 0.6, nb.mapv(scale=tuple(x * scale * 4 for x in st)))
     g = nb.add(nb.mul(rings, 0.75), nb.mul(fine, 0.35))
-    col = nb.ramp(g, [(0.25, light), (0.6, nb_lerp(light, dark, 0.35)), (0.95, dark)])
+    col = nb.ramp(g, [(0.2, light), (0.5, nb_lerp(light, dark, 0.3)), (0.8, dark)])
     col = nb.mix(col, nb.hsv(col, 0.5, 0.9, 0.7), nb.ss(nb.noise(8 * scale, 4, 0.6), 0.5, 0.75))
     col = nb.mix(col, nb.hsv(col, 0.5, 1.1, 0.8), nb.noise(3 * scale, 3))
     pore = nb.ss(nb.noise(300, 2, 0.5, nb.mapv(scale=tuple(x * scale * 8 for x in st))), 0.62, 0.7)

@@ -1,0 +1,22 @@
+{
+ "theme": "nordic",
+ "name": "soapstone_pot",
+ "title": "Soapstone pot",
+ "kind": "vessel",
+ "tris": 14396,
+ "dims_m": [
+  0.356,
+  0.316,
+  0.3184
+ ],
+ "texture": 1024,
+ "materials": [
+  "soapstone_pot_mat",
+  "soapstone_pot_mat"
+ ],
+ "glb_kb": 720,
+ "seconds": 54.0,
+ "t_build": 0,
+ "t_bake": 23,
+ "t_render": 31
+}

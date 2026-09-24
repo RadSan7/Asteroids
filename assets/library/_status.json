@@ -1,4 +1,25 @@
 {
+ "nordic/bearded_axe": {
+  "hash": "9b6f6728eee6",
+  "kb": 1696,
+  "ok": true,
+  "secs": 35,
+  "tris": 32868
+ },
+ "nordic/drinking_horn": {
+  "hash": "da14b688cf8e",
+  "kb": 1895,
+  "ok": true,
+  "secs": 71,
+  "tris": 31636
+ },
+ "nordic/mjolnir_pendant": {
+  "hash": "39c1c14cbb50",
+  "kb": 976,
+  "ok": true,
+  "secs": 53,
+  "tris": 12796
+ },
  "nordic/round_shield": {
   "hash": "1f7ef281ff07",
   "kb": 1052,
@@ -6,12 +27,40 @@
   "secs": 323,
   "tris": 12420
  },
- "nordic/stave_tankard": {
-  "hash": "8e620a216542",
-  "kb": 500,
+ "nordic/sea_chest": {
+  "hash": "eeff7aebc620",
+  "kb": 1529,
   "ok": true,
-  "secs": 135,
-  "tris": 6300
+  "secs": 118,
+  "tris": 11056
+ },
+ "nordic/smithing_hammer": {
+  "hash": "5d8cac5056d9",
+  "kb": 342,
+  "ok": true,
+  "secs": 42,
+  "tris": 6220
+ },
+ "nordic/soapstone_pot": {
+  "hash": "b48ea4f5d840",
+  "kb": 720,
+  "ok": true,
+  "secs": 55,
+  "tris": 14396
+ },
+ "nordic/spangenhelm": {
+  "hash": "cd33722afd9a",
+  "kb": 2038,
+  "ok": true,
+  "secs": 363,
+  "tris": 25174
+ },
+ "nordic/stave_tankard": {
+  "hash": "41a233e7c15d",
+  "kb": 523,
+  "ok": true,
+  "secs": 52,
+  "tris": 6252
  },
  "nordic/viking_sword": {
   "hash": "621cbbec6025",

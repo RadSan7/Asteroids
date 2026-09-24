@@ -1,0 +1,18 @@
+{
+ "theme": "nordic",
+ "name": "spangenhelm",
+ "title": "Spangenhelm",
+ "kind": "armor",
+ "tris": 25174,
+ "dims_m": [
+  0.2108,
+  0.2473,
+  0.2502
+ ],
+ "texture": 2048,
+ "materials": [
+  "spangenhelm_mat"
+ ],
+ "glb_kb": 2038,
+ "seconds": 362.1
+}

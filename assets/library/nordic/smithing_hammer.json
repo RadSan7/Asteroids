@@ -1,0 +1,22 @@
+{
+ "theme": "nordic",
+ "name": "smithing_hammer",
+ "title": "Smithing hammer",
+ "kind": "tool",
+ "tris": 6220,
+ "dims_m": [
+  0.13,
+  0.04,
+  0.355
+ ],
+ "texture": 1024,
+ "materials": [
+  "smithing_hammer_mat",
+  "smithing_hammer_mat"
+ ],
+ "glb_kb": 342,
+ "seconds": 41.5,
+ "t_build": 0,
+ "t_bake": 15,
+ "t_render": 27
+}
