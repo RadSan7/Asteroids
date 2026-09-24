@@ -22,19 +22,19 @@ def smoothstep(a, b, x):
 def z_top(u):
     """Upper contour: almost straight, the toe rises slightly."""
     u = np.asarray(u, dtype=float)
-    return 0.030 + 0.022 * u ** 2.2
+    return 0.028 + 0.026 * u ** 2.4
 
 
 def z_bot(u):
     """Lower contour: short neck, then the hooked beard sweeping down."""
     u = np.asarray(u, dtype=float)
-    return -0.022 - 0.125 * smoothstep(0.16, 1.0, u) ** 1.6 + 0.004 * np.exp(-((u - 0.12) / 0.06) ** 2)
+    return -0.019 - 0.135 * smoothstep(0.28, 1.0, u) ** 2.3 + 0.003 * np.exp(-((u - 0.15) / 0.08) ** 2)
 
 
 def x_edge(v):
     """Cutting edge: a shallow crescent, the beard tip pulled back."""
     v = np.asarray(v, dtype=float)
-    return 0.150 + 0.018 * np.sin(np.pi * v) ** 0.8 - 0.012 * (1.0 - v) ** 3
+    return 0.158 + 0.016 * np.sin(np.pi * v) ** 0.8 - 0.020 * (1.0 - v) ** 3
 
 
 def blade_point(u, v):
@@ -82,20 +82,20 @@ def outline_polygon(n=400):
 # ------------------------------------------------------------------ eye -----
 EYE_IN_A = 0.0200     # inner half-size along X (haft fits here)
 EYE_IN_B = 0.0135     # inner half-size along Y
-EYE_OUT_FRONT = 0.029
-EYE_OUT_BACK = 0.028
-EYE_OUT_B = 0.0195
+EYE_OUT_FRONT = 0.036
+EYE_OUT_BACK = 0.025
+EYE_OUT_B = 0.0182
 
 
 def eye_z_range(theta):
     s = np.abs(np.sin(theta)) ** 4
-    return -0.045 - 0.016 * s, 0.040 + 0.006 * s
+    return -0.037 - 0.014 * s, 0.034 + 0.005 * s
 
 
 # ----------------------------------------------------------------- haft -----
 HAFT_Z0 = -0.660
-HAFT_Z1 = 0.048
-_HZ = [-0.660, -0.652, -0.640, -0.600, -0.45, -0.25, -0.10, -0.060, -0.045, 0.048]
+HAFT_Z1 = 0.041
+_HZ = [-0.660, -0.652, -0.640, -0.600, -0.45, -0.25, -0.10, -0.058, -0.040, 0.041]
 _HA = [0.0170, 0.0232, 0.0240, 0.0210, 0.0197, 0.0184, 0.0194, 0.0206, 0.0199, 0.0199]
 
 

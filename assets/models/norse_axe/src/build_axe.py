@@ -165,7 +165,7 @@ def build_eye(mat):
     Nt = 72
     th = np.linspace(0, 2 * np.pi, Nt, endpoint=False)
     c, s = np.cos(th), np.sin(th)
-    n = 2.6
+    n = 3.4                              # boxy enough to swallow the blade root
     ox = np.sign(c) * np.abs(c) ** (2 / n) * np.where(c > 0, S.EYE_OUT_FRONT, S.EYE_OUT_BACK)
     oy = np.sign(s) * np.abs(s) ** (2 / n) * S.EYE_OUT_B
     ix, iy = S.EYE_IN_A * c, S.EYE_IN_B * s
@@ -181,7 +181,7 @@ def build_eye(mat):
     for k in range(K + 1):                              # outer wall
         t = k / K
         z = zb + (zt - zb) * t
-        bulge = 1.0 + 0.04 * np.sin(np.pi * t)          # slight barrel shape
+        bulge = 0.93 + 0.09 * np.sin(np.pi * t) ** 0.6  # barrel shape, rounded rims
         ring(ox * bulge, oy * bulge, z, 0.02 + 0.34 * (z.mean() + 0.065) / 0.12)
     for f, v in ((0.5, 0.365), (1.0, 0.37)):            # top annulus
         ring(ox + (ix - ox) * f, oy + (iy - oy) * f, zt, v)
@@ -213,7 +213,7 @@ def haft_ring(z, theta, grow=0.0):
 
 
 def build_haft(mat):
-    Nt, Nz = 48, 140
+    Nt, Nz = 40, 90
     zs = np.linspace(S.HAFT_Z0, S.HAFT_Z1, Nz + 1)
     zs = np.unique(np.concatenate([zs, np.linspace(S.HAFT_Z0, S.HAFT_Z0 + 0.03, 12)]))
     L = S.HAFT_Z1 - S.HAFT_Z0
@@ -275,7 +275,7 @@ def build_wedge(mat):
 def build_grip(mat):
     """Leather strap wound as a helix. Mesh rows follow the helix so the
     overlapping strap edge is a clean step instead of a jagged diagonal."""
-    Nt, M = 72, 14                      # samples around / rows per pitch
+    Nt, M = 48, 12                      # samples around / rows per pitch
     p, z0, z1 = S.GRIP_PITCH, S.GRIP_Z0, S.GRIP_Z1
     Lg = z1 - z0
     turns = int(math.ceil(Lg / p)) + 2

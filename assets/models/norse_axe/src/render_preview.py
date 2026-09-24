@@ -5,6 +5,8 @@ import os
 import bpy
 from mathutils import Euler, Vector
 
+KEY, RIM, FILL = 28.0, 30.0, 4.0     # area light power (W) - scene is small
+
 
 def _world(strength=0.25):
     w = bpy.data.worlds.new("World")
@@ -105,7 +107,7 @@ def _setup_render(res, samples):
     sc.cycles.samples = samples
     sc.cycles.use_denoising = True
     sc.render.resolution_x, sc.render.resolution_y = res
-    sc.render.resolution_percentage = 100
+    sc.render.resolution_percentage = int(os.environ.get("AXE_PCT", 100))
     sc.view_settings.view_transform = "AgX"
     sc.view_settings.look = "AgX - Medium High Contrast"
     sc.render.image_settings.file_format = "JPEG"
@@ -125,7 +127,7 @@ def render(axe, root, samples=160):
     # ---------- shot 1: lying on a slate slab, runes up, shallow depth of field
     _clear_extras(axe)
     _setup_render((1600, 1000), samples)
-    _world(0.25)
+    _world(0.08)
     axe.rotation_euler = Euler((math.radians(90), 0, math.radians(-28)), "XYZ")
     bpy.context.view_layer.update()
     zmin = min((axe.matrix_world @ Vector(c)).z for c in axe.bound_box)
@@ -133,22 +135,26 @@ def render(axe, root, samples=160):
     bpy.ops.mesh.primitive_plane_add(size=4, location=(0, 0, 0))
     ground = bpy.context.active_object
     ground.data.materials.append(_slate_material())
-    head = axe.matrix_world @ Vector((0.07, 0.0, 0.53))
+    M = axe.matrix_world
+    head = M @ Vector((0.07, 0.0, 0.53))
     focus = bpy.data.objects.new("Focus", None)
     bpy.context.scene.collection.objects.link(focus)
     focus.location = head
-    mid = axe.matrix_world @ Vector((0.03, 0, 0.23))
-    _camera(mid + Vector((0.05, -0.62, 0.62)), mid + Vector((0.0, 0.02, 0)), 50, focus, 5.6)
-    _area("Key", (-0.8, -0.4, 1.3), (0, 0, 0), (1.2, 0.8), 260, (1.0, 0.95, 0.88))
-    _area("Rim", (0.9, 1.0, 0.45), (0, 0, 0), (0.5, 1.6), 380, (0.85, 0.9, 1.0))
-    _area("Fill", (0.2, -1.4, 0.3), (0, 0, 0), (1.0, 0.4), 30)
+    mid = M @ Vector((0.04, 0, 0.26))
+    hdir = (M.to_3x3() @ Vector((0, 0, 1))).normalized()      # along the haft
+    bdir = (M.to_3x3() @ Vector((1, 0, 0))).normalized()      # towards the edge
+    cam_loc = mid - 0.66 * bdir - 0.12 * hdir + Vector((0, 0, 0.85))
+    _camera(cam_loc, mid - 0.03 * hdir, 42, focus, 5.6)
+    _area("Key", tuple(mid + Vector((-0.7, -0.5, 1.1))), tuple(mid), (1.0, 0.7), KEY, (1.0, 0.94, 0.86))
+    _area("Rim", tuple(mid + 0.9 * bdir + Vector((0, 0, 0.35))), tuple(mid), (0.4, 1.4), RIM, (0.8, 0.88, 1.0))
+    _area("Fill", tuple(mid - 1.2 * bdir + Vector((0, 0, 0.25))), tuple(mid), (1.0, 0.4), FILL)
     bpy.context.scene.render.filepath = os.path.join(out_dir, "axe_hero.jpg")
     bpy.ops.render.render(write_still=True)
 
     # ---------- shot 2: close-up of the head and the silver-inlaid runes
     cam = bpy.context.scene.camera
-    head_c = axe.matrix_world @ Vector((0.085, 0.0, 0.50))
-    cam.location = head_c + Vector((0.02, -0.16, 0.30))
+    head_c = M @ Vector((0.08, 0.0, 0.51))
+    cam.location = head_c - 0.13 * bdir + 0.06 * hdir + Vector((0, 0, 0.30))
     cam.rotation_euler = (head_c - cam.location).to_track_quat("-Z", "Y").to_euler()
     cam.data.lens = 70
     cam.data.dof.aperture_fstop = 8
@@ -162,12 +168,12 @@ def render(axe, root, samples=160):
     axe.location = (0, 0, 0)
     axe.rotation_euler = (0, 0, 0)
     bpy.context.view_layer.update()
-    _world(0.6)
+    _world(0.30)
     bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y = 900, 1400
-    c = Vector((0.03, 0, 0.23))
-    _camera(c + Vector((0.18, -1.55, 0.12)), c, 60)
-    _area("Key", (-0.9, -1.0, 1.0), c, (1.0, 1.0), 220, (1.0, 0.96, 0.9))
-    _area("Rim", (0.8, 0.9, 0.8), c, (0.4, 1.4), 300, (0.85, 0.9, 1.0))
-    _area("Top", (0.0, -0.2, 1.4), c, (0.6, 0.6), 80)
+    c = Vector((0.05, 0, 0.225))
+    _camera(c + Vector((0.12, -1.45, 0.05)), c, 60)
+    _area("Key", (-0.9, -1.0, 1.0), c, (1.0, 1.0), KEY * 1.4, (1.0, 0.96, 0.9))
+    _area("Rim", (0.8, 0.9, 0.8), c, (0.4, 1.4), RIM * 1.4, (0.85, 0.9, 1.0))
+    _area("Top", (0.0, -0.2, 1.4), c, (0.6, 0.6), 8)
     bpy.context.scene.render.filepath = os.path.join(out_dir, "axe_studio.jpg")
     bpy.ops.render.render(write_still=True)

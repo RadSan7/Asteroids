@@ -148,8 +148,8 @@ def make_iron(N=2048):
     pits = ndimage.gaussian_filter(pits, 0.7)
 
     # scratches
-    band_w = 7.0 + 1.5 * fbm(N, N, 1 / 60, 3)
-    band = 1.0 - smooth(band_w - 1.2, band_w + 1.2, d_edge)
+    band_w = 7.0 + 1.3 * fbm(N, N, 1 / 160, 2)
+    band = 1.0 - smooth(band_w - 0.5, band_w + 0.5, d_edge)
     lines_gen, lines_edge = [], []
     for _ in range(900):
         p = RNG.random(2) * N
@@ -175,10 +175,10 @@ def make_iron(N=2048):
     patina_n = fbm(N, N, 1 / 160, 6, gain=0.5)
     hp_hammer = hammer - ndimage.gaussian_filter(hammer, 8)
     wear = ndimage.gaussian_filter(smooth(0.01, 0.04, hp_hammer), 2) * 0.2
-    scale = np.clip(smooth(-1.9, -0.4, patina_n) - wear, 0, 1)
+    scale = np.clip(smooth(-2.3, -1.0, patina_n) - wear, 0, 1)
     rust = np.clip(rust_mask * 0.45 + pits * 0.9, 0, 1) * (1 - band * blade)
 
-    iron_clean = np.array([0.34, 0.34, 0.35])
+    iron_clean = np.array([0.26, 0.26, 0.27])
     rust_col = np.array([0.17, 0.065, 0.026])
     edge_col = np.array([0.63, 0.63, 0.64])
     silver = np.array([0.80, 0.78, 0.74])
@@ -299,14 +299,14 @@ def make_wood(W=512, H=4096):
     pores = smooth(1.6, 2.4, streak) * (1 - smooth(0.25, 0.45, rings))
     fine = fft_noise(H, W, 1 / 3, 1 / 80)
 
-    early_c = np.array([0.66, 0.52, 0.35])
-    late_c = np.array([0.43, 0.29, 0.17])
+    early_c = np.array([0.58, 0.42, 0.26])
+    late_c = np.array([0.36, 0.22, 0.12])
     col = mix(early_c, late_c, late * 0.85)
     col = col * (1 + 0.05 * fine[..., None])
     col = col * (1 + 0.10 * fbm(H, W, 1 / 300, 3, aniso=0.2)[..., None])
-    col = mix(col, np.array([0.30, 0.20, 0.11]), pores * 0.8)
+    col = mix(col, np.array([0.30, 0.20, 0.11]), pores * 0.5)
     # aged linseed oil: warmer and darker
-    col = col ** 1.25 * np.array([1.0, 0.93, 0.82])
+    col = col ** 1.35 * np.array([0.92, 0.82, 0.68])
     # handling grime above the grip and near the head
     grime = smooth(0.12, 0.0, np.abs(zz + 0.36)) * 0.6 + smooth(-0.10, -0.02, zz) * 0.35
     grime = grime * (0.7 + 0.3 * fbm(H, W, 1 / 40, 3))
