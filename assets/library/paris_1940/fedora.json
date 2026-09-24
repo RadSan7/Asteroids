@@ -3,20 +3,20 @@
  "name": "fedora",
  "title": "Felt fedora",
  "kind": "clothing",
- "tris": 20716,
+ "tris": 13696,
  "dims_m": [
-  0.3472,
-  0.3105,
-  0.1373
+  0.3326,
+  0.2872,
+  0.1516
  ],
  "texture": 2048,
  "materials": [
   "fedora_mat",
   "fedora_mat"
  ],
- "glb_kb": 1549,
- "seconds": 72.1,
+ "glb_kb": 1212,
+ "seconds": 64.5,
  "t_build": 0,
- "t_bake": 44,
- "t_render": 27
+ "t_bake": 39,
+ "t_render": 25
 }

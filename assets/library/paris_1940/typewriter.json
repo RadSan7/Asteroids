@@ -3,11 +3,11 @@
  "name": "typewriter",
  "title": "Portable typewriter",
  "kind": "device",
- "tris": 27492,
+ "tris": 32578,
  "dims_m": [
-  0.3828,
-  0.2985,
-  0.2641
+  0.3839,
+  0.3148,
+  0.295
  ],
  "texture": 2048,
  "materials": [
@@ -15,11 +15,12 @@
   "typewriter_mat",
   "typewriter_mat",
   "typewriter_mat",
+  "typewriter_mat",
   "typewriter_mat"
  ],
- "glb_kb": 2374,
- "seconds": 71.8,
+ "glb_kb": 2738,
+ "seconds": 63.5,
  "t_build": 1,
- "t_bake": 42,
- "t_render": 29
+ "t_bake": 33,
+ "t_render": 28
 }

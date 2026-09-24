@@ -348,25 +348,25 @@
   "tris": 31404
  },
  "paris_1940/club_chair": {
-  "hash": "f82c7692643b",
-  "kb": 780,
+  "hash": "97766b6600e4",
+  "kb": 787,
   "ok": true,
-  "secs": 128,
+  "secs": 122,
   "tris": 6932
  },
  "paris_1940/cup_and_saucer": {
-  "hash": "1abcfd2058e8",
+  "hash": "8f3333dd5315",
   "kb": 1325,
   "ok": true,
-  "secs": 55,
+  "secs": 54,
   "tris": 36128
  },
  "paris_1940/fedora": {
-  "hash": "8f48bbc55bd6",
-  "kb": 1549,
+  "hash": "328f1036485a",
+  "kb": 1212,
   "ok": true,
-  "secs": 73,
-  "tris": 20716
+  "secs": 65,
+  "tris": 13696
  },
  "paris_1940/gramophone": {
   "hash": "0f74c91a0810",
@@ -397,11 +397,11 @@
   "tris": 10884
  },
  "paris_1940/typewriter": {
-  "hash": "d4b5669663fe",
-  "kb": 2374,
+  "hash": "3b4b55d70e0d",
+  "kb": 2738,
   "ok": true,
-  "secs": 72,
-  "tris": 27492
+  "secs": 64,
+  "tris": 32578
  },
  "paris_1940/walther_p38": {
   "hash": "21987a2c6097",
@@ -411,10 +411,10 @@
   "tris": 6632
  },
  "paris_1940/wine_and_glass": {
-  "hash": "6b2782437a92",
+  "hash": "c0f3017f3345",
   "kb": 1368,
   "ok": true,
-  "secs": 48,
+  "secs": 46,
   "tris": 25940
  },
  "viking_hall/beam_2m": {
