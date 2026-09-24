@@ -1,4 +1,11 @@
 {
+ "aztec/macuahuitl": {
+  "hash": "f89c63e4ce43",
+  "kb": 1406,
+  "ok": true,
+  "secs": 65,
+  "tris": 12052
+ },
  "egypt/ankh": {
   "hash": "3b06c3b46ab6",
   "kb": 993,
