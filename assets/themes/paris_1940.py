@@ -49,17 +49,19 @@ def tube_radio():
     _ = shell
     # front fretwork panel with art-deco slots, cloth behind
     fret = arch.buffer(-0.03)
+    # grille: many narrow vertical slats (4 mm) with 8 mm openings, the openings following the arch
+    opening = arch.buffer(-0.05).difference(G.poly2d([(-1, 0), (1, 0), (1, 0.185), (-1, 0.185)]))
     cut = None
-    for k in range(-6, 7):
-        x = k * 0.018
-        slot = G.poly2d([(x - 0.005, 0.18), (x + 0.005, 0.18), (x + 0.005, H - 0.07 - abs(k) * 0.011),
-                         (x - 0.005, H - 0.07 - abs(k) * 0.011)]).buffer(0.004)
+    for k in range(-12, 13):
+        x = k * 0.0125
+        slot = G.poly2d([(x - 0.0042, 0.185), (x + 0.0042, 0.185), (x + 0.0042, 1.0), (x - 0.0042, 1.0)])
         cut = slot if cut is None else cut.union(slot)
+    cut = cut.intersection(opening).buffer(0.0008)
     panel = fret.difference(G.poly2d([(-1, 0), (1, 0), (1, 0.16), (-1, 0.16)])).difference(cut)
     fp = G.extrude("fret", G.shape_polys(panel.simplify(0.0003)), 0.008, bev=0.0015, plane="XZ",
                    mat=walnut("fret_walnut", axis="Z"))
     G.xform(fp, (0, -Dp / 2 - 0.004, 0))
-    cloth = M.fabric("grille_cloth", color=(0.22, 0.17, 0.10), color2=(0.18, 0.14, 0.09), weave=2200, rough=0.9,
+    cloth = M.fabric("grille_cloth", color=(0.42, 0.33, 0.19), color2=(0.36, 0.28, 0.16), weave=2200, rough=0.9,
                      fuzz=0.4)
     cl_shape = arch.buffer(-0.026).difference(G.poly2d([(-1, 0), (1, 0), (1, 0.165), (-1, 0.165)]))
     cl = G.extrude("cloth", G.shape_polys(cl_shape), 0.004, plane="XZ", mat=cloth)
@@ -137,7 +139,7 @@ def telephone():
     for s in (1, -1):
         cup = G.lathe(f"cup{s}", G.curve_pts([(0.0, 0), (0.012, 0), (0.026, 0.018), (0.028, 0.03), (0.024, 0.034),
                                              (0.0, 0.03)], 30), segs=48, mat=bk)
-        G.xform(cup, (s * 0.113, 0.035, 0.088), rot=G.rotd(0, s * 18, 0))
+        G.xform(cup, (s * 0.112, 0.035, 0.122), rot=G.rotd(180, -s * 20, 0))
     cord = M.fabric("cord_cloth", color=(0.06, 0.045, 0.03), weave=1500, rough=0.8)
     guide = np.array(G.curve_pts([(-0.105, 0.03, 0.08), (-0.14, 0.05, 0.03), (-0.12, 0.11, 0.006),
                                   (-0.02, 0.12, 0.006), (0.05, 0.08, 0.02)], 200))
@@ -290,69 +292,107 @@ def gramophone():
 
 
 # ------------------------------------------------------------------ 6 ------
-@asset(res=2048, view=(-12, 8), pose=(0, 0, 0), pivot="center", kind="weapon", title="Walther P38")
+@asset(res=2048, view=(-18, 10), pose=(0, 0, 0), pivot="center", kind="weapon", title="Walther P38")
 def walther_p38():
-    """Walther P38 (1943 production), ~216 mm long. Muzzle towards -X, built in the XZ plane."""
-    def rounded(poly, r=0.002):
-        return G.poly2d(poly).buffer(r, quad_segs=6).buffer(-r * 1.6, quad_segs=6).buffer(r * 0.6, quad_segs=6)
+    """Walther P38 (1943 production) modelled from real dimensions (mm):
+    216 long, 137 high, 125 barrel, slide 29 wide, frame 27, grip 34 over the panels.
+    Profile coordinates are in mm with x = 0 at the muzzle, growing to the rear;
+    the model is placed with the muzzle towards -X."""
+    from shapely.geometry import Polygon
+    MM = 0.001
 
-    serr = D.Canvas(1024)
-    for k in range(14):
-        u = 0.78 + k * 0.012
-        serr.line([(u, 0.72), (u, 0.86)], 0.004)
-    ser = serr.blur(0.6).save("serrations")
-    blue = M.metal("blued_steel", "gunmetal", color=(0.045, 0.047, 0.055), rough=0.28, rough_var=0.03, wear=1.0,
-                   dirt=0.5, scratches=0.5, pitting=0.1, rust=0.02, scale=6, edge_radius=0.0012,
-                   layers=[dict(mask=ser, height=-1.0, color=(0.02, 0.02, 0.025))])
-    # slide: full height at the rear, open-top front exposes the barrel
-    slide = rounded([(-0.062, 0.096), (0.082, 0.096), (0.086, 0.104), (0.084, 0.118), (0.0, 0.119),
-                     (-0.018, 0.116), (-0.022, 0.108), (-0.062, 0.108)])
-    sl = G.extrude("slide", G.shape_polys(slide), 0.029, bev=0.0022, bres=2, plane="XZ", mat=blue)
-    G.planar_uv(sl, "Y")
-    ej = G.box("ejection", (0.034, 0.03, 0.012), loc=(0.028, 0.012, 0.118), bev=0.001)
-    G.boolean(sl, ej)
-    bar = G.cyl("barrel", 0.0086, 0.126, loc=(-0.109, 0, 0.1125), rot=G.rotd(0, 90, 0), segs=40, bev=0.0012,
-                mat=blue)
-    bore = G.cyl("bore", 0.0046, 0.03, loc=(-0.112, 0, 0.1125), rot=G.rotd(0, 90, 0), segs=24)
+    def P(pts):                       # mm (x from muzzle, z) -> model XZ in metres, muzzle at -X
+        return [((x - 108) * MM, z * MM) for x, z in pts]
+
+    def smooth_poly(ctrl, n=160):
+        return Polygon(G.curve_pts(P(ctrl), n, closed=True)).buffer(0)
+
+    blue = M.metal("blued_steel", "gunmetal", color=(0.075, 0.077, 0.085), rough=0.32, rough_var=0.03, wear=1.0,
+                   dirt=0.55, scratches=0.45, pitting=0.06, rust=0.015, scale=6, edge_radius=0.0012)
+    # ---------- barrel (exposed ahead of the slide and through the open-top front)
+    bz = 118 * MM
+    bar = G.cyl("barrel", 9 * MM, 126 * MM, loc=((0 - 108) * MM, 0, bz), rot=G.rotd(0, 90, 0), segs=48,
+                bev=0.0012, mat=blue)
+    bore = G.cyl("bore", 4.5 * MM, 0.03, loc=((-5 - 108) * MM, 0, bz), rot=G.rotd(0, 90, 0), segs=24)
     G.boolean(bar, bore)
-    frame = rounded([(-0.085, 0.082), (0.084, 0.082), (0.086, 0.097), (-0.085, 0.097)], 0.0015)
-    grip = rounded([(0.022, 0.086), (0.082, 0.088), (0.088, 0.078), (0.083, 0.03), (0.074, 0.002), (0.066, -0.004),
-                    (0.030, -0.004), (0.024, 0.004), (0.026, 0.03), (0.034, 0.066)], 0.004)
-    guard_o = rounded([(-0.036, 0.086), (0.028, 0.086), (0.03, 0.062), (0.014, 0.05), (-0.018, 0.05),
-                       (-0.034, 0.062)], 0.008)
-    guard_i = rounded([(-0.029, 0.083), (0.022, 0.083), (0.023, 0.066), (0.011, 0.057), (-0.015, 0.057),
-                       (-0.027, 0.066)], 0.006)
-    fr = frame.union(grip).union(guard_o.difference(guard_i))
-    fo = G.extrude("frame", G.shape_polys(fr), 0.027, bev=0.0024, bres=2, plane="XZ", mat=blue)
-    G.planar_uv(fo, "Y")
-    mag = rounded([(0.03, -0.004), (0.068, -0.004), (0.07, -0.012), (0.028, -0.012)], 0.002)
-    G.extrude("mag_base", G.shape_polys(mag), 0.024, bev=0.0015, plane="XZ", mat=blue)
-    trig = rounded([(-0.004, 0.083), (0.004, 0.083), (0.002, 0.07), (-0.004, 0.062), (-0.008, 0.063),
-                    (-0.004, 0.072)], 0.0012)
-    G.extrude("trigger", G.shape_polys(trig), 0.006, bev=0.0012, plane="XZ", mat=blue)
-    ham = rounded([(0.078, 0.1), (0.086, 0.099), (0.096, 0.114), (0.093, 0.12), (0.086, 0.117)], 0.0015)
-    G.extrude("hammer", G.shape_polys(ham), 0.008, bev=0.0014, plane="XZ", mat=blue)
-    chk = D.Canvas(1024)
-    for k in range(-50, 51):
-        chk.line([(k / 50, 0), (k / 50 + 1, 1)], 0.0028)
-        chk.line([(k / 50, 1), (k / 50 + 1, 0)], 0.0028)
-    chk.circle(0.5, 0.55, 0.12, fill=0)
-    ck = chk.blur(0.5).save("checker")
-    grips = M.plastic("grip_bakelite", color=(0.035, 0.012, 0.006), marble=(0.07, 0.025, 0.01), rough=0.35,
-                      wear=0.6, dirt=0.6, layers=[dict(mask=ck, height=-0.9, invert=True)], bump_strength=0.4)
-    gp = grip.buffer(-0.0045)
+    G.cyl("muzzle_crown", 9.4 * MM, 3 * MM, loc=((0 - 108) * MM, 0, bz), rot=G.rotd(0, 90, 0), segs=48,
+          bev=0.0008, mat=blue)
+    # ---------- slide, rear block: lofted rounded section (x 118 -> 207)
+    def slide_sec(xm, top, w=14.5, bot=103.0, r=7.0):
+        pts = []
+        for a in np.linspace(0, 2 * pi, 40, endpoint=False):
+            c, s = math.cos(a), math.sin(a)
+            y = math.copysign(abs(c) ** 0.35, c) * w
+            zc = (top + bot) / 2
+            hh = (top - bot) / 2
+            zz = zc + math.copysign(abs(s) ** (0.35 if s < 0 else 0.6), s) * hh
+            pts.append(((xm - 108) * MM, y * MM, zz * MM))
+        return pts
+    xs = np.linspace(118, 207, 26)
+    secs = []
+    for xm in xs:
+        t = (xm - 118) / 89
+        top = 133.0 - 3.0 * max(0.0, (xm - 200) / 7) ** 2
+        secs.append(slide_sec(xm, top, w=14.5 - 1.0 * max(0.0, (xm - 202) / 5)))
+    rear = G.loft("slide_rear", secs, blue)
+    for k in range(10):                                   # cocking serrations
+        g = G.box(f"serr{k}", (1.6 * MM, 0.04, 20 * MM), loc=((166 + k * 3.6 - 108) * MM, 0, 118 * MM))
+        G.boolean(rear, g)
+    ej = G.box("ejection", (30 * MM, 20 * MM, 14 * MM), loc=((135 - 108) * MM, 12 * MM, 133 * MM), bev=0.002)
+    G.boolean(rear, ej)
+    # ---------- slide, open-top front: U section extruded along the barrel (x 18 -> 120)
+    U = Polygon([(-14.5, 103), (14.5, 103), (14.5, 120), (10.5, 120), (10.5, 108), (-10.5, 108), (-10.5, 120),
+                 (-14.5, 120)]).buffer(1.2).buffer(-1.2)
+    front = G.extrude("slide_front", G.shape_polys(Polygon([(y * MM, z * MM) for y, z in U.exterior.coords])),
+                      102 * MM, bev=0.0012, plane="YZ", mat=blue)
+    G.xform(front, ((69 - 108) * MM, 0, 0))
+    G.box("front_sight", (4 * MM, 3 * MM, 7 * MM), loc=((24 - 108) * MM, 0, 127.5 * MM), bev=0.0006, mat=blue)
+    G.box("rear_sight", (7 * MM, 12 * MM, 5 * MM), loc=((196 - 108) * MM, 0, 135 * MM), bev=0.001, mat=blue)
+    # ---------- frame: dust cover + receiver + grip (side profile, well rounded)
+    frame = smooth_poly([(28, 103), (208, 103), (216, 97), (215, 84), (213, 60), (216, 30), (217, 8), (210, 1),
+                         (152, 1), (145, 8), (143, 40), (136, 76), (124, 91), (60, 92), (40, 94), (30, 97)], 240)
+    fr = G.extrude("frame", G.shape_polys(frame), 27 * MM, bev=0.0034, bres=3, plane="XZ", mat=blue)
+    G.planar_uv(fr, "Y")
+    guard_o = smooth_poly([(122, 93), (124, 74), (112, 60), (86, 58), (66, 64), (60, 80), (62, 93)], 120)
+    guard_i = smooth_poly([(115, 92), (117, 76), (108, 66), (87, 64), (71, 69), (67, 82), (69, 92)], 120)
+    gd = G.extrude("trigger_guard", G.shape_polys(guard_o.difference(guard_i)), 11 * MM, bev=0.002, bres=3,
+                   plane="XZ", mat=blue)
+    _ = gd
+    trig = smooth_poly([(94, 92), (100, 91), (99, 82), (95, 73), (89, 70), (90, 76), (93, 84)], 60)
+    G.extrude("trigger", G.shape_polys(trig), 7 * MM, bev=0.0016, bres=2, plane="XZ", mat=blue)
+    ham = smooth_poly([(204, 112), (214, 110), (224, 124), (222, 135), (212, 136), (206, 124)], 80)
+    ham = ham.difference(G.circle2d((216 - 108) * MM, 126 * MM, 4 * MM, 24))
+    G.extrude("hammer", G.shape_polys(ham), 10 * MM, bev=0.0018, bres=2, plane="XZ", mat=blue)
+    # levers and small parts (left side = -Y)
+    G.cyl("safety_hub", 7 * MM, 4 * MM, loc=((186 - 108) * MM, -16.5 * MM, 121 * MM), rot=G.rotd(90, 0, 0), segs=28,
+          bev=0.001, mat=blue)
+    G.box("safety_lever", (6 * MM, 3.5 * MM, 13 * MM), loc=((186 - 108) * MM, -17 * MM, 111 * MM), bev=0.0012,
+          mat=blue)
+    G.box("slide_stop", (16 * MM, 3.5 * MM, 6 * MM), loc=((128 - 108) * MM, -14.8 * MM, 99 * MM), bev=0.001, mat=blue)
+    G.box("takedown", (6 * MM, 3.5 * MM, 12 * MM), loc=((58 - 108) * MM, -14.8 * MM, 97 * MM), bev=0.001, mat=blue)
+    G.box("mag_base", (58 * MM, 24 * MM, 5 * MM), loc=((180 - 108) * MM, 0, 0.5 * MM), bev=0.0015, mat=blue)
+    G.torus("lanyard", 6 * MM, 1.4 * MM, loc=((213 - 108) * MM, 0, 1 * MM), rot=G.rotd(90, 0, 0), segs=16, rsegs=6,
+            mat=blue)
+    # ---------- grip panels: bulged bakelite with horizontal grooves
+    grooves = D.Canvas(1024)
+    for k in range(64):
+        grooves.line([(0.04, 0.05 + k * 0.0142), (0.96, 0.05 + k * 0.0142)], 0.0042)
+    grooves.circle(0.52, 0.5, 0.075, fill=0)
+    gm = grooves.blur(0.6).save("grip_grooves")
+    grips = M.plastic("grip_bakelite", color=(0.03, 0.017, 0.01), marble=(0.06, 0.03, 0.016), rough=0.42,
+                      wear=0.6, dirt=0.6, layers=[dict(mask=gm, height=-1.0)], bump_strength=0.45)
+    gp = smooth_poly([(143, 88), (207, 92), (208, 62), (211, 12), (154, 9), (148, 40)], 100)
     for sgn in (1, -1):
-        g = G.extrude(f"grip{sgn}", G.shape_polys(gp), 0.005, bev=0.0019, bres=3, plane="XZ", mat=grips)
-        G.planar_uv(g, "Y")
-        G.xform(g, (0, sgn * 0.0148, 0))
-        G.cyl(f"screw{sgn}", 0.0038, 0.002, loc=(0.054, sgn * 0.0172, 0.045), rot=G.rotd(90, 0, 0), segs=20,
-              bev=0.0006, mat=blue)
-    G.box("front_sight", (0.004, 0.0035, 0.0065), loc=(-0.101, 0, 0.1235), bev=0.0008, mat=blue)
-    G.box("rear_sight", (0.007, 0.014, 0.006), loc=(0.07, 0, 0.1205), bev=0.001, mat=blue)
-    G.cyl("safety", 0.0065, 0.036, loc=(0.066, -0.018, 0.109), rot=G.rotd(-90, 0, 0), segs=24, bev=0.0015, mat=blue)
-    G.box("safety_lever", (0.004, 0.004, 0.012), loc=(0.066, -0.019, 0.101), bev=0.001, mat=blue)
-    G.box("slide_stop", (0.012, 0.004, 0.005), loc=(0.028, -0.0145, 0.091), bev=0.001, mat=blue)
-    G.torus("lanyard", 0.005, 0.0012, loc=(0.078, 0.0, -0.001), rot=G.rotd(90, 0, 0), segs=16, rsegs=6, mat=blue)
+        g = G.extrude(f"grip{sgn}", G.shape_polys(gp), 4 * MM, bev=0.0016, bres=3, plane="XZ", mat=grips)
+        G.planar_uv(g, "Y", stretch=True)
+        cx, cz = (178 - 108) * MM, 50 * MM
+        for v in g.data.vertices:
+            d2 = ((v.co.x - cx) / 0.034) ** 2 + ((v.co.z - cz) / 0.046) ** 2
+            v.co.y *= 1.0 + 1.1 * max(0.0, 1 - d2)          # domed outer face
+        g.data.update()
+        G.xform(g, (0, sgn * 15.5 * MM, 0))
+        G.cyl(f"screw{sgn}", 3.6 * MM, 2 * MM, loc=((178 - 108) * MM, sgn * 20.6 * MM, 50 * MM), rot=G.rotd(90, 0, 0),
+              segs=20, bev=0.0006, mat=blue)
 
 
 # ------------------------------------------------------------------ 7 ------
@@ -386,56 +426,82 @@ def table_lamp():
 
 
 # ------------------------------------------------------------------ 8 ------
-@asset(res=2048, view=(-20, 30), kind="device", title="Portable typewriter", max_tris=80000)
+@asset(res=2048, view=(-22, 28), kind="device", title="Portable typewriter", max_tris=90000)
 def typewriter():
-    enamel = M.plastic("typewriter_enamel", color=(0.012, 0.011, 0.01), rough=0.35, wear=0.6, dirt=0.5, scale=4)
-    secs = []
-    for z in np.linspace(0, 0.09, 20):
-        t = z / 0.09
-        w = 0.3 - 0.02 * t
-        d0, d1 = -0.14 + 0.12 * t ** 1.4, 0.12
-        ring = []
-        for a in np.linspace(0, 2 * pi, 48, endpoint=False):
-            ca, sa = math.cos(a), math.sin(a)
-            x = math.copysign(abs(ca) ** 0.3, ca) * w / 2
-            y = (d0 + d1) / 2 + math.copysign(abs(sa) ** 0.3, sa) * (d1 - d0) / 2
-            ring.append((x, y, z))
-        secs.append(ring)
-    G.loft("body", secs, enamel)
-    keys = "AZERTYUIOP QSDFGHJKLM WXCVBN,;:"
-    rows = [keys[0:10], keys[11:21], keys[22:31]]
-    lg = D.Canvas(2048, 256)
-    k_all = [c for r in rows for c in r] + list("1234567890")
-    for i, ch in enumerate(k_all):
-        lg.text((i + 0.5) / len(k_all), 0.5, ch, size=0.45, font="sans_bold")
+    """1930s portable typewriter (Japy / Remington Portable type). Front faces -Y."""
+    deco = D.Canvas(2048)
+    deco.text(0.5, 0.2, "JAPY", size=0.05, font="serif_bold")
+    for v in (0.06, 0.08):
+        deco.line([(0.05, v), (0.95, v)], 0.0015)
+    deco_p = deco.blur(0.4).save("typewriter_gold")
+    enamel = M.plastic("typewriter_enamel", color=(0.01, 0.009, 0.008), rough=0.22, wear=0.55, dirt=0.5, scale=4,
+                       layers=[dict(mask=deco_p, color=(0.85, 0.62, 0.25), metal=1.0, rough=0.3)])
+    ch = chrome("typewriter_chrome")
+    blk = bakelite("platen_knob")
+    W = 0.30
+    # body: side profile extruded across the width (sloped keyboard deck, flat top, rounded back)
+    prof = G.curve_pts([(-0.15, 0.0), (-0.152, 0.018), (-0.14, 0.03), (-0.02, 0.083), (0.03, 0.092), (0.11, 0.094),
+                        (0.135, 0.075), (0.138, 0.0)], 60)
+    from shapely.geometry import Polygon
+    body = G.extrude("body", G.shape_polys(Polygon(prof).buffer(0)), W, bev=0.012, bres=3, plane="YZ", mat=enamel)
+    G.planar_uv(body, "X")
+    basket_hole = G.cyl("basket_hole", 0.1, 0.1, loc=(0, 0.075, 0.06), segs=64)
+    G.xform(basket_hole, scale=(1.0, 0.45, 1.0))
+    G.boolean(body, basket_hole)
+    # typebar basket: fan of thin bars converging on the printing point
+    for i in range(38):
+        a = math.radians(-78 + 156 * i / 37)
+        r0 = 0.085
+        p0 = (r0 * math.sin(a), 0.07 - 0.035 * math.cos(a), 0.068)
+        p1 = (0.35 * r0 * math.sin(a), 0.07 - 0.012 * math.cos(a), 0.086)
+        G.tube(f"typebar{i}", [p0, ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2, 0.082), p1], 0.0012, n=4, mat=ch)
+    seg = G.lathe("segment", [(0.02, 0.078), (0.028, 0.078), (0.028, 0.086), (0.02, 0.086)], segs=48, mat=ch,
+                  angle=pi)
+    G.xform(seg, (0, 0.075, 0.0))
+    # keys: glass-topped caps with chrome rims, four stepped rows (AZERTY)
+    rows = ["1234567890", "AZERTYUIOP", "QSDFGHJKLM", "WXCVBN,;:"]
+    k_all = [c for r in rows for c in r]
+    lg = D.Canvas(4096, 128)
+    for i, c in enumerate(k_all):
+        lg.text((i + 0.5) / len(k_all), 0.5, c, size=0.55, font="sans_bold")
     legend = lg.save("key_legend")
-    keycap = M.plastic("keycap", color=(0.01, 0.01, 0.01), rough=0.3, wear=0.3,
-                       layers=[dict(mask=legend, color=(0.7, 0.68, 0.62))])
-    ch = chrome("key_chrome")
-    idx = 0
-    for r, row in enumerate(["1234567890"] + rows):
+    keycap = M.plastic("keycap_glass", color=(0.012, 0.012, 0.012), rough=0.08, wear=0.2,
+                       layers=[dict(mask=legend, color=(0.75, 0.73, 0.68), rough=0.3)])
+    for r, row in enumerate(rows):
+        z = 0.034 + 0.017 * (3 - r) * 0 + 0.016 * r
+        y = -0.118 + 0.028 * r
         for i, c in enumerate(row):
-            x = -0.105 + i * 0.022 + r * 0.006
-            y = -0.13 + 0.03 * (3 - r) * 0 + 0.028 * r
-            z = 0.02 + 0.014 * r
+            x = -0.118 + i * 0.0245 + (r % 2) * 0.006 + (0.012 if r == 3 else 0)
             kidx = k_all.index(c)
-            cap = G.cyl(f"key{r}{i}", 0.0085, 0.004, loc=(x, y, z + 0.012), segs=24, bev=0.001, mat=keycap)
-            me = cap.data
-            lay = me.uv_layers["design"]
-            for li, loop in enumerate(me.loops):
-                co = me.vertices[loop.vertex_index].co
-                lay.data[li].uv = ((kidx + 0.5 + (co.x - x) / 0.017) / len(k_all), 0.5 + (co.y - y) / 0.017 * 8)
-            G.torus(f"ring{r}{i}", 0.0088, 0.0012, loc=(x, y, z + 0.0145), segs=24, rsegs=6, mat=ch)
-            G.cyl(f"stem{r}{i}", 0.0012, 0.04, loc=(x, y + 0.02, z - 0.01), rot=G.rotd(-60, 0, 0), segs=6, mat=ch)
-            idx += 1
-    G.box("spacebar", (0.14, 0.012, 0.006), loc=(0.0, -0.155, 0.018), bev=0.002, mat=ch)
-    rubber = M.plastic("platen_rubber", color=(0.015, 0.015, 0.015), rough=0.6, wear=0.2, dirt=0.3)
-    G.cyl("platen", 0.022, 0.30, loc=(-0.15, 0.1, 0.11), rot=G.rotd(0, 90, 0), segs=48, mat=rubber)
+            cap = G.cyl(f"key{r}{i}", 0.0072, 0.0035, loc=(x, y, z + 0.012), segs=24, bev=0.0012, mat=keycap)
+            lay = cap.data.uv_layers["design"]
+            for li, loop in enumerate(cap.data.loops):
+                co = cap.data.vertices[loop.vertex_index].co
+                lay.data[li].uv = ((kidx + 0.5 + (co.x - x) / 0.016) / len(k_all), 0.5 + (co.y - y) / 0.016)
+            G.torus(f"rim{r}{i}", 0.0074, 0.0011, loc=(x, y, z + 0.0145), segs=24, rsegs=6, mat=ch)
+            G.tube(f"lever{r}{i}", [(x, y, z + 0.012), (x, y + 0.012, z - 0.002), (x * 0.9, y + 0.05, z - 0.01)],
+                   0.0011, n=4, mat=ch)
+    G.box("spacebar", (0.15, 0.011, 0.005), loc=(0.0, -0.138, 0.03), bev=0.002, mat=ch)
     for s in (1, -1):
-        G.cyl(f"knob{s}", 0.02, 0.018, loc=(s * 0.168 - (0.018 if s > 0 else 0), 0.1, 0.11), rot=G.rotd(0, 90, 0),
-              segs=48, bev=0.003, mat=enamel)
-    G.box("carriage", (0.34, 0.035, 0.02), loc=(0, 0.12, 0.09), bev=0.004, mat=ch)
-    G.tube("return_lever", [(-0.17, 0.08, 0.12), (-0.2, 0.05, 0.14), (-0.21, 0.02, 0.145)], 0.003, n=8, mat=ch)
+        G.cyl(f"shift{s}", 0.0075, 0.0035, loc=(s * 0.135, -0.105, 0.05), segs=24, bev=0.0012, mat=keycap)
+        G.cyl(f"spool{s}", 0.03, 0.009, loc=(s * 0.095, 0.075, 0.093), segs=48, bev=0.003, mat=enamel)
+        G.cyl(f"spool_hub{s}", 0.008, 0.012, loc=(s * 0.095, 0.075, 0.095), segs=24, bev=0.002, mat=ch)
+    # carriage on top at the back
+    G.box("carriage_rail", (W + 0.04, 0.03, 0.012), loc=(0, 0.105, 0.1), bev=0.004, mat=ch)
+    rubber = M.plastic("platen_rubber", color=(0.016, 0.016, 0.016), rough=0.65, wear=0.15, dirt=0.3)
+    G.cyl("platen", 0.021, W + 0.02, loc=(-(W + 0.02) / 2, 0.1, 0.13), rot=G.rotd(0, 90, 0), segs=48, mat=rubber)
+    for s in (1, -1):
+        kb = G.lathe(f"knob{s}", G.curve_pts([(0, 0), (0.019, 0.0), (0.021, 0.006), (0.021, 0.014), (0.017, 0.018),
+                                              (0, 0.019)], 20), segs=40, mat=blk)
+        G.xform(kb, (s * (W / 2 + 0.012), 0.1, 0.13), rot=G.rotd(0, s * 90, 0))
+        G.box(f"end_plate{s}", (0.006, 0.05, 0.05), loc=(s * (W / 2 + 0.006), 0.105, 0.125), bev=0.004, mat=enamel)
+    G.tube("bail", [(-0.12, 0.078, 0.138), (0.12, 0.078, 0.138)], 0.0018, n=8, mat=ch)
+    for x in (-0.05, 0.05):
+        G.cyl(f"bail_roller{x}", 0.0045, 0.012, loc=(x - 0.006, 0.078, 0.138), rot=G.rotd(0, 90, 0), segs=16,
+              mat=rubber)
+    G.tube("return_lever", G.curve_pts([(-W / 2 - 0.01, 0.09, 0.14), (-W / 2 - 0.035, 0.07, 0.15),
+                                        (-W / 2 - 0.05, 0.035, 0.152)], 20), 0.0032, n=10, mat=ch)
+    G.box("paper_table", (0.2, 0.004, 0.07), loc=(0, 0.126, 0.165), rot=G.rotd(-20, 0, 0), bev=0.002, mat=enamel)
     txt = D.Canvas(1024, 1400)
     lines = ["COMBAT", "", "Organe du Mouvement", "de Libération Française", "", "Paris, le 14 juillet 1943", "",
              "Français ! L'heure approche.", "Tenez-vous prêts.", "Ne collaborez pas.", "", "Vive la France libre."]
@@ -444,8 +510,8 @@ def typewriter():
     tp = txt.blur(0.3).save("typed")
     paper = M.paper("typing_paper", color=(0.72, 0.69, 0.6), fibers="rice", stains=0.15, dirt=0.1,
                     layers=[dict(mask=tp, color=(0.03, 0.03, 0.05), opacity=0.9)])
-    path = [(0.1 + 0.024 * math.cos(a), 0.11 + 0.024 * math.sin(a)) for a in np.linspace(-2.6, pi / 2, 24)]
-    path += [(0.1 + 0.003 * t + 0.02 * t * t, 0.134 + 0.13 * t) for t in np.linspace(0.05, 1, 16)]
+    path = [(0.1 + 0.023 * math.cos(a), 0.13 + 0.023 * math.sin(a)) for a in np.linspace(-2.6, pi / 2, 24)]
+    path += [(0.1 + 0.01 * t + 0.03 * t * t, 0.153 + 0.13 * t) for t in np.linspace(0.05, 1, 16)]
     L = np.r_[0, np.cumsum(np.linalg.norm(np.diff(np.array(path), axis=0), axis=1))]
     pverts, pfaces, puv = [], [], []
     for (y, z) in path:
@@ -457,8 +523,6 @@ def typewriter():
         puv.append([(0, v0), (0, v1), (1, v1), (1, v0)])
     sheet = G.mesh("paper", pverts, pfaces, puv, paper)
     G.solidify(sheet, 0.0004)
-    for s in (1, -1):
-        G.cyl(f"spool{s}", 0.018, 0.008, loc=(s * 0.09, 0.05, 0.09), segs=32, mat=ch)
 
 
 # ------------------------------------------------------------------ 9 ------
@@ -500,32 +564,73 @@ def wine_and_glass():
 
 
 # ----------------------------------------------------------------- 10 ------
-@asset(res=2048, view=(-25, 18), kind="clothing", title="Felt fedora")
+@asset(res=2048, view=(-28, 16), kind="clothing", title="Felt fedora")
 def fedora():
-    felt = M.fabric("felt", color=(0.07, 0.065, 0.06), weave=2500, rough=0.9, fuzz=0.6, sheen=0.5, wear=0.4)
-    crown = G.lathe("crown", G.curve_pts([(0.085, 0.0), (0.086, 0.04), (0.08, 0.1), (0.06, 0.125), (0.02, 0.118),
-                                          (0.0, 0.11)], 50), segs=96, mat=felt, caps=False)
-    for v in crown.data.vertices:
+    """Men's felt fedora, c. 1940: teardrop crown with front pinches, snap brim, grosgrain band and bow.
+    Front of the hat faces -Y."""
+    felt = M.fabric("fur_felt", color=(0.045, 0.04, 0.034), color2=(0.036, 0.032, 0.028), weave=900, rough=0.85,
+                    fuzz=0.2, sheen=0.0, wear=0.08, dirt=0.25, bump_strength=0.1)
+    band = M.fabric("grosgrain", color=(0.012, 0.011, 0.01), weave=2600, rough=0.5, sheen=0.0, wear=0.0)
+    # --- crown: elliptical sections, domed top, then crease + pinches as deformations
+    A, B, Hc = 0.098, 0.083, 0.128
+    secs = []
+    for z in np.r_[np.linspace(0.0, 0.09, 12), np.linspace(0.095, Hc, 10)]:
+        k = 1.0 - 0.1 * (z / Hc)
+        if z > 0.09:
+            k *= math.sqrt(max(1 - ((z - 0.09) / (Hc - 0.09 + 0.004)) ** 2, 0.02))
+        secs.append([(A * k * math.sin(a), -B * k * math.cos(a), z) for a in np.linspace(0, 2 * pi, 72, endpoint=False)])
+    secs.append([(0.0, 0.0, Hc + 0.002)] * 72)          # pole: closes the top
+    crown = G.loft("crown", secs, felt, closed=True, cap=False)
+    me = crown.data
+    for v in me.vertices:
         x, y, z = v.co
-        a = math.atan2(y, x)
-        pinch = 1 - 0.08 * max(0, math.cos(a + pi / 2)) ** 4 * (z / 0.12) ** 2
-        v.co.x = x * pinch * 1.15
-        v.co.y = y * (1 - 0.1 * (z / 0.12) ** 2)
-        crease = math.exp(-(x / 0.025) ** 2) * 0.03 * (z / 0.125) ** 3
+        t = max(0.0, (z - 0.06) / (Hc - 0.06))
+        back = 0.5 + 0.5 * (y / B)                       # 0 at front, 1 at back
+        crease = 0.03 * math.exp(-(x / 0.03) ** 2) * t ** 2.0 * (0.5 + 0.5 * back)
         v.co.z = z - crease
-    G.solidify(crown, 0.0025)
-    brim = G.lathe("brim", [(0.08, 0.0), (0.155, 0.0)], segs=128, mat=felt, caps=False)
-    for v in brim.data.vertices:
-        x, y, z = v.co
-        r = math.hypot(x, y)
-        a = math.atan2(y, x)
-        t = (r - 0.08) / 0.075
-        up = 0.03 * t ** 2 * (0.5 + 0.5 * math.sin(a)) - 0.012 * t ** 2 * max(0, -math.sin(a))
-        v.co.x = x * 1.12
-        v.co.z = up
-    G.solidify(brim, 0.003)
-    band = M.fabric("grosgrain", color=(0.02, 0.018, 0.016), weave=1800, rough=0.6, sheen=0.7)
-    bnd = G.lathe("band", [(0.087, 0.004), (0.0885, 0.004), (0.0885, 0.036), (0.087, 0.036)], segs=128, mat=band)
-    G.xform(bnd, scale=(1.15, 1.0, 1.0))
-    bow = G.box("bow", (0.004, 0.035, 0.03), loc=(-0.1, -0.02, 0.02), bev=0.003, mat=band)
+        for sx in (1, -1):                               # front pinches
+            d2 = ((x - sx * 0.045) / 0.028) ** 2 + ((y + 0.055) / 0.03) ** 2 + ((z - 0.095) / 0.03) ** 2
+            f = 0.018 * math.exp(-d2)
+            v.co.x -= sx * f
+            v.co.y += f * 0.4
+    me.update()
+    G.solidify(crown, 0.0028, offset=-1.0)
+    # --- brim: snap brim, down in front, up at back and sides, bound edge
+    verts, faces = [], []
+    nr, na = 10, 96
+    for i in range(nr + 1):
+        s = i / nr
+        for j in range(na):
+            a = 2 * pi * j / na
+            ca, sa = math.sin(a), -math.cos(a)            # sa = -1 at front (-Y)
+            w = 0.058 + 0.008 * abs(ca)                   # a touch wider at the sides
+            r = s * w
+            x = (A + r) * ca * 1.0
+            y = (B + r) * sa
+            up = (0.03 * max(0.0, sa) + 0.016 * abs(ca)) * s ** 2      # back and sides turn up
+            down = 0.026 * max(0.0, -sa) ** 1.5 * s ** 1.5              # front snapped down
+            verts.append((x, y, up - down))
+    for i in range(nr):
+        for j in range(na):
+            a, b = i * na + j, i * na + (j + 1) % na
+            faces.append([a, b, b + na, a + na])
+    brim = G.mesh("brim", verts, faces, None, felt)
+    G.solidify(brim, 0.0032, offset=0.0)
+    edge = [verts[nr * na + j] for j in range(na)] + [verts[nr * na]]
+    G.tube("binding", edge, 0.0024, n=10, mat=band)
+    # --- band and bow (left side, +X from the wearer's view facing -Y -> bow at +X)
+    bnd = G.lathe("band", [(1.0, 0.004), (1.0, 0.038)], segs=96, mat=band, caps=False)
+    for v in bnd.data.vertices:
+        a = math.atan2(v.co.x, -v.co.y)
+        k = 1.0 - 0.1 * (v.co.z / Hc)
+        v.co.x, v.co.y = (A * k + 0.0022) * math.sin(a), -(B * k + 0.0022) * math.cos(a)
+    bnd.data.update()
+    G.solidify(bnd, 0.0012, offset=1.0)
+    bx, by = A + 0.004, 0.012
+    bow = G.box("bow_knot", (0.008, 0.016, 0.02), loc=(bx, by, 0.021), bev=0.003, mat=band)
     _ = bow
+    for s in (1, -1):
+        loop = G.box(f"bow_loop{s}", (0.005, 0.026, 0.016), loc=(bx - 0.001, by + s * 0.018, 0.021), bev=0.004,
+                     mat=band)
+        G.xform(loop, (0, 0, 0), rot=(0, 0, 0))
+    G.box("bow_tail", (0.004, 0.012, 0.03), loc=(bx + 0.001, by + 0.006, 0.006), bev=0.002, mat=band)

@@ -14,9 +14,9 @@
   "post_hall_mat",
   "post_hall_mat"
  ],
- "glb_kb": 504,
- "seconds": 62.8,
+ "glb_kb": 1495,
+ "seconds": 66.7,
  "t_build": 1,
- "t_bake": 42,
- "t_render": 19
+ "t_bake": 35,
+ "t_render": 30
 }

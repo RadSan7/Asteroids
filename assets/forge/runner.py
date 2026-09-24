@@ -36,7 +36,7 @@ def themes():
 def forge_hash():
     h = hashlib.sha1()
     for f in sorted(os.listdir(os.path.join(ROOT, "forge"))):
-        if f.endswith(".py") and f not in ("runner.py", "catalog.py", "demo_hall.py", "run_asset.py"):
+        if f.endswith(".py") and f not in ("runner.py", "catalog.py", "run_asset.py"):
             h.update(open(os.path.join(ROOT, "forge", f), "rb").read())
     return h.hexdigest()
 

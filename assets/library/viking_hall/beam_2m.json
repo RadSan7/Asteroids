@@ -13,9 +13,9 @@
  "materials": [
   "beam_2m_mat"
  ],
- "glb_kb": 216,
- "seconds": 39.7,
+ "glb_kb": 608,
+ "seconds": 46.4,
  "t_build": 0,
- "t_bake": 15,
- "t_render": 24
+ "t_bake": 13,
+ "t_render": 33
 }

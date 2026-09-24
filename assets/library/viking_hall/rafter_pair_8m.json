@@ -13,9 +13,9 @@
  "materials": [
   "rafter_pair_8m_mat"
  ],
- "glb_kb": 656,
- "seconds": 55.9,
+ "glb_kb": 1682,
+ "seconds": 61.6,
  "t_build": 0,
- "t_bake": 35,
+ "t_bake": 41,
  "t_render": 20
 }

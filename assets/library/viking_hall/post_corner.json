@@ -13,9 +13,9 @@
  "materials": [
   "post_corner_mat"
  ],
- "glb_kb": 208,
- "seconds": 36.8,
+ "glb_kb": 611,
+ "seconds": 52.1,
  "t_build": 0,
  "t_bake": 15,
- "t_render": 21
+ "t_render": 37
 }

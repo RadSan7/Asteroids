@@ -3,19 +3,19 @@
  "name": "foundation_corner",
  "title": "Foundation corner",
  "kind": "kit",
- "tris": 1536,
+ "tris": 7680,
  "dims_m": [
-  0.7262,
-  0.7856,
+  0.7075,
+  0.7302,
   0.486
  ],
  "texture": 1024,
  "materials": [
   "foundation_corner_mat"
  ],
- "glb_kb": 355,
- "seconds": 54.0,
+ "glb_kb": 868,
+ "seconds": 46.6,
  "t_build": 0,
- "t_bake": 23,
+ "t_bake": 17,
  "t_render": 30
 }

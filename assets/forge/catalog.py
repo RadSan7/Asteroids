@@ -33,8 +33,7 @@ KIT_NOTES = """
 | Opposite roof slope | `roof_thatch_2m` rotated 180 deg about Z, shifted +2 m in X |
 
 Pivots sit exactly on the snapping point (module start on the wall centre line,
-or footprint centre for posts and props). `_demo_hall.glb` shows a 12 x 8 m hall
-assembled only from kit pieces.
+or footprint centre for posts and props).
 """
 
 
@@ -64,9 +63,6 @@ def main():
         lines.append("")
         if key == "viking_hall":
             lines.append(KIT_NOTES)
-            if os.path.exists(os.path.join(d, "_demo_exterior.jpg")):
-                lines += ["![demo hall](viking_hall/_demo_exterior.jpg)",
-                          "![demo hall cutaway](viking_hall/_demo_cutaway.jpg)", ""]
     lines += ["## Engine notes", "",
               "- **Unity**: glTFast or UnityGLTF. **Unreal 5**: built-in glTF importer (Interchange). "
               "**Godot 4**: native. **three.js / Babylon**: GLTFLoader.",

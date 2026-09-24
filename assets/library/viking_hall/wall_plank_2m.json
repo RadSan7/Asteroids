@@ -5,8 +5,8 @@
  "kind": "kit",
  "tris": 14416,
  "dims_m": [
-  2.0,
-  0.356,
+  2.0086,
+  0.323,
   2.5118
  ],
  "texture": 2048,
@@ -14,9 +14,9 @@
   "wall_plank_2m_mat",
   "wall_plank_2m_mat"
  ],
- "glb_kb": 1352,
- "seconds": 127.7,
+ "glb_kb": 2594,
+ "seconds": 81.9,
  "t_build": 0,
- "t_bake": 101,
- "t_render": 26
+ "t_bake": 53,
+ "t_render": 28
 }

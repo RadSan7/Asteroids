@@ -5,8 +5,8 @@
  "kind": "kit",
  "tris": 18760,
  "dims_m": [
-  2.0,
-  0.3388,
+  2.0141,
+  0.323,
   2.5118
  ],
  "texture": 2048,
@@ -14,9 +14,9 @@
   "wall_plank_door_2m_mat",
   "wall_plank_door_2m_mat"
  ],
- "glb_kb": 1678,
- "seconds": 135.8,
- "t_build": 1,
- "t_bake": 108,
- "t_render": 27
+ "glb_kb": 2814,
+ "seconds": 80.7,
+ "t_build": 0,
+ "t_bake": 54,
+ "t_render": 26
 }

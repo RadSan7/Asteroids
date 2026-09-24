@@ -3,7 +3,7 @@
  "name": "wall_wattle_2m",
  "title": "Wall wattle and daub 2m",
  "kind": "kit",
- "tris": 53398,
+ "tris": 54518,
  "dims_m": [
   2.0067,
   0.323,
@@ -15,9 +15,9 @@
   "wall_wattle_2m_mat",
   "wall_wattle_2m_mat"
  ],
- "glb_kb": 3162,
- "seconds": 99.2,
- "t_build": 1,
- "t_bake": 70,
- "t_render": 28
+ "glb_kb": 3783,
+ "seconds": 85.6,
+ "t_build": 26,
+ "t_bake": 32,
+ "t_render": 27
 }

@@ -5,8 +5,8 @@
  "kind": "kit",
  "tris": 10132,
  "dims_m": [
-  0.886,
-  0.2623,
+  0.9165,
+  0.147,
   1.84
  ],
  "texture": 1024,
@@ -15,9 +15,9 @@
   "door_plank_mat",
   "door_plank_mat"
  ],
- "glb_kb": 698,
- "seconds": 51.3,
- "t_build": 1,
- "t_bake": 26,
+ "glb_kb": 945,
+ "seconds": 36.9,
+ "t_build": 0,
+ "t_bake": 12,
  "t_render": 24
 }

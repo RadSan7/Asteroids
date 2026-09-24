@@ -3,20 +3,20 @@
  "name": "floor_earth_2x2",
  "title": "Floor earth 2x2",
  "kind": "kit",
- "tris": 13688,
+ "tris": 13188,
  "dims_m": [
   2.0,
   2.0,
-  0.0778
+  0.0696
  ],
  "texture": 2048,
  "materials": [
   "floor_earth_2x2_mat",
   "floor_earth_2x2_mat"
  ],
- "glb_kb": 1195,
- "seconds": 75.6,
- "t_build": 0,
- "t_bake": 47,
+ "glb_kb": 1842,
+ "seconds": 62.3,
+ "t_build": 18,
+ "t_bake": 16,
  "t_render": 28
 }
