@@ -3,20 +3,20 @@
  "name": "sea_chest",
  "title": "Sea chest",
  "kind": "furniture",
- "tris": 11056,
+ "tris": 8848,
  "dims_m": [
   0.88,
-  0.4661,
-  0.4203
+  0.466,
+  0.3865
  ],
  "texture": 2048,
  "materials": [
   "sea_chest_mat",
   "sea_chest_mat"
  ],
- "glb_kb": 1529,
- "seconds": 117.2,
+ "glb_kb": 1408,
+ "seconds": 119.1,
  "t_build": 0,
- "t_bake": 84,
- "t_render": 33
+ "t_bake": 86,
+ "t_render": 32
 }

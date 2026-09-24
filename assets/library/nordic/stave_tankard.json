@@ -15,9 +15,9 @@
   "stave_tankard_mat",
   "mead"
  ],
- "glb_kb": 523,
- "seconds": 51.6,
+ "glb_kb": 526,
+ "seconds": 53.4,
  "t_build": 0,
  "t_bake": 19,
- "t_render": 32
+ "t_render": 34
 }

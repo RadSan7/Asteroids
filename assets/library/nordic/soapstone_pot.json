@@ -14,9 +14,9 @@
   "soapstone_pot_mat",
   "soapstone_pot_mat"
  ],
- "glb_kb": 720,
- "seconds": 54.0,
+ "glb_kb": 704,
+ "seconds": 53.5,
  "t_build": 0,
  "t_bake": 23,
- "t_render": 31
+ "t_render": 30
 }
