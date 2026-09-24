@@ -293,12 +293,26 @@
   "secs": 55,
   "tris": 36128
  },
+ "paris_1940/fedora": {
+  "hash": "8f48bbc55bd6",
+  "kb": 1549,
+  "ok": true,
+  "secs": 73,
+  "tris": 20716
+ },
  "paris_1940/gramophone": {
   "hash": "705c041d9326",
   "kb": 1776,
   "ok": true,
   "secs": 114,
   "tris": 23356
+ },
+ "paris_1940/table_lamp": {
+  "hash": "dd9b233cea1c",
+  "kb": 1884,
+  "ok": true,
+  "secs": 78,
+  "tris": 20412
  },
  "paris_1940/telephone": {
   "hash": "aa637c8c99ac",
@@ -313,5 +327,26 @@
   "ok": true,
   "secs": 83,
   "tris": 10652
+ },
+ "paris_1940/typewriter": {
+  "hash": "d4b5669663fe",
+  "kb": 2374,
+  "ok": true,
+  "secs": 72,
+  "tris": 27492
+ },
+ "paris_1940/walther_p38": {
+  "hash": "29123c36ea63",
+  "kb": 813,
+  "ok": true,
+  "secs": 128,
+  "tris": 1864
+ },
+ "paris_1940/wine_and_glass": {
+  "hash": "6b2782437a92",
+  "kb": 1368,
+  "ok": true,
+  "secs": 48,
+  "tris": 25940
  }
 }

@@ -1,0 +1,27 @@
+{
+ "theme": "paris_1940",
+ "name": "wine_and_glass",
+ "title": "Bordeaux bottle and glass",
+ "kind": "tableware",
+ "tris": 25940,
+ "dims_m": [
+  0.2222,
+  0.1301,
+  0.3177
+ ],
+ "texture": 2048,
+ "materials": [
+  "bottle_glass",
+  "bordeaux",
+  "wine_and_glass_mat",
+  "wine_and_glass_mat",
+  "wine_glass",
+  "wine_in_glass",
+  "wine_and_glass_mat"
+ ],
+ "glb_kb": 1368,
+ "seconds": 47.8,
+ "t_build": 0,
+ "t_bake": 21,
+ "t_render": 26
+}

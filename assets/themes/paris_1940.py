@@ -23,7 +23,7 @@ def bakelite(name="bakelite", color=(0.012, 0.009, 0.007), **kw):
 
 def brass(name="brass", **kw):
     kw.setdefault("rough", 0.25)
-    return M.metal(name, "brass", wear=0.5, dirt=0.6, patina=(0.12, 0.09, 0.04), patina_amt=0.35, scratches=0.3,
+    return M.metal(name, "brass", wear=0.5, dirt=0.6, patina=(0.12, 0.09, 0.04), patina_amt=0.12, scratches=0.3,
                    scale=4, **kw)
 
 
@@ -38,7 +38,8 @@ def tube_radio():
     W, Dp, H = 0.36, 0.22, 0.42
     arch = G.poly2d([(-W / 2, 0), (W / 2, 0)] + [(W / 2 * math.cos(t), H - W / 2 + W / 2 * math.sin(t) * 0.85)
                                                   for t in np.linspace(0, pi, 60)])
-    wal = walnut("radio_walnut", ring_scale=35)
+    wal = M.wood("radio_walnut", light=(0.16, 0.085, 0.04), dark=(0.05, 0.025, 0.012), axis="Z", varnish=0.65,
+                 wear=0.35, dirt=0.4, grain_stretch=20)
     shell = G.extrude("cabinet", G.shape_polys(arch), Dp, bev=0.008, bres=3, plane="XZ", mat=wal)
     _ = shell
     # front fretwork panel with art-deco slots, cloth behind
@@ -133,9 +134,12 @@ def telephone():
                                              (0.0, 0.03)], 30), segs=48, mat=bk)
         G.xform(cup, (s * 0.108, 0.02, 0.078), rot=G.rotd(0, s * 18, 0))
     cord = M.fabric("cord_cloth", color=(0.06, 0.045, 0.03), weave=1500, rough=0.8)
-    hel = [(0.11 + 0.01 * t + 0.006 * math.cos(t * 40), -0.07 + 0.012 * math.sin(t * 40) - 0.02 * t, 0.004 + 0.004 * t)
-           for t in np.linspace(0, 3, 400)]
-    G.tube("cord", hel, 0.0028, n=8, mat=cord)
+    guide = np.array(G.curve_pts([(-0.105, 0.03, 0.08), (-0.14, 0.05, 0.03), (-0.12, 0.11, 0.006),
+                                  (-0.02, 0.12, 0.006), (0.05, 0.08, 0.02)], 200))
+    T, N, B = G.frames(guide)
+    tt = np.linspace(0, 1, 200)
+    coil = guide + 0.006 * (np.cos(tt * 160)[:, None] * N + np.sin(tt * 160)[:, None] * B)
+    G.tube("cord", coil, 0.0022, n=8, mat=cord)
 
 
 # ------------------------------------------------------------------ 3 ------
@@ -281,44 +285,69 @@ def gramophone():
 
 
 # ------------------------------------------------------------------ 6 ------
-@asset(res=2048, view=(0, 8), pose=(0, 0, 0), pivot="center", kind="weapon", title="Walther P38")
+@asset(res=2048, view=(-12, 8), pose=(0, 0, 0), pivot="center", kind="weapon", title="Walther P38")
 def walther_p38():
-    blue = M.metal("blued_steel", "gunmetal", color=(0.05, 0.05, 0.06), rough=0.3, wear=0.9, dirt=0.5,
-                   scratches=0.6, pitting=0.2, rust=0.05, scale=6, edge_radius=0.0015)
-    slide = G.poly2d([(-0.1, 0.095), (0.075, 0.095), (0.078, 0.108), (0.07, 0.12), (-0.02, 0.12), (-0.028, 0.113),
-                      (-0.1, 0.113)])
-    s = G.extrude("slide", G.shape_polys(slide), 0.03, bev=0.002, plane="XZ", mat=blue)
-    ej = G.box("ejection", (0.05, 0.03, 0.014), loc=(-0.01, -0.0, 0.122))
-    G.boolean(s, ej)
-    barrel = G.cyl("barrel", 0.0085, 0.13, loc=(-0.1, 0, 0.113), rot=G.rotd(0, 90, 0), segs=32, mat=blue)
-    bore = G.cyl("bore", 0.0045, 0.02, loc=(-0.105, 0, 0.113), rot=G.rotd(0, 90, 0), segs=24)
-    G.boolean(barrel, bore)
-    frame = G.poly2d([(-0.06, 0.083), (0.07, 0.083), (0.075, 0.095), (-0.06, 0.095)])
-    grip = G.poly2d([(0.02, 0.083), (0.075, 0.083), (0.085, 0.07), (0.075, 0.0), (0.03, 0.0), (0.028, 0.02),
-                     (0.035, 0.07)])
-    tg = G.poly2d([(-0.03, 0.085), (0.025, 0.085), (0.025, 0.06), (0.0, 0.05), (-0.02, 0.053), (-0.03, 0.068)])
-    tgi = G.poly2d([(-0.022, 0.08), (0.018, 0.08), (0.018, 0.064), (0.0, 0.057), (-0.015, 0.06), (-0.022, 0.07)])
-    fr = frame.union(grip).union(tg.difference(tgi))
-    G.extrude("frame", G.shape_polys(fr), 0.028, bev=0.0022, plane="XZ", mat=blue)
-    trig = G.poly2d([(0.004, 0.083), (0.009, 0.083), (0.008, 0.07), (0.003, 0.064), (0.001, 0.066), (0.005, 0.072)])
-    G.extrude("trigger", G.shape_polys(trig), 0.006, bev=0.001, plane="XZ", mat=blue)
-    ham = G.poly2d([(0.07, 0.1), (0.078, 0.1), (0.088, 0.118), (0.083, 0.122), (0.074, 0.112)])
-    G.extrude("hammer", G.shape_polys(ham), 0.009, bev=0.0015, plane="XZ", mat=blue)
+    """Walther P38 (1943 production), ~216 mm long. Muzzle towards -X, built in the XZ plane."""
+    def rounded(poly, r=0.002):
+        return G.poly2d(poly).buffer(r, quad_segs=6).buffer(-r * 1.6, quad_segs=6).buffer(r * 0.6, quad_segs=6)
+
+    serr = D.Canvas(1024)
+    for k in range(14):
+        u = 0.78 + k * 0.012
+        serr.line([(u, 0.72), (u, 0.86)], 0.004)
+    ser = serr.blur(0.6).save("serrations")
+    blue = M.metal("blued_steel", "gunmetal", color=(0.045, 0.047, 0.055), rough=0.28, rough_var=0.03, wear=1.0,
+                   dirt=0.5, scratches=0.5, pitting=0.1, rust=0.02, scale=6, edge_radius=0.0012,
+                   layers=[dict(mask=ser, height=-1.0, color=(0.02, 0.02, 0.025))])
+    # slide: full height at the rear, open-top front exposes the barrel
+    slide = rounded([(-0.062, 0.096), (0.082, 0.096), (0.086, 0.104), (0.084, 0.118), (0.0, 0.119),
+                     (-0.018, 0.116), (-0.022, 0.108), (-0.062, 0.108)])
+    sl = G.extrude("slide", G.shape_polys(slide), 0.029, bev=0.0022, bres=2, plane="XZ", mat=blue)
+    G.planar_uv(sl, "Y")
+    ej = G.box("ejection", (0.034, 0.03, 0.012), loc=(0.028, 0.012, 0.118), bev=0.001)
+    G.boolean(sl, ej)
+    bar = G.cyl("barrel", 0.0086, 0.126, loc=(-0.109, 0, 0.1125), rot=G.rotd(0, 90, 0), segs=40, bev=0.0012,
+                mat=blue)
+    bore = G.cyl("bore", 0.0046, 0.03, loc=(-0.112, 0, 0.1125), rot=G.rotd(0, 90, 0), segs=24)
+    G.boolean(bar, bore)
+    frame = rounded([(-0.085, 0.082), (0.084, 0.082), (0.086, 0.097), (-0.085, 0.097)], 0.0015)
+    grip = rounded([(0.022, 0.086), (0.082, 0.088), (0.088, 0.078), (0.083, 0.03), (0.074, 0.002), (0.066, -0.004),
+                    (0.030, -0.004), (0.024, 0.004), (0.026, 0.03), (0.034, 0.066)], 0.004)
+    guard_o = rounded([(-0.036, 0.086), (0.028, 0.086), (0.03, 0.062), (0.014, 0.05), (-0.018, 0.05),
+                       (-0.034, 0.062)], 0.008)
+    guard_i = rounded([(-0.029, 0.083), (0.022, 0.083), (0.023, 0.066), (0.011, 0.057), (-0.015, 0.057),
+                       (-0.027, 0.066)], 0.006)
+    fr = frame.union(grip).union(guard_o.difference(guard_i))
+    fo = G.extrude("frame", G.shape_polys(fr), 0.027, bev=0.0024, bres=2, plane="XZ", mat=blue)
+    G.planar_uv(fo, "Y")
+    mag = rounded([(0.03, -0.004), (0.068, -0.004), (0.07, -0.012), (0.028, -0.012)], 0.002)
+    G.extrude("mag_base", G.shape_polys(mag), 0.024, bev=0.0015, plane="XZ", mat=blue)
+    trig = rounded([(-0.004, 0.083), (0.004, 0.083), (0.002, 0.07), (-0.004, 0.062), (-0.008, 0.063),
+                    (-0.004, 0.072)], 0.0012)
+    G.extrude("trigger", G.shape_polys(trig), 0.006, bev=0.0012, plane="XZ", mat=blue)
+    ham = rounded([(0.078, 0.1), (0.086, 0.099), (0.096, 0.114), (0.093, 0.12), (0.086, 0.117)], 0.0015)
+    G.extrude("hammer", G.shape_polys(ham), 0.008, bev=0.0014, plane="XZ", mat=blue)
     chk = D.Canvas(1024)
-    for k in range(-40, 41):
-        chk.line([(k / 40, 0), (k / 40 + 1, 1)], 0.003)
-        chk.line([(k / 40, 1), (k / 40 + 1, 0)], 0.003)
-    ck = chk.blur(0.6).save("checker")
-    grips = M.plastic("grip_bakelite", color=(0.05, 0.02, 0.01), rough=0.35, wear=0.5, dirt=0.6,
-                      layers=[dict(mask=ck, height=-0.8, invert=True)])
-    gp = grip.buffer(-0.004)
+    for k in range(-50, 51):
+        chk.line([(k / 50, 0), (k / 50 + 1, 1)], 0.0028)
+        chk.line([(k / 50, 1), (k / 50 + 1, 0)], 0.0028)
+    chk.circle(0.5, 0.55, 0.12, fill=0)
+    ck = chk.blur(0.5).save("checker")
+    grips = M.plastic("grip_bakelite", color=(0.035, 0.012, 0.006), marble=(0.07, 0.025, 0.01), rough=0.35,
+                      wear=0.6, dirt=0.6, layers=[dict(mask=ck, height=-0.9, invert=True)], bump_strength=0.4)
+    gp = grip.buffer(-0.0045)
     for sgn in (1, -1):
-        g = G.extrude(f"grip{sgn}", G.shape_polys(gp), 0.006, bev=0.0022, plane="XZ", mat=grips)
-        G.xform(g, (0, sgn * 0.0155, 0))
-    G.cyl("screw", 0.004, 0.036, loc=(0.052, -0.018, 0.045), rot=G.rotd(-90, 0, 0), segs=16, mat=blue)
-    G.box("front_sight", (0.004, 0.003, 0.006), loc=(-0.095, 0, 0.122), bev=0.001, mat=blue)
-    G.box("rear_sight", (0.006, 0.012, 0.006), loc=(0.06, 0, 0.122), bev=0.001, mat=blue)
-    G.box("safety", (0.012, 0.036, 0.006), loc=(0.055, 0, 0.114), bev=0.002, mat=blue)
+        g = G.extrude(f"grip{sgn}", G.shape_polys(gp), 0.005, bev=0.0019, bres=3, plane="XZ", mat=grips)
+        G.planar_uv(g, "Y")
+        G.xform(g, (0, sgn * 0.0148, 0))
+        G.cyl(f"screw{sgn}", 0.0038, 0.002, loc=(0.054, sgn * 0.0172, 0.045), rot=G.rotd(90, 0, 0), segs=20,
+              bev=0.0006, mat=blue)
+    G.box("front_sight", (0.004, 0.0035, 0.0065), loc=(-0.101, 0, 0.1235), bev=0.0008, mat=blue)
+    G.box("rear_sight", (0.007, 0.014, 0.006), loc=(0.07, 0, 0.1205), bev=0.001, mat=blue)
+    G.cyl("safety", 0.0065, 0.036, loc=(0.066, -0.018, 0.109), rot=G.rotd(-90, 0, 0), segs=24, bev=0.0015, mat=blue)
+    G.box("safety_lever", (0.004, 0.004, 0.012), loc=(0.066, -0.019, 0.101), bev=0.001, mat=blue)
+    G.box("slide_stop", (0.012, 0.004, 0.005), loc=(0.028, -0.0145, 0.091), bev=0.001, mat=blue)
+    G.torus("lanyard", 0.005, 0.0012, loc=(0.078, 0.0, -0.001), rot=G.rotd(90, 0, 0), segs=16, rsegs=6, mat=blue)
 
 
 # ------------------------------------------------------------------ 7 ------
