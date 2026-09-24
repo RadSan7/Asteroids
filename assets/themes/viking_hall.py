@@ -31,13 +31,30 @@ pi = math.pi
 GRID, FOUND_H, WALL_H, SPAN, EAVE, RISE = 2.0, 0.5, 2.5, 8.0, 0.6, 4.0
 HALF = SPAN / 2
 SLOPE_L = (HALF + EAVE) * math.sqrt(2)
+VERT = (pi / 2, -pi / 2, 0)      # plank(): length -> Z, width -> X, thickness -> Y
 
 
 # ================================================================ materials
-def oak(name, axis="Z", weather=0.6, cracks=0.4, adze=0.0, **kw):
-    kw.setdefault("dirt", 0.6)
-    return M.wood(name, light=(0.20, 0.14, 0.085), dark=(0.07, 0.048, 0.03), axis=axis, weather=weather,
-                  cracks=cracks, adze=adze, wear=0.3, pores=0.35, grain_stretch=14, **kw)
+def oak(name, axis="Z", weather=0.6, cracks=0.5, adze=0.0, damp=0.0, **kw):
+    kw.setdefault("dirt", 0.7)
+    kw.setdefault("bump_strength", 0.35)
+    layers = kw.pop("layers", []) or []
+    if damp:
+        layers = layers + [dict(mask=M.axis_mask("Z", damp, 0.0, noise=0.25, nscale=4), color=(0.035, 0.04, 0.02),
+                                rough=0.9, height=0.2),
+                           dict(mask=lambda nb: nb.mul(nb.ss(nb.sep(nb.co())[2], damp * 0.6, 0.0),
+                                                       nb.ss(nb.noise(9, 8, 0.7), 0.55, 0.65)),
+                                color=(0.04, 0.075, 0.02), rough=0.95, height=0.4)]
+    ax = "XYZ".index(axis)
+    st = [5.0, 5.0, 5.0]
+    st[ax] = 0.35
+    layers = [dict(mask=M.noise_mask(1.1, 0.35, 0.75, detail=3), color=(0.09, 0.06, 0.035), opacity=0.55),
+              dict(mask=M.noise_mask(0.8, 0.55, 0.8, detail=3), color=(0.30, 0.22, 0.13), opacity=0.35),
+              dict(mask=lambda nb, st=tuple(st): nb.ss(nb.noise(3.0, 6, 0.6, nb.mapv(scale=st)), 0.55, 0.75),
+                   color=(0.07, 0.062, 0.055), rough=0.85, opacity=0.6)] + layers
+    return M.wood(name, light=(0.25, 0.17, 0.10), dark=(0.05, 0.034, 0.02), axis=axis, weather=weather * 0.7,
+                  cracks=cracks, adze=adze, wear=0.3, pores=0.45, grain_stretch=16, ring_scale=45,
+                  weather_color=(0.22, 0.21, 0.19), layers=layers, **kw)
 
 
 def beam_oak(name, axis="X"):
@@ -49,15 +66,17 @@ def fieldstone(name, moss_z=0.18):
     orange = dict(mask=M.noise_mask(28.0, 0.73, 0.76), color=(0.42, 0.17, 0.03), rough=0.9)
     moss = dict(mask=lambda nb: nb.mul(nb.ss(nb.sep(nb.co())[2], moss_z, 0.0), nb.ss(nb.noise(7, 8, 0.7), 0.45, 0.6)),
                 color=(0.035, 0.07, 0.02), rough=0.95, height=0.3)
-    return M.stone(name, c1=(0.25, 0.24, 0.225), c2=(0.11, 0.105, 0.1), kind="granite", rough=0.75, chips=0.4,
-                   dirt=0.7, scale=1.0, layers=[lichen, orange, moss], bump_strength=0.45)
+    tint = dict(mask=M.noise_mask(0.9, 0.45, 0.7, detail=2), color=(0.26, 0.225, 0.2), opacity=0.45)
+    cold = dict(mask=M.noise_mask(1.3, 0.6, 0.8, detail=2), color=(0.13, 0.14, 0.15), opacity=0.8)
+    return M.stone(name, c1=(0.27, 0.26, 0.245), c2=(0.10, 0.098, 0.095), kind="granite", rough=0.72, chips=0.6,
+                   dirt=0.8, scale=1.0, layers=[tint, cold, lichen, orange, moss], bump_strength=0.7)
 
 
 def thatch(name):
     nb = M.NB(name)
     x, y, z = nb.sep(nb.co())
     s = nb.mul(nb.sub(z, y), 0.7071)                   # coordinate running up the -Y slope
-    v = nb.combine(nb.mul(x, 90.0), nb.mul(s, 2.5), nb.mul(nb.add(y, z), 90.0))
+    v = nb.combine(nb.mul(x, 160.0), nb.mul(s, 3.0), nb.mul(nb.add(y, z), 120.0))
     strands = nb.noise(1.0, 6, 0.55, v)
     fine = nb.noise(3.0, 4, 0.5, nb.combine(nb.mul(x, 400.0), nb.mul(s, 8.0), 0.0))
     base = nb.ramp(nb.add(nb.mul(strands, 0.8), nb.mul(fine, 0.3)),
@@ -69,7 +88,7 @@ def thatch(name):
     col = nb.mix(col, (0.02, 0.015, 0.01), nb.mul(nb.cavity(0.08), 0.8, clamp=True))
     height = nb.add(nb.mul(strands, 1.0), nb.mul(fine, 0.4))
     r = nb.mixf(0.85, 0.95, moss)
-    return nb.done(col, r, 0.0, nb.bump(height, 0.6, 0.004))
+    return nb.done(col, r, 0.0, nb.bump(height, 1.1, 0.006))
 
 
 def earth(name):
@@ -77,15 +96,23 @@ def earth(name):
                  color=(0.30, 0.22, 0.10), rough=0.7, height=0.4)
     straw2 = dict(mask=lambda nb: nb.ss(nb.noise(60, 2, 0.5, nb.mapv(scale=(12, 1, 1), rot=(0, 0, -0.4))), 0.7, 0.74),
                   color=(0.26, 0.19, 0.09), rough=0.7, height=0.4)
-    return M.stone(name, c1=(0.085, 0.066, 0.048), c2=(0.035, 0.027, 0.02), kind="limestone", rough=0.92,
-                   chips=0.0, dirt=0.4, scale=1.5, layers=[straw, straw2], bump_strength=0.5)
+    pebbles = dict(mask=lambda nb: nb.ss(nb.voronoi(45, feature="F1"), 0.12, 0.05), color=(0.13, 0.12, 0.11),
+                   rough=0.6, height=0.8)
+    patches = dict(mask=M.noise_mask(1.2, 0.5, 0.7), color=(0.025, 0.02, 0.015), rough=0.8, opacity=0.8)
+    return M.stone(name, c1=(0.075, 0.058, 0.042), c2=(0.03, 0.024, 0.018), kind="limestone", rough=0.9,
+                   chips=0.0, dirt=0.4, scale=1.5, layers=[patches, pebbles, straw, straw2], bump_strength=0.8)
 
 
 def daub(name):
     cracks = dict(mask=lambda nb: nb.mul(nb.mr(nb.voronoi(6, feature="DISTANCE_TO_EDGE"), 0, 0.006, 1, 0),
                                          nb.ss(nb.noise(3, 4), 0.4, 0.6)), color=(0.05, 0.04, 0.03), height=-1.0)
-    return M.stone(name, c1=(0.30, 0.245, 0.17), c2=(0.16, 0.125, 0.085), kind="limestone", rough=0.93, chips=0.2,
-                   dirt=0.6, scale=1.2, layers=[cracks], bump_strength=0.5)
+    lime = dict(mask=lambda nb: nb.ss(nb.noise(1.6, 8, 0.65), 0.5, 0.62), color=(0.34, 0.31, 0.26), rough=0.95,
+                opacity=0.6)
+    grime = dict(mask=M.axis_mask("Z", 0.8, 0.1, noise=0.3, nscale=3), color=(0.06, 0.045, 0.03), opacity=0.7)
+    straw_bits = dict(mask=lambda nb: nb.ss(nb.noise(50, 2, 0.5, nb.mapv(scale=(1, 1, 10))), 0.72, 0.76),
+                      color=(0.28, 0.2, 0.08), height=0.3)
+    return M.stone(name, c1=(0.27, 0.215, 0.15), c2=(0.12, 0.095, 0.065), kind="limestone", rough=0.93, chips=0.4,
+                   dirt=0.7, scale=1.2, layers=[lime, cracks, straw_bits, grime], bump_strength=0.9)
 
 
 def iron(name="iron"):
@@ -94,7 +121,7 @@ def iron(name="iron"):
 
 
 def straw(name="straw"):
-    return M.plastic(name, color=(0.42, 0.31, 0.12), marble=(0.26, 0.19, 0.07), rough=0.5, wear=0.0, dirt=0.4,
+    return M.plastic(name, color=(0.30, 0.22, 0.09), marble=(0.17, 0.13, 0.06), rough=0.55, wear=0.0, dirt=0.5,
                      scale=20)
 
 
@@ -164,13 +191,24 @@ def hewn(name, L, w, h, loc, rot, mat, seed, bow=0.012):
     return G.xform(ob, loc, rot)
 
 
-def rock(name, dims, loc, mat, seed, rot=(0, 0, 0), flat_top=None, flat_bottom=True, rough=0.14):
-    ob = G.box(name, (1, 1, 1), mat=mat, subdiv=3)
+def rock(name, dims, loc, mat, seed, rot=(0, 0, 0), flat_top=None, flat_bottom=True, rough=0.14, facets=4, sub=None):
+    """Angular fieldstone: rounded box, noise, then a few random split planes."""
+    sub = sub or (4 if max(dims) > 0.4 else 3 if max(dims) > 0.1 else 2)
+    ob = G.box(name, (1, 1, 1), mat=mat, subdiv=sub)
+    rng = np.random.default_rng(seed)
 
     def f(co):
         n = co / np.linalg.norm(co, axis=1, keepdims=True)
-        co = co * 0.45 + n * 0.55 * 0.5
-        co += n * (rough * snoise(co, seed, 3.0))[:, None]
+        co = co * 0.72 + n * 0.28 * 0.5
+        co += n * (rough * snoise(co, seed, 2.5) + 0.35 * rough * snoise(co, seed + 1, 7.0))[:, None]
+        for _ in range(facets):
+            d = rng.normal(size=3)
+            d[2] *= 0.5
+            d /= np.linalg.norm(d)
+            lim = 0.36 + 0.1 * rng.random()
+            h = co @ d
+            over = h > lim
+            co[over] -= np.outer(h[over] - lim, d) * 0.92
         co *= np.array(dims)
         if flat_bottom:
             co[:, 2] = np.maximum(co[:, 2], -dims[2] * 0.42)
@@ -210,31 +248,35 @@ def knot_band(name, n=6, v0=0.0, v1=1.0, width=0.01):
 
 
 # ============================================================ foundations
-@asset(res=2048, view=(-25, 18), pivot="origin", kind="kit", title="Foundation 2m")
+@asset(res=2048, view=(-25, 18), pivot="origin", kind="kit", title="Foundation 2m", max_tris=24000)
 def foundation_2m():
     st = fieldstone("plinth_stone")
     rng = np.random.default_rng(1)
     k = 0
     for course, (zc, h, seed) in enumerate(((0.13, 0.3, 1), (0.37, 0.26, 2))):
         x = 0.0
-        ws = split_widths(GRID, 0.36, 0.58, seed + 10, gap=0.0)
+        ws = split_widths(GRID, 0.26, 0.5, seed + 10, gap=0.0)
         if course:
             ws = ws[::-1]
         for L in ws:
-            rock(f"s{k}", (L * 1.05, 0.46, h), (x + L / 2, 0.01 * rng.normal(), zc), st, 100 + k,
-                 flat_top=h / 2)
+            hh = h * (0.85 + 0.25 * rng.random())
+            rock(f"s{k}", (L * 1.06, 0.44 + 0.06 * rng.random(), hh), (x + L / 2, 0.015 * rng.normal(), zc), st,
+                 100 + k, flat_top=h / 2, rot=(0.04 * rng.normal(), 0.04 * rng.normal(), 0.08 * rng.normal()))
             x += L
             k += 1
-    for i in range(10):
-        rock(f"chink{i}", (0.09, 0.08, 0.07), (0.1 + 1.8 * rng.random(), -0.24 + 0.48 * (i % 2), 0.26),
-             st, 300 + i, rough=0.2)
+    for i in range(16):
+        rock(f"chink{i}", (0.07 + 0.05 * rng.random(), 0.08, 0.05 + 0.03 * rng.random()),
+             (0.05 + 1.9 * rng.random(), -0.22 + 0.44 * (i % 2), 0.25 + 0.03 * rng.normal()), st, 300 + i, rough=0.2,
+             rot=(0, 0, rng.random() * pi))
 
 
 @asset(res=1024, view=(-35, 22), pivot="origin", kind="kit", title="Foundation corner")
 def foundation_corner():
     st = fieldstone("corner_stone")
-    rock("c0", (0.62, 0.62, 0.3), (0, 0, 0.14), st, 11, flat_top=0.15)
-    rock("c1", (0.56, 0.56, 0.26), (0.02, -0.01, 0.37), st, 12, flat_top=0.13, rot=(0, 0, 0.4))
+    rock("c0", (0.6, 0.58, 0.3), (0, 0, 0.14), st, 11, flat_top=0.15, facets=6)
+    rock("c1", (0.54, 0.5, 0.26), (0.02, -0.01, 0.37), st, 12, flat_top=0.13, rot=(0, 0, 0.35), facets=6)
+    rock("c2", (0.14, 0.12, 0.1), (0.3, 0.26, 0.26), st, 13, rot=(0, 0, 1.0))
+    rock("c3", (0.12, 0.1, 0.08), (-0.29, -0.25, 0.25), st, 14, rot=(0, 0, 2.0))
 
 
 @asset(res=2048, view=(-20, 40), pivot="origin", kind="kit", title="Floor earth 2x2")
@@ -249,12 +291,12 @@ def floor_earth_2x2():
     deform(bpy_grid, f)
     stm = straw("floor_straw")
     rng = np.random.default_rng(3)
-    for i in range(70):
-        p = np.array([0.1 + 1.8 * rng.random(), 0.1 + 1.8 * rng.random(), 0.012])
+    for i in range(140):
+        p = np.array([0.05 + 1.9 * rng.random(), 0.05 + 1.9 * rng.random(), 0.009])
         a = rng.random() * pi
-        L = 0.08 + 0.12 * rng.random()
+        L = 0.05 + 0.12 * rng.random()
         d = np.array([math.cos(a), math.sin(a), 0]) * L / 2
-        G.tube(f"straw{i}", [p - d, p + d * 0.2 + [0, 0, 0.004], p + d], 0.0018, n=4, mat=stm)
+        G.tube(f"straw{i}", [p - d, p + d * 0.2 + [0, 0, 0.002], p + d], 0.0012, n=4, mat=stm, scale2=0.5)
 
 
 @asset(res=2048, view=(-20, 40), pivot="origin", kind="kit", title="Floor planks 2x2")
@@ -282,11 +324,11 @@ def _wall_frame(sill_mat, pmat, n_pegs=4):
 @asset(res=2048, view=(-20, 10), pivot="origin", kind="kit", title="Wall plank 2m")
 def wall_plank_2m():
     beams = beam_oak("wall_beam_oak")
-    boards = oak("wall_board_oak", axis="Z", weather=0.7)
+    boards = oak("wall_board_oak", axis="Z", weather=0.75, damp=0.35)
     _wall_frame(beams, beams)
     x = 0.0
     for i, w in enumerate(split_widths(GRID, 0.2, 0.32, 7)):
-        plank(f"board{i}", WALL_H - 0.3, w, 0.06, (x + w / 2, 0.003 * (i % 2), WALL_H / 2), (0, pi / 2, 0), boards,
+        plank(f"board{i}", WALL_H - 0.3, w, 0.06, (x + w / 2, 0.003 * (i % 2), WALL_H / 2), VERT, boards,
               40 + i, bow=0.01)
         x += w + 0.004
 
@@ -294,7 +336,7 @@ def wall_plank_2m():
 @asset(res=2048, view=(-20, 10), pivot="origin", kind="kit", title="Wall plank door 2m")
 def wall_plank_door_2m():
     beams = beam_oak("door_beam_oak")
-    boards = oak("door_board_oak", axis="Z", weather=0.7)
+    boards = oak("door_board_oak", axis="Z", weather=0.75, damp=0.35)
     _wall_frame(beams, beams)
     for i, x0 in enumerate((0.45, 1.43)):
         hewn(f"jamb{i}", 1.86, 0.12, 0.2, (x0 + 0.06, 0, 0.22 + 0.93), (0, pi / 2, 0), beams, 60 + i, bow=0.004)
@@ -304,9 +346,9 @@ def wall_plank_door_2m():
         c = x + w / 2
         if 0.42 < c < 1.58:
             pl = 0.14
-            plank(f"above{i}", pl, w, 0.06, (c, 0, 2.29 + 0.01), (0, pi / 2, 0), boards, 80 + i, bow=0.0)
+            plank(f"above{i}", pl, w, 0.06, (c, 0, 2.29 + 0.01), VERT, boards, 80 + i, bow=0.0)
         else:
-            plank(f"board{i}", WALL_H - 0.3, w, 0.06, (c, 0.003 * (i % 2), WALL_H / 2), (0, pi / 2, 0), boards,
+            plank(f"board{i}", WALL_H - 0.3, w, 0.06, (c, 0.003 * (i % 2), WALL_H / 2), VERT, boards,
                   90 + i, bow=0.01)
         x += w + 0.004
 
@@ -317,7 +359,7 @@ def door_plank():
     W, H = 0.9, 1.84
     x = 0.0
     for i, w in enumerate(split_widths(W, 0.2, 0.26, 5)):
-        plank(f"b{i}", H, w, 0.04, (x + w / 2, 0, H / 2), (0, pi / 2, 0), boards, 10 + i, bow=0.004)
+        plank(f"b{i}", H, w, 0.04, (x + w / 2, 0, H / 2), VERT, boards, 10 + i, bow=0.004)
         x += w + 0.003
     battens = oak("batten_oak", axis="X", weather=0.4)
     for z in (0.3, 1.5):
@@ -357,11 +399,13 @@ def wall_wattle_2m():
 
         def f(co, s=sgn):
             face = np.sign(co[:, 1] - s * 0.058) == s
-            co[face, 1] += s * (0.012 * snoise(co[face] * [1, 0, 1], 40 + s, 3.0))
+            co[face, 1] += s * (0.022 * snoise(co[face] * [1, 0, 1], 40 + s, 2.0)
+                                + 0.008 * snoise(co[face] * [1, 0, 1], 50 + s, 9.0))
             return co
         deform(slab, f)
         if sgn < 0:
-            for k, (cx, cz, r) in enumerate(((0.55, 0.8, 0.22), (1.45, 1.75, 0.16), (1.2, 0.45, 0.12))):
+            for k, (cx, cz, r) in enumerate(((0.45, 0.55, 0.3), (1.45, 1.75, 0.2), (1.25, 0.4, 0.14),
+                                             (0.9, 1.3, 0.1))):
                 blob = rock(f"hole{k}", (r * 2, 0.2, r * 1.6), (cx, -0.06, cz), None, 70 + k, flat_bottom=False,
                             rough=0.3)
                 G.boolean(slab, blob)
@@ -369,23 +413,23 @@ def wall_wattle_2m():
 
 @asset(res=2048, view=(-60, 10), pivot="origin", kind="kit", title="Gable wall 8m")
 def gable_wall_8m():
-    boards = oak("gable_oak", axis="Z", weather=0.75)
+    boards = oak("gable_oak", axis="Z", weather=0.8, cracks=0.6)
     y = -HALF
     for i, w in enumerate(split_widths(SPAN, 0.2, 0.3, 33)):
         y0, y1 = y, y + w
         top0, top1 = RISE - abs(y0), RISE - abs(y1)
-        if abs((y0 + y1) / 2) < 0.4:
-            top0 = top1 = min(top0, top1, 3.2)
-        if y0 < 0 < y1:
-            poly = [(y0, -0.12), (y1, -0.12), (y1, top1), (0, RISE), (y0, top0)]
-        else:
-            poly = [(y0, -0.12), (y1, -0.12), (y1, top1), (y0, top0)]
+        if abs((y0 + y1) / 2) < 0.45:
+            top0 = top1 = min(top0, top1, 3.05)        # smoke hole under the ridge
+        poly = [(y0, -0.12), (y1, -0.12), (y1, top1), (y0, top0)]
         b = G.extrude(f"g{i}", [poly], 0.06, bev=0.005, plane="YZ", mat=boards)
         _ = b
         y += w + 0.004
     bat = beam_oak("gable_batten", axis="Y")
-    hewn("batten", 5.0, 0.1, 0.12, (-0.07, 0, 1.5), (0, 0, pi / 2), bat, 5, bow=0.0)
-    pegs([(-0.13, yy, 1.5) for yy in np.linspace(-2.2, 2.2, 6)], (0, pi / 2, 0), bat, L=0.05)
+    for zb, Lb in ((1.2, 5.4), (2.55, 2.6)):
+        hewn(f"batten{zb}", Lb, 0.1, 0.12, (-0.07, 0, zb), (0, 0, pi / 2), bat, int(zb * 10), bow=0.0)
+        pegs([(-0.13, yy, zb) for yy in np.linspace(-Lb / 2 + 0.2, Lb / 2 - 0.2, 6)], (0, pi / 2, 0), bat, L=0.05,
+             name=f"bp{zb}")
+    hewn("hole_sill", 0.95, 0.1, 0.1, (-0.07, 0, 3.02), (0, 0, pi / 2), bat, 77, bow=0.0)
 
 
 # ================================================================== frame
@@ -443,14 +487,19 @@ def rafter_pair_8m():
 # =================================================================== roof
 @asset(res=4096, view=(-35, 25), pivot="origin", kind="kit", title="Thatch roof 2m", max_tris=90000)
 def roof_thatch_2m():
+    """Water-reed/straw thatch laid in overlapping courses on the -Y slope.
+    Outer surface is continuous-looking: each course steps out only a few cm,
+    butts are ragged, the whole coat sags and swells slightly."""
     th = thatch("thatch")
     rng = np.random.default_rng(4)
+    nx = 48
+    step, clen = 0.36, 1.05
     k = 0
     s0 = 0.0
-    nx = 44
-    while s0 < SLOPE_L - 0.2:
-        s1 = min(s0 + 1.05, SLOPE_L + 0.05)
-        ns = 6
+    while s0 < SLOPE_L - 0.15:
+        s1 = min(s0 + clen, SLOPE_L + 0.08)
+        ns = 7
+        butt = 0.36 if k == 0 else 0.30
         verts, faces = [], []
         for side in (0, 1):
             for i in range(nx + 1):
@@ -458,9 +507,11 @@ def roof_thatch_2m():
                 for j in range(ns + 1):
                     t = j / ns
                     s = s0 + (s1 - s0) * t
-                    jag = 0.035 * math.sin(x * 23 + k * 3.1) + 0.02 * rng.normal() if j == 0 else 0.0
-                    s = s + jag
-                    off = (0.34 - 0.24 * t ** 0.7) if side == 0 else 0.0
+                    if j == 0:
+                        s += 0.012 * math.sin(x * 17 + k * 2.3) + 0.008 * rng.normal()
+                    off = (butt - 0.05 * t ** 0.8) if side == 0 else 0.0
+                    if side == 0:
+                        off += 0.025 * math.sin(x * 2.1 + s * 1.3 + k) + 0.012 * rng.normal() * (j > 0)
                     y = -(HALF + EAVE) + s / math.sqrt(2)
                     z = -EAVE + s / math.sqrt(2)
                     verts.append((x, y - off / math.sqrt(2), z + off / math.sqrt(2)))
@@ -480,26 +531,33 @@ def roof_thatch_2m():
                 faces.append([vid(0, i, j), vid(0, i, j + 1), vid(1, i, j + 1), vid(1, i, j)])
         G.mesh(f"course{k}", verts, faces, None, th)
         k += 1
-        s0 += 0.52
+        s0 += step
 
 
 @asset(res=2048, view=(-30, 25), pivot="origin", kind="kit", title="Ridge 2m")
 def roof_ridge_2m():
     th = thatch("ridge_thatch")
-    path = [(x, 0.0, RISE + 0.12) for x in np.linspace(-0.03, GRID + 0.03, 40)]
-    roll = G.tube("roll", path, 0.34, n=32, mat=th, scale2=0.55)
-    G.displace(roll, 0.02, scale=0.08)
+    W = 1.05
+
+    def top(y):
+        return RISE - abs(y) + 0.30 + 0.22 * math.exp(-(y / 0.45) ** 2)
+    secs = []
+    for x in np.linspace(-0.03, GRID + 0.03, 36):
+        ring = [(x, y, top(y) + 0.02 * math.sin(x * 3.1 + y * 4)) for y in np.linspace(-W, W, 40)]
+        ring += [(x, y, RISE - abs(y) + 0.12) for y in np.linspace(W, -W, 20)]
+        secs.append(ring)
+    G.loft("saddle", secs, th, closed=True, cap=True)
     hz = hazel("ridge_hazel")
-    for s in (1, -1):
-        for d in (0.18, 0.36):
-            y = s * d
-            z = RISE + 0.12 + 0.19 * math.cos(pi * d / 0.8) - 0.02
-            G.tube(f"ligger{s}{d}", [(x, y, z) for x in np.linspace(-0.02, GRID + 0.02, 30)], 0.015, n=8, mat=hz)
-    for i in range(9):
-        x0 = 0.12 + i * 0.22
-        for s in (1, -1):
-            a = [(x0, s * 0.42, RISE + 0.05), (x0 + 0.11, s * 0.05, RISE + 0.32)]
-            G.tube(f"spar{i}{s}", a, 0.01, n=6, mat=hz)
+    for yy in (-0.72, -0.4, 0.4, 0.72):
+        G.tube(f"ligger{yy}", [(x, yy, top(yy) + 0.012) for x in np.linspace(-0.02, GRID + 0.02, 30)], 0.014, n=8,
+               mat=hz)
+    for i in range(10):
+        x0 = 0.05 + i * 0.2
+        for (ya, yb) in ((-0.72, -0.4), (0.4, 0.72)):
+            for d in (1, -1):
+                a = (x0, ya, top(ya) + 0.02)
+                b = (x0 + 0.1 * d, yb, top(yb) + 0.02)
+                G.tube(f"spar{i}{ya}{d}", [a, b], 0.009, n=6, mat=hz)
 
 
 @asset(res=2048, view=(-80, 12), pivot="origin", kind="kit", title="Gable dragon finials")
@@ -517,7 +575,7 @@ def gable_finial():
         nrm = np.array([1.0, s * 1.0]) / math.sqrt(2) * (1 if s < 0 else 1)
         Lb = SLOPE_L + 0.22 + 0.9
         p0 = np.array([y0, z0])
-        w = 0.3
+        w = 0.36
         pts = [p0 - nrm * w / 2, p0 + d * Lb - nrm * w / 2]
         # dragon head beyond the crossing, curling outward
         head = _dragon(p0 + d * Lb, d, -s)
@@ -525,21 +583,25 @@ def gable_finial():
         pts += [p0 + d * Lb + nrm * w / 2, p0 + nrm * w / 2]
         poly = [(float(p[0]), float(p[1])) for p in pts]
         from shapely.geometry import Polygon
-        pg = Polygon(poly).buffer(0.01).buffer(-0.01)
+        pg = Polygon(poly).buffer(0.01).buffer(-0.01).difference(_dragon_eye(p0 + d * Lb, d, -s))
         b = G.extrude(f"board{s}", G.shape_polys(pg), 0.06, bev=0.01, bres=2, plane="YZ", mat=board_m)
         G.xform(b, (0.03 * s, 0, 0))
 
 
 def _dragon(base, d, side):
-    """Profile of a carved dragon head starting at `base`, heading along d."""
+    """Carved dragon-head profile (neck at `base`, snout along d); returns outline points."""
     n = np.array([-d[1], d[0]]) * side
-    P = []
-    spec = [(0.0, 0.15), (0.12, 0.22), (0.30, 0.26), (0.42, 0.34), (0.50, 0.30), (0.62, 0.22), (0.78, 0.2),
-            (0.92, 0.12), (0.98, 0.04), (0.84, 0.02), (0.9, -0.04), (0.98, -0.08), (0.8, -0.1), (0.6, -0.12),
-            (0.45, -0.17), (0.3, -0.16), (0.15, -0.15), (0.0, -0.15)]
-    for (a, b) in spec:
-        P.append(base + d * a + n * b)
-    return P
+    spec = [(0.0, 0.18), (0.22, 0.24), (0.4, 0.33), (0.5, 0.46), (0.56, 0.5), (0.6, 0.4), (0.72, 0.3),
+            (0.92, 0.24), (1.08, 0.17), (1.16, 0.08), (1.1, 0.03), (0.96, 0.03), (0.82, 0.0), (0.98, -0.04),
+            (1.1, -0.07), (1.12, -0.12), (0.96, -0.16), (0.7, -0.19), (0.4, -0.21), (0.15, -0.2), (0.0, -0.18)]
+    sc = 0.95
+    return [base + d * a * sc + n * b * sc for (a, b) in spec]
+
+
+def _dragon_eye(base, d, side):
+    n = np.array([-d[1], d[0]]) * side
+    c = base + d * 0.8 * 0.95 + n * 0.15 * 0.95
+    return G.circle2d(float(c[0]), float(c[1]), 0.035, 24)
 
 
 # ================================================================ interior

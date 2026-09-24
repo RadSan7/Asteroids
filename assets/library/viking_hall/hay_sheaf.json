@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "hay_sheaf",
+ "title": "Hay sheaf",
+ "kind": "prop",
+ "tris": 11276,
+ "dims_m": [
+  0.4693,
+  0.4759,
+  0.9812
+ ],
+ "texture": 1024,
+ "materials": [
+  "hay_sheaf_mat",
+  "hay_sheaf_mat"
+ ],
+ "glb_kb": 1139,
+ "seconds": 39.5,
+ "t_build": 0,
+ "t_bake": 3,
+ "t_render": 36
+}

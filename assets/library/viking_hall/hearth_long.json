@@ -1,0 +1,25 @@
+{
+ "theme": "viking_hall",
+ "name": "hearth_long",
+ "title": "Long hearth",
+ "kind": "kit",
+ "tris": 47336,
+ "dims_m": [
+  2.2813,
+  1.2457,
+  1.2649
+ ],
+ "texture": 2048,
+ "materials": [
+  "hearth_long_mat",
+  "hearth_long_mat",
+  "hearth_long_mat",
+  "embers",
+  "hearth_long_mat"
+ ],
+ "glb_kb": 3696,
+ "seconds": 93.3,
+ "t_build": 1,
+ "t_bake": 61,
+ "t_render": 31
+}

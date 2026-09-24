@@ -92,13 +92,13 @@ def build_one(theme, name, timeout):
     return False, dict(error="crashed", tail=tail), time.time() - t0
 
 
-def contact_sheet(theme, cols=5, cell=360):
+def contact_sheet(theme, cols=5, cell=360, base=None, out=None):
     from PIL import Image, ImageDraw, ImageFont
     names = [n for n, _ in theme_assets(theme)]
     ims = []
     for n in names:
-        p = os.path.join(LIB, theme, n + ".jpg")
-        meta_p = os.path.join(LIB, theme, n + ".json")
+        p = os.path.join(base or LIB, theme, n + ".jpg")
+        meta_p = os.path.join(base or LIB, theme, n + ".json")
         meta = json.load(open(meta_p)) if os.path.exists(meta_p) else {}
         ims.append((n, Image.open(p).convert("RGB") if os.path.exists(p) else None, meta))
     if not ims:
@@ -118,7 +118,7 @@ def contact_sheet(theme, cols=5, cell=360):
         if meta:
             info += f"  {meta['tris'] // 1000}k tri  {meta['glb_kb'] // 1024 or 1}MB"
         d.text((x + 8, y + cell + 8), info, fill=(225, 215, 195), font=f)
-    path = os.path.join(LIB, theme, "_review.jpg")
+    path = out or os.path.join(LIB, theme, "_review.jpg")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     sheet.save(path, quality=85)
     return path
@@ -133,6 +133,7 @@ def main():
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--timeout", type=int, default=1500)
     ap.add_argument("--dry", action="store_true", help="build geometry only (fast error check)")
+    ap.add_argument("--quick", action="store_true", help="unbaked low-sample preview to /tmp/forge_quick")
     a = ap.parse_args()
     sel = a.theme or themes()
     only = {s.strip() for s in a.only.split(",") if s.strip()}
@@ -141,18 +142,22 @@ def main():
         for t in sel:
             print(contact_sheet(t))
         return
-    if a.dry:
-        os.environ["FORGE_DRY"] = "1"
+
+    if a.dry or a.quick:
+        os.environ["FORGE_QUICK" if a.quick else "FORGE_DRY"] = "1"
         for t in sel:
             for n, _ in theme_assets(t):
                 if only and f"{t}/{n}" not in only and n not in only:
                     continue
-                ok, info, secs = build_one(t, n, 300)
+                ok, info, secs = build_one(t, n, 600)
                 if ok:
                     print(f"dry OK   {t}/{n}  {info['tris']} tris  dims={info['dims_m']}  {secs:.0f}s", flush=True)
                 else:
                     print(f"dry FAIL {t}/{n}  {info.get('error')} :: {' | '.join(info.get('tail', [])[-3:])[-500:]}",
                           flush=True)
+        if a.quick:
+            for t in sel:
+                print("quick sheet:", contact_sheet(t, base="/tmp/forge_quick", out=f"/tmp/forge_quick/{t}_quick.jpg"))
         return
     queue = []
     for t in sel:

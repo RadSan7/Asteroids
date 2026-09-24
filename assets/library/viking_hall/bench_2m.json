@@ -1,0 +1,24 @@
+{
+ "theme": "viking_hall",
+ "name": "bench_2m",
+ "title": "Sleeping bench 2m",
+ "kind": "kit",
+ "tris": 18080,
+ "dims_m": [
+  2.0,
+  1.1492,
+  0.5731
+ ],
+ "texture": 2048,
+ "materials": [
+  "bench_2m_mat",
+  "bench_2m_mat",
+  "bench_2m_mat",
+  "bench_2m_mat"
+ ],
+ "glb_kb": 1716,
+ "seconds": 107.2,
+ "t_build": 0,
+ "t_bake": 76,
+ "t_render": 30
+}

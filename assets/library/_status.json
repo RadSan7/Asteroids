@@ -426,6 +426,13 @@
   "secs": 40,
   "tris": 1448
  },
+ "viking_hall/bench_2m": {
+  "hash": "f8f7d98d7ed5",
+  "kb": 1716,
+  "ok": true,
+  "secs": 108,
+  "tris": 18080
+ },
  "viking_hall/door_plank": {
   "hash": "d1cfb3a4b73b",
   "kb": 698,
@@ -461,12 +468,47 @@
   "secs": 55,
   "tris": 1536
  },
+ "viking_hall/gable_finial": {
+  "hash": "eb7def357a4d",
+  "kb": 542,
+  "ok": true,
+  "secs": 50,
+  "tris": 1544
+ },
  "viking_hall/gable_wall_8m": {
   "hash": "83f70fbcec2e",
   "kb": 1180,
   "ok": true,
   "secs": 69,
   "tris": 4104
+ },
+ "viking_hall/hay_pile": {
+  "hash": "9d2ea06d9e72",
+  "kb": 2801,
+  "ok": true,
+  "secs": 48,
+  "tris": 15208
+ },
+ "viking_hall/hay_sheaf": {
+  "hash": "0c327bb2b1d6",
+  "kb": 1139,
+  "ok": true,
+  "secs": 40,
+  "tris": 11276
+ },
+ "viking_hall/hearth_long": {
+  "hash": "de309836926d",
+  "kb": 3696,
+  "ok": true,
+  "secs": 94,
+  "tris": 47336
+ },
+ "viking_hall/plank_stack": {
+  "hash": "d74898e6acc9",
+  "kb": 1936,
+  "ok": true,
+  "secs": 173,
+  "tris": 23088
  },
  "viking_hall/post_corner": {
   "hash": "fc5a84dbd191",
@@ -488,6 +530,20 @@
   "ok": true,
   "secs": 56,
   "tris": 4704
+ },
+ "viking_hall/roof_ridge_2m": {
+  "hash": "a52a5492ffc3",
+  "kb": 1512,
+  "ok": true,
+  "secs": 82,
+  "tris": 4820
+ },
+ "viking_hall/roof_thatch_2m": {
+  "hash": "e9bbf8e56717",
+  "kb": 7194,
+  "ok": true,
+  "secs": 250,
+  "tris": 16328
  },
  "viking_hall/tie_beam_8m": {
   "hash": "de1abd093ef0",

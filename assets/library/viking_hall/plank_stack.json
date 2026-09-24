@@ -1,0 +1,22 @@
+{
+ "theme": "viking_hall",
+ "name": "plank_stack",
+ "title": "Plank stack",
+ "kind": "prop",
+ "tris": 23088,
+ "dims_m": [
+  2.4037,
+  0.8208,
+  0.2903
+ ],
+ "texture": 2048,
+ "materials": [
+  "plank_stack_mat",
+  "plank_stack_mat"
+ ],
+ "glb_kb": 1936,
+ "seconds": 172.7,
+ "t_build": 1,
+ "t_bake": 141,
+ "t_render": 31
+}

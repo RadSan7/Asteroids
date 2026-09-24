@@ -371,6 +371,16 @@ def run(theme, name, outroot, workroot):
     ob = assemble(spec, name)
     lo, hi = G.bbox(ob)
     size = float(np.linalg.norm(hi - lo))
+    if os.environ.get("FORGE_QUICK"):
+        qdir = os.path.join("/tmp/forge_quick", theme)
+        os.makedirs(qdir, exist_ok=True)
+        for o in list(bpy.context.scene.objects):
+            if o is not ob:
+                bpy.data.objects.remove(o, do_unlink=True)
+        spec = dict(spec, samples=12)
+        render_preview(ob, spec, os.path.join(qdir, f"{name}.jpg"), res=560)
+        return dict(theme=theme, name=name, title=spec["title"], tris=_tris(ob), glb_kb=0,
+                    dims_m=[round(float(x), 3) for x in (hi - lo)])
     if os.environ.get("FORGE_DRY"):
         return dict(theme=theme, name=name, title=spec["title"], tris=_tris(ob), glb_kb=0,
                     dims_m=[round(float(x), 3) for x in (hi - lo)], mats=len(ob.data.materials))
