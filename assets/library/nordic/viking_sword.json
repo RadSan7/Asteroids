@@ -1,0 +1,21 @@
+{
+ "theme": "nordic",
+ "name": "viking_sword",
+ "title": "Viking sword",
+ "kind": "weapon",
+ "tris": 28028,
+ "dims_m": [
+  0.1433,
+  0.026,
+  0.889
+ ],
+ "texture": 2048,
+ "materials": [
+  "viking_sword_mat",
+  "viking_sword_mat",
+  "viking_sword_mat",
+  "viking_sword_mat"
+ ],
+ "glb_kb": 1913,
+ "seconds": 432.5
+}

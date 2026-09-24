@@ -1,0 +1,20 @@
+{
+ "theme": "nordic",
+ "name": "stave_tankard",
+ "title": "Stave tankard",
+ "kind": "vessel",
+ "tris": 6300,
+ "dims_m": [
+  0.1971,
+  0.1356,
+  0.162
+ ],
+ "texture": 1024,
+ "materials": [
+  "stave_tankard_mat",
+  "stave_tankard_mat",
+  "mead"
+ ],
+ "glb_kb": 500,
+ "seconds": 134.5
+}

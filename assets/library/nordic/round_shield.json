@@ -1,0 +1,21 @@
+{
+ "theme": "nordic",
+ "name": "round_shield",
+ "title": "Round shield",
+ "kind": "weapon",
+ "tris": 12420,
+ "dims_m": [
+  0.8504,
+  0.122,
+  0.8504
+ ],
+ "texture": 2048,
+ "materials": [
+  "round_shield_mat",
+  "round_shield_mat",
+  "round_shield_mat",
+  "round_shield_mat"
+ ],
+ "glb_kb": 1052,
+ "seconds": 322.7
+}

@@ -1,0 +1,23 @@
+{
+ "nordic/round_shield": {
+  "hash": "1f7ef281ff07",
+  "kb": 1052,
+  "ok": true,
+  "secs": 323,
+  "tris": 12420
+ },
+ "nordic/stave_tankard": {
+  "hash": "8e620a216542",
+  "kb": 500,
+  "ok": true,
+  "secs": 135,
+  "tris": 6300
+ },
+ "nordic/viking_sword": {
+  "hash": "621cbbec6025",
+  "kb": 1913,
+  "ok": true,
+  "secs": 433,
+  "tris": 28028
+ }
+}
