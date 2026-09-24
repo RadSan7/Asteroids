@@ -1,0 +1,22 @@
+{
+ "theme": "greece",
+ "name": "amphora",
+ "title": "Black-figure amphora",
+ "kind": "vessel",
+ "tris": 31608,
+ "dims_m": [
+  0.3222,
+  0.3222,
+  0.6207
+ ],
+ "texture": 2048,
+ "materials": [
+  "amphora_mat",
+  "amphora_mat"
+ ],
+ "glb_kb": 1605,
+ "seconds": 123.2,
+ "t_build": 1,
+ "t_bake": 97,
+ "t_render": 24
+}

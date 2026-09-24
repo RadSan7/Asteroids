@@ -1,0 +1,26 @@
+{
+ "theme": "paris_1940",
+ "name": "gramophone",
+ "title": "Horn gramophone",
+ "kind": "device",
+ "tris": 23356,
+ "dims_m": [
+  0.5199,
+  0.7161,
+  0.829
+ ],
+ "texture": 2048,
+ "materials": [
+  "gramophone_mat",
+  "gramophone_mat",
+  "gramophone_mat",
+  "gramophone_mat",
+  "gramophone_mat",
+  "gramophone_mat"
+ ],
+ "glb_kb": 1776,
+ "seconds": 113.1,
+ "t_build": 1,
+ "t_bake": 85,
+ "t_render": 27
+}

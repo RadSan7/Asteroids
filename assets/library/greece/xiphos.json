@@ -1,0 +1,23 @@
+{
+ "theme": "greece",
+ "name": "xiphos",
+ "title": "Xiphos",
+ "kind": "weapon",
+ "tris": 8044,
+ "dims_m": [
+  0.085,
+  0.036,
+  0.609
+ ],
+ "texture": 2048,
+ "materials": [
+  "xiphos_mat",
+  "xiphos_mat",
+  "xiphos_mat"
+ ],
+ "glb_kb": 683,
+ "seconds": 75.4,
+ "t_build": 0,
+ "t_bake": 55,
+ "t_render": 20
+}

@@ -15,7 +15,7 @@ GLOSS = (0.012, 0.010, 0.009)    # black gloss
 
 def bronze(name="bronze", **kw):
     kw.setdefault("rough", 0.28)
-    kw.setdefault("patina_amt", 0.45)
+    kw.setdefault("patina_amt", 0.18)
     return M.metal(name, "bronze", wear=0.7, dirt=0.6, patina=(0.07, 0.26, 0.19), pitting=0.25, scale=3, **kw)
 
 
@@ -88,12 +88,19 @@ def corinthian_helmet():
                 layers=[dict(mask=_rim_holes(), height=-0.8, color=(0.02, 0.015, 0.01)),
                         dict(mask=brows, height=1.0)])
     G.set_mat(shell, br)
-    hair = M.fabric("crest_hair", color=(0.30, 0.02, 0.012), weave=2400, rough=0.6, sheen=0.9, fuzz=0.5)
-    arc = [(0, 0.01 + 0.14 * math.cos(t), 0.262 + 0.035 * math.sin(t) ** 0.7) for t in np.linspace(0.25, pi - 0.1, 60)]
-    crest = G.strap("crest", arc, [(0, 0, 1)] * 60, np.linspace(0.02, 0.028, 60), 0.075, hair)
-    G.displace(crest, 0.004, scale=0.004)
-    holder = [(0, 0.01 + 0.13 * math.cos(t), 0.258 + 0.02 * math.sin(t) ** 0.7) for t in np.linspace(0.3, pi - 0.2, 40)]
-    G.strap("holder", holder, [(0, 0, 1)] * 40, 0.026, 0.008, bronze("holder_bronze"))
+    hair = M.fabric("crest_hair", color=(0.30, 0.02, 0.012), weave=2400, rough=0.6, sheen=0.9, fuzz=0.5,
+                    layers=[dict(mask=lambda nb: nb.ss(nb.noise(300, 3, 0.5, nb.mapv(scale=(40, 1, 1))), 0.45, 0.7),
+                                 color=(0.12, 0.008, 0.005), height=-0.6)])
+    ys = np.linspace(-0.13, 0.16, 70)
+
+    def top(y):
+        return 0.15 + 0.11 * math.sqrt(max(1 - ((y - 0.01) / 0.122) ** 2, 0.0))
+    arc = [(0.0, y, top(y) + 0.045 + 0.02 * math.sin(pi * (y + 0.13) / 0.29)) for y in ys]
+    rad = [0.017 * (0.55 + 0.45 * max(math.sin(pi * (y + 0.13) / 0.29), 0.0) ** 0.5) for y in ys]
+    crest = G.tube("crest", arc, rad, n=24, mat=hair, scale2=3.2)
+    G.displace(crest, 0.003, scale=0.003)
+    holder = [(0.0, y, top(y) + 0.004) for y in np.linspace(-0.11, 0.14, 40)]
+    G.strap("holder", holder, [(0, 0, 1)] * 40, 0.022, 0.012, bronze("holder_bronze"))
 
 
 def _rim_holes():
@@ -219,8 +226,8 @@ def amphora():
 def kylix():
     c = D.Canvas(2048)
     c.rect(0, 0, 1, 1)
-    c.circle(0.5, 0.5, 0.16, fill=0)
     owl = D.Canvas(2048)
+    owl.circle(0.5, 0.5, 0.165, fill=None, outline=255, width=0.006)
     owl.poly([(0.47, 0.40), (0.53, 0.40), (0.555, 0.5), (0.545, 0.575), (0.5, 0.6), (0.455, 0.575), (0.445, 0.5)],
              fill=255)
     owl.circle(0.48, 0.555, 0.012, fill=0).circle(0.52, 0.555, 0.012, fill=0)
@@ -370,7 +377,8 @@ def oil_lamp():
         c.poly(pts)
     c.circle(0.35, 0.5, 0.14, fill=None, outline=255, width=0.008)
     rosette = c.blur(2).save("rosette")
-    clay = M.ceramic("lamp_clay", color=(0.50, 0.25, 0.12), rough=0.7, speckle=0.3, chips=0.3, dirt=0.6,
+    clay = M.ceramic("lamp_clay", color=(0.34, 0.13, 0.055), rough=0.7, speckle=0.3, chips=0.3, dirt=0.7,
+                     bump_strength=0.7,
                      layers=[dict(mask=rosette, height=0.8),
                              dict(mask=M.axis_mask("X", 0.07, 0.1, noise=0.01), color=(0.03, 0.02, 0.015),
                                   rough=0.9)])

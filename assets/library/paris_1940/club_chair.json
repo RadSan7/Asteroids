@@ -1,0 +1,23 @@
+{
+ "theme": "paris_1940",
+ "name": "club_chair",
+ "title": "Leather club chair",
+ "kind": "furniture",
+ "tris": 6932,
+ "dims_m": [
+  0.78,
+  0.6982,
+  0.8296
+ ],
+ "texture": 2048,
+ "materials": [
+  "club_chair_mat",
+  "club_chair_mat",
+  "club_chair_mat"
+ ],
+ "glb_kb": 780,
+ "seconds": 127.0,
+ "t_build": 0,
+ "t_bake": 97,
+ "t_render": 29
+}

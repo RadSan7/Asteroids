@@ -1,0 +1,21 @@
+{
+ "theme": "greece",
+ "name": "thunderbolt",
+ "title": "Thunderbolt of Zeus",
+ "kind": "artifact",
+ "tris": 10520,
+ "dims_m": [
+  0.0854,
+  0.0923,
+  0.7203
+ ],
+ "texture": 2048,
+ "materials": [
+  "thunderbolt_mat"
+ ],
+ "glb_kb": 1712,
+ "seconds": 88.9,
+ "t_build": 0,
+ "t_bake": 66,
+ "t_render": 22
+}

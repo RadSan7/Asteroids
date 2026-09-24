@@ -1,0 +1,27 @@
+{
+ "theme": "paris_1940",
+ "name": "tube_radio",
+ "title": "Art deco tube radio",
+ "kind": "device",
+ "tris": 10652,
+ "dims_m": [
+  0.376,
+  0.247,
+  0.4129
+ ],
+ "texture": 2048,
+ "materials": [
+  "tube_radio_mat",
+  "tube_radio_mat",
+  "tube_radio_mat",
+  "tube_radio_mat",
+  "radio_glass",
+  "tube_radio_mat",
+  "tube_radio_mat"
+ ],
+ "glb_kb": 1160,
+ "seconds": 83.0,
+ "t_build": 0,
+ "t_bake": 52,
+ "t_render": 31
+}

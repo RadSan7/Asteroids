@@ -1,0 +1,23 @@
+{
+ "theme": "greece",
+ "name": "hoplon",
+ "title": "Hoplon shield",
+ "kind": "weapon",
+ "tris": 38824,
+ "dims_m": [
+  0.908,
+  0.1,
+  0.908
+ ],
+ "texture": 2048,
+ "materials": [
+  "hoplon_mat",
+  "hoplon_mat",
+  "hoplon_mat"
+ ],
+ "glb_kb": 1880,
+ "seconds": 129.0,
+ "t_build": 1,
+ "t_bake": 99,
+ "t_render": 28
+}

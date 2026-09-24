@@ -69,6 +69,76 @@
   "secs": 46,
   "tris": 69780
  },
+ "greece/amphora": {
+  "hash": "324b1a310ac2",
+  "kb": 1605,
+  "ok": true,
+  "secs": 124,
+  "tris": 31608
+ },
+ "greece/chelys_lyre": {
+  "hash": "a2d5682b1948",
+  "kb": 1269,
+  "ok": true,
+  "secs": 53,
+  "tris": 10288
+ },
+ "greece/corinthian_helmet": {
+  "hash": "e583cb8027ca",
+  "kb": 1505,
+  "ok": true,
+  "secs": 151,
+  "tris": 18274
+ },
+ "greece/hoplon": {
+  "hash": "a9db35f3771c",
+  "kb": 1880,
+  "ok": true,
+  "secs": 129,
+  "tris": 38824
+ },
+ "greece/kylix": {
+  "hash": "6f0c9741a590",
+  "kb": 1570,
+  "ok": true,
+  "secs": 123,
+  "tris": 39560
+ },
+ "greece/laurel_wreath": {
+  "hash": "e04312cec23f",
+  "kb": 2299,
+  "ok": true,
+  "secs": 42,
+  "tris": 39384
+ },
+ "greece/oil_lamp": {
+  "hash": "14a9b2a1a2ff",
+  "kb": 365,
+  "ok": true,
+  "secs": 53,
+  "tris": 6464
+ },
+ "greece/thunderbolt": {
+  "hash": "7b552e2d1796",
+  "kb": 1712,
+  "ok": true,
+  "secs": 89,
+  "tris": 10520
+ },
+ "greece/trident": {
+  "hash": "fbdd9172fd50",
+  "kb": 807,
+  "ok": true,
+  "secs": 53,
+  "tris": 5468
+ },
+ "greece/xiphos": {
+  "hash": "1394d24380e3",
+  "kb": 683,
+  "ok": true,
+  "secs": 76,
+  "tris": 8044
+ },
  "jade_dynasty/bi_disc": {
   "hash": "f651532182ab",
   "kb": 643,
@@ -208,5 +278,40 @@
   "ok": true,
   "secs": 433,
   "tris": 28028
+ },
+ "paris_1940/club_chair": {
+  "hash": "f82c7692643b",
+  "kb": 780,
+  "ok": true,
+  "secs": 128,
+  "tris": 6932
+ },
+ "paris_1940/cup_and_saucer": {
+  "hash": "1abcfd2058e8",
+  "kb": 1325,
+  "ok": true,
+  "secs": 55,
+  "tris": 36128
+ },
+ "paris_1940/gramophone": {
+  "hash": "705c041d9326",
+  "kb": 1776,
+  "ok": true,
+  "secs": 114,
+  "tris": 23356
+ },
+ "paris_1940/telephone": {
+  "hash": "aa637c8c99ac",
+  "kb": 1692,
+  "ok": true,
+  "secs": 81,
+  "tris": 21400
+ },
+ "paris_1940/tube_radio": {
+  "hash": "9c051db89c3f",
+  "kb": 1160,
+  "ok": true,
+  "secs": 83,
+  "tris": 10652
  }
 }

@@ -231,6 +231,12 @@ class NB:
             sc = self.add(sc, self.mr(v, 0.0, 0.01, 1, 0))
         return self.mul(self.mul(sc, self.ss(self.noise(5, 2, 0.5), 0.4, 0.62)), amount, clamp=True)
 
+    def combine(self, x, y, z=0.0):
+        n = self.node("ShaderNodeCombineXYZ")
+        for i, v in enumerate((x, y, z)):
+            self.set(n.inputs[i], v)
+        return n.outputs[0]
+
     def bump(self, height, strength=0.3, dist=0.002, normal=None):
         n = self.node("ShaderNodeBump")
         self.set(n.inputs["Height"], height)
@@ -363,7 +369,8 @@ def metal(name, kind="iron", color=None, rough=0.32, rough_var=0.06, wear=0.6, d
 
 def wood(name, light=(0.30, 0.19, 0.095), dark=(0.11, 0.065, 0.03), rough=0.55, axis="Z", ring_scale=55.0,
          grain_stretch=12.0, varnish=0.0, dirt=0.4, wear=0.3, scale=1.0, layers=None, paint=None,
-         paint_wear=0.5, pores=0.5, bump_strength=0.2):
+         paint_wear=0.5, pores=0.5, bump_strength=0.2, weather=0.0, cracks=0.0, adze=0.0,
+         weather_color=(0.17, 0.16, 0.145)):
     nb = NB(name)
     st = {"X": (1 / grain_stretch, 1, 1), "Y": (1, 1 / grain_stretch, 1), "Z": (1, 1, 1 / grain_stretch)}[axis]
     v = nb.mapv(scale=tuple(x * scale for x in st))
@@ -378,6 +385,24 @@ def wood(name, light=(0.30, 0.19, 0.095), dark=(0.11, 0.065, 0.03), rough=0.55, 
     height = nb.add(nb.mul(g, 0.2), nb.mul(pore, -0.3 * pores))
     r = nb.mixf(rough, rough + 0.1, g)
     metal_v = 0.0
+    if weather:
+        wm = nb.mul(nb.ss(nb.add(nb.mul(nb.noise(3 * scale, 8, 0.65), 0.8), nb.mul(g, 0.4)), 0.35, 0.75), weather,
+                    clamp=True)
+        wc = nb.mix(weather_color, nb.hsv(weather_color, 0.5, 0.8, 0.7), nb.mul(g, 0.8))
+        col = nb.mix(col, wc, wm)
+        r = nb.mixf(r, 0.82, wm)
+        height = nb.add(height, nb.mul(nb.mul(g, wm), 0.4))
+    if cracks:
+        cst = tuple(x * scale * 3 for x in st)
+        cv = nb.voronoi(6, nb.mapv(scale=cst), feature="DISTANCE_TO_EDGE")
+        cm = nb.mul(nb.mul(nb.mr(cv, 0.0, 0.012, 1, 0), nb.ss(nb.noise(2.5 * scale, 4, 0.6), 0.45, 0.62)), cracks,
+                    clamp=True)
+        col = nb.mix(col, (0.015, 0.011, 0.008), cm)
+        height = nb.sub(height, nb.mul(cm, 1.5))
+    if adze:
+        ast = tuple((1.0 / x if x < 1 else 1.0) * scale for x in st)
+        av = nb.voronoi(9 * scale, nb.mapv(scale=tuple(a * b for a, b in zip(ast, (0.35, 0.35, 0.35)))), feature="F1")
+        height = nb.add(height, nb.mul(nb.math("POWER", av, 2.0), adze))
     if varnish:
         r = nb.mixf(r, 0.18, varnish)
     if paint is not None:

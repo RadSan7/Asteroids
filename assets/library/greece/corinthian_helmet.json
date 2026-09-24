@@ -1,0 +1,23 @@
+{
+ "theme": "greece",
+ "name": "corinthian_helmet",
+ "title": "Corinthian helmet",
+ "kind": "armor",
+ "tris": 18274,
+ "dims_m": [
+  0.2038,
+  0.2876,
+  0.3734
+ ],
+ "texture": 2048,
+ "materials": [
+  "corinthian_helmet_mat",
+  "corinthian_helmet_mat",
+  "corinthian_helmet_mat"
+ ],
+ "glb_kb": 1505,
+ "seconds": 150.6,
+ "t_build": 1,
+ "t_bake": 123,
+ "t_render": 25
+}

@@ -1,0 +1,32 @@
+{
+ "theme": "greece",
+ "name": "chelys_lyre",
+ "title": "Chelys lyre",
+ "kind": "instrument",
+ "tris": 10288,
+ "dims_m": [
+  0.2585,
+  0.0747,
+  0.4968
+ ],
+ "texture": 2048,
+ "materials": [
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat",
+  "chelys_lyre_mat"
+ ],
+ "glb_kb": 1269,
+ "seconds": 52.4,
+ "t_build": 1,
+ "t_bake": 26,
+ "t_render": 25
+}

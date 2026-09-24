@@ -1,0 +1,22 @@
+{
+ "theme": "greece",
+ "name": "trident",
+ "title": "Trident of Poseidon",
+ "kind": "weapon",
+ "tris": 5468,
+ "dims_m": [
+  0.2743,
+  0.0609,
+  1.5498
+ ],
+ "texture": 2048,
+ "materials": [
+  "trident_mat",
+  "trident_mat"
+ ],
+ "glb_kb": 807,
+ "seconds": 52.4,
+ "t_build": 0,
+ "t_bake": 33,
+ "t_render": 19
+}

@@ -1,0 +1,24 @@
+{
+ "theme": "paris_1940",
+ "name": "cup_and_saucer",
+ "title": "Limoges cup and saucer",
+ "kind": "tableware",
+ "tris": 36128,
+ "dims_m": [
+  0.1754,
+  0.1754,
+  0.0637
+ ],
+ "texture": 1024,
+ "materials": [
+  "cup_and_saucer_mat",
+  "cup_and_saucer_mat",
+  "coffee",
+  "cup_and_saucer_mat"
+ ],
+ "glb_kb": 1325,
+ "seconds": 54.9,
+ "t_build": 1,
+ "t_bake": 22,
+ "t_render": 32
+}

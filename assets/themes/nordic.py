@@ -87,56 +87,81 @@ def _stitches():
 @asset(res=2048, view=(0, 6), pose=(0, 90, 0), pivot="origin", kind="weapon", title="Viking sword")
 def viking_sword():
     L = 0.765
-    zs = np.linspace(0, L, 90)
+    zs = np.linspace(0, L, 100)
     secs = []
-    n = 40
+    n = 44
     for z in zs:
         t = z / L
         w = 0.056 - 0.014 * t
         if t > 0.86:
             w *= max(math.sqrt(max(1 - t, 0) / 0.14), 0.012)
         th = 0.0066 - 0.0032 * t
-        fd = 0.0014 * (1 - S(0.58, 0.78, t))
-        fw = 0.021 * (1 - 0.35 * t)
+        fd = 0.0014 * (1 - S(0.58, 0.8, t))
+        fw = 0.022 * (1 - 0.35 * t)
         sec = []
-        for s in np.linspace(0, 2 * pi, n, endpoint=False):
-            x = w / 2 * math.cos(s)
-            sy = math.sin(s)
+        for s_ in np.linspace(0, 2 * pi, n, endpoint=False):
+            x = w / 2 * math.cos(s_)
+            sy = math.sin(s_)
             y = math.copysign((th / 2) * abs(sy) ** 0.62, sy)
             y -= math.copysign(fd * math.exp(-(x / (fw / 2)) ** 4), sy) if abs(sy) > 1e-6 else 0
-            sec.append((x, y, z + 0.006))
+            sec.append((x, y, z + 0.008))
         secs.append(sec)
     ins = D.Canvas(512, 4096)
-    ins.text(0.25, 0.46, "+VLFBERH+T", size=0.022, font="serif_bold", angle=90)
-    ins.text(0.75, 0.46, "+++ I + I +++", size=0.018, font="serif_bold", angle=90)
+    ins.text(0.25, 0.42, "+VLFBERH+T", size=0.02, font="serif_bold", angle=90)
+    ins.text(0.75, 0.42, "+ I I I + I I I +", size=0.016, font="serif_bold", angle=90)
     inlay = ins.blur(0.8).save("inlay")
-    steel = M.metal("blade_steel", "steel", rough=0.26, wear=0.35, dirt=0.45, scratches=0.7,
-                    patina=(0.08, 0.075, 0.07), patina_amt=0.12, pitting=0.2, rust=0.04, scale=2,
-                    layers=[dict(mask=inlay, color=(0.9, 0.88, 0.84), metal=1.0, rough=0.2, height=-0.3)])
+
+    def pattern_weld(nb):
+        """Twisted-rod (pattern welded) core, visible in the fullers."""
+        x, y, _ = nb.sep(nb.co(M.UV))
+        zone = nb.math("MAXIMUM", nb.ss(nb.math("ABSOLUTE", nb.sub(x, 0.25)), 0.075, 0.045),
+                       nb.ss(nb.math("ABSOLUTE", nb.sub(x, 0.75)), 0.075, 0.045))
+        zone = nb.mul(zone, nb.ss(y, 0.72, 0.62))
+        v = nb.combine(nb.mul(nb.math("ABSOLUTE", nb.sub(nb.math("FRACT", nb.mul(x, 2.0)), 0.5)), 60.0),
+                       nb.mul(y, 90.0), 0.0)
+        wv = nb.wave(1.0, v, kind="BANDS", axis="Y", distort=2.5, detail=2, dscale=1.5)
+        return nb.mul(zone, nb.ss(wv, 0.45, 0.6))
+    steel = M.metal("blade_steel", "steel", rough=0.2, rough_var=0.03, wear=0.35, dirt=0.35, scratches=0.5,
+                    patina=(0.10, 0.095, 0.09), patina_amt=0.06, pitting=0.12, rust=0.02, scale=2,
+                    layers=[dict(mask=pattern_weld, color=(0.20, 0.20, 0.21), rough=0.32, height=-0.08),
+                            dict(mask=inlay, color=(0.92, 0.9, 0.86), metal=1.0, rough=0.16, height=-0.25)])
     G.loft("blade", secs, steel)
-    irn = iron("hilt_iron", rust=0.12, scale=3, edge_radius=0.0015,
-               layers=[dict(mask=_ladder(), color=(0.85, 0.82, 0.76), metal=1.0, rough=0.25, height=-0.2)])
-    guard = G.box("guard", (0.118, 0.026, 0.016), loc=(0, 0, 0), bev=0.004, mat=irn, subdiv=3)
-    G.deform(guard, "BEND", angle=-14, axis="Y")
-    G.planar_uv(guard, "Y")
+    irn = M.metal("hilt_iron", "iron", color=(0.26, 0.25, 0.24), rough=0.35, wear=0.7, dirt=0.6,
+                  patina=(0.05, 0.045, 0.04), patina_amt=0.25, rust=0.05, pitting=0.2, scale=4, edge_radius=0.0015,
+                  layers=[dict(mask=_ladder(), color=(0.86, 0.84, 0.8), metal=1.0, rough=0.2, height=-0.3)])
+
+    def bar(name, length, depth, height, curve, taper):
+        b = G.box(name, (length, depth, height), bev=0.0035, segs=3, mat=irn, subdiv=3)
+        co = np.array([v.co[:] for v in b.data.vertices])
+        t = co[:, 0] / (length / 2)
+        co[:, 2] += curve * t ** 2
+        co[:, 1] *= 1 - taper * t ** 2
+        co[:, 2] *= 1 - 0.25 * taper * t ** 2
+        for v, c in zip(b.data.vertices, co):
+            v.co = c
+        b.data.update()
+        G.planar_uv(b, "Y")
+        return b
+    g = bar("guard", 0.118, 0.028, 0.017, -0.004, 0.3)
+    G.xform(g, (0, 0, 0.0))
     grip = G.lathe("grip", [(0, 0), (0.0142, 0), (0.0158, -0.045), (0.0142, -0.09), (0, -0.09)], segs=40,
-                   mat=M.leather("grip_leather", color=(0.08, 0.035, 0.015), scale=4))
-    G.xform(grip, (0, 0, -0.008), scale=(1, 0.72, 1))
-    hel = [(0.0162 * math.cos(t), 0.0162 * 0.72 * math.sin(t), -0.012 - 0.078 * t / (26 * pi))
+                   mat=M.leather("grip_leather", color=(0.07, 0.03, 0.013), scale=4))
+    G.xform(grip, (0, 0, -0.0085), scale=(1, 0.72, 1))
+    hel = [(0.0161 * math.cos(t), 0.0161 * 0.72 * math.sin(t), -0.013 - 0.077 * t / (26 * pi))
            for t in np.linspace(0, 26 * pi, 900)]
-    wr = [(1 + 0.1 * S(0.2, 0.5, 1 - abs(p[2] + 0.051) / 0.04)) for p in hel]
-    silver = M.metal("wire_silver", "silver", rough=0.25, wear=0.3, patina=(0.06, 0.05, 0.045), patina_amt=0.5,
+    silver = M.metal("wire_silver", "silver", rough=0.22, wear=0.3, patina=(0.06, 0.05, 0.045), patina_amt=0.45,
                      scale=6, scratches=0.2)
-    G.tube("wire", hel, [0.00095 * r for r in wr], n=8, mat=silver, cap=True)
-    upper = G.box("upper_guard", (0.078, 0.026, 0.013), loc=(0, 0, -0.105), bev=0.004, mat=irn, subdiv=3)
-    G.deform(upper, "BEND", angle=12, axis="Y")
-    G.planar_uv(upper, "Y")
+    G.tube("wire", hel, 0.00095, n=8, mat=silver, cap=True)
+    for z in (-0.011, -0.093):
+        rg = G.torus(f"wire_ring{z}", 0.0158, 0.0016, loc=(0, 0, 0), segs=40, rsegs=8, mat=silver)
+        G.xform(rg, (0, 0, z), scale=(1, 0.72, 1))
+    ug = bar("upper_guard", 0.08, 0.027, 0.014, 0.003, 0.25)
+    G.xform(ug, (0, 0, -0.105))
     lobes = G.circle2d(0, 0.02, 0.019).union(G.circle2d(-0.022, 0.009, 0.012)).union(
         G.circle2d(0.022, 0.009, 0.012)).union(G.poly2d([(-0.036, 0), (0.036, 0), (0.03, 0.012), (-0.03, 0.012)]))
     lobes = lobes.difference(G.poly2d([(-0.06, -0.02), (0.06, -0.02), (0.06, 0.0), (-0.06, 0.0)]))
-    pom = G.extrude("pommel", G.shape_polys(lobes.buffer(0.001)), 0.024, bev=0.0055, bres=3, plane="XZ",
-                    mat=irn)
-    G.xform(pom, (0, 0, -0.1115))
+    pom = G.extrude("pommel", G.shape_polys(lobes.buffer(0.001)), 0.024, bev=0.0055, bres=3, plane="XZ", mat=irn)
+    G.xform(pom, (0, 0, -0.1112), rot=(pi, 0, 0))
 
 
 def S(a, b, x):
