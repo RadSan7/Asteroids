@@ -425,10 +425,10 @@
   "tris": 1448
  },
  "viking_hall/bench_2m": {
-  "hash": "f8f7d98d7ed5",
-  "kb": 1716,
+  "hash": "b82fcca12fa2",
+  "kb": 2250,
   "ok": true,
-  "secs": 108,
+  "secs": 74,
   "tris": 18080
  },
  "viking_hall/door_plank": {
@@ -481,17 +481,17 @@
   "tris": 7704
  },
  "viking_hall/hay_pile": {
-  "hash": "9d2ea06d9e72",
-  "kb": 2801,
+  "hash": "07417227beb9",
+  "kb": 2799,
   "ok": true,
-  "secs": 48,
+  "secs": 39,
   "tris": 15208
  },
  "viking_hall/hay_sheaf": {
-  "hash": "0c327bb2b1d6",
-  "kb": 1139,
+  "hash": "f5975133772a",
+  "kb": 1140,
   "ok": true,
-  "secs": 40,
+  "secs": 32,
   "tris": 11276
  },
  "viking_hall/hearth_long": {
@@ -509,10 +509,10 @@
   "tris": 2520
  },
  "viking_hall/plank_stack": {
-  "hash": "d74898e6acc9",
-  "kb": 1936,
+  "hash": "646b07045156",
+  "kb": 2951,
   "ok": true,
-  "secs": 173,
+  "secs": 75,
   "tris": 23088
  },
  "viking_hall/post_corner": {

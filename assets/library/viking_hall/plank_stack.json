@@ -14,9 +14,9 @@
   "plank_stack_mat",
   "plank_stack_mat"
  ],
- "glb_kb": 1936,
- "seconds": 172.7,
- "t_build": 1,
- "t_bake": 141,
- "t_render": 31
+ "glb_kb": 2951,
+ "seconds": 74.4,
+ "t_build": 0,
+ "t_bake": 46,
+ "t_render": 28
 }
