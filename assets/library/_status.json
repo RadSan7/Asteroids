@@ -390,11 +390,11 @@
   "tris": 21400
  },
  "paris_1940/tube_radio": {
-  "hash": "9c051db89c3f",
-  "kb": 1160,
+  "hash": "16514f800f64",
+  "kb": 1549,
   "ok": true,
-  "secs": 83,
-  "tris": 10652
+  "secs": 63,
+  "tris": 10884
  },
  "paris_1940/typewriter": {
   "hash": "d4b5669663fe",
