@@ -13,7 +13,7 @@ pi = math.pi
 
 def jade(name="jade", color=(0.03, 0.22, 0.09), scale=12, **kw):
     kw.setdefault("rough", 0.1)
-    return M.gem(name, color=color, color2=(0.18, 0.42, 0.22), veins=0.3, cloud=0.8, scale=scale, **kw)
+    return M.gem(name, color=color, color2=(0.09, 0.33, 0.15), veins=0.25, cloud=0.45, scale=scale, **kw)
 
 
 def white_jade(name="white_jade", scale=12, **kw):
@@ -118,7 +118,8 @@ def bi_disc():
     c.circle(0.5, 0.5, 0.165, fill=None, outline=255, width=0.006)
     grain = c.blur(2.5).save("grain")
     _ = rng
-    jd = jade("bi_jade", color=(0.05, 0.25, 0.11), scale=8, layers=[dict(mask=grain, height=1.2)])
+    jd = jade("bi_jade", color=(0.03, 0.2, 0.08), scale=8, bump_strength=0.8,
+              layers=[dict(mask=grain, height=1.0, color=(0.05, 0.26, 0.11))])
     disc = G.lathe("bi", [(0.03, -0.004), (0.098, -0.004), (0.1, -0.002), (0.1, 0.002), (0.098, 0.004),
                           (0.03, 0.004), (0.029, 0.0), (0.03, -0.004)], segs=160, mat=jd)
     G.planar_uv(disc, "Z")
@@ -182,7 +183,7 @@ def ding_censer():
         c.circle(u, vc, 0.005)
     relief = c.blur(1.5).save("taotie")
     br = M.metal("ding_bronze", "bronze", color=(0.62, 0.40, 0.22), rough=0.3, wear=0.8, dirt=0.7,
-                 patina=(0.08, 0.28, 0.2), patina_amt=0.45, scale=3,
+                 patina=(0.08, 0.28, 0.2), patina_amt=0.2, scale=3,
                  layers=[dict(mask=relief, height=1.0)])
     G.lathe("bowl", prof, segs=128, mat=br)
     for k in range(3):

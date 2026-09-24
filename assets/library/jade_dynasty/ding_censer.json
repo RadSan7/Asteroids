@@ -1,0 +1,22 @@
+{
+ "theme": "jade_dynasty",
+ "name": "ding_censer",
+ "title": "Bronze ding censer",
+ "kind": "artifact",
+ "tris": 10760,
+ "dims_m": [
+  0.228,
+  0.228,
+  0.2272
+ ],
+ "texture": 2048,
+ "materials": [
+  "ding_censer_mat",
+  "ding_censer_mat"
+ ],
+ "glb_kb": 1306,
+ "seconds": 180.9,
+ "t_build": 1,
+ "t_bake": 151,
+ "t_render": 29
+}

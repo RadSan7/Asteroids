@@ -1,0 +1,25 @@
+{
+ "theme": "jade_dynasty",
+ "name": "folding_fan",
+ "title": "Folding fan",
+ "kind": "accessory",
+ "tris": 6424,
+ "dims_m": [
+  0.4924,
+  0.3251,
+  0.016
+ ],
+ "texture": 2048,
+ "materials": [
+  "folding_fan_mat",
+  "folding_fan_mat",
+  "folding_fan_mat",
+  "folding_fan_mat",
+  "folding_fan_mat"
+ ],
+ "glb_kb": 1222,
+ "seconds": 79.5,
+ "t_build": 0,
+ "t_bake": 51,
+ "t_render": 28
+}

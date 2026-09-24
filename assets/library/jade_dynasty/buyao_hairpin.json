@@ -1,0 +1,23 @@
+{
+ "theme": "jade_dynasty",
+ "name": "buyao_hairpin",
+ "title": "Buyao hairpin",
+ "kind": "clothing",
+ "tris": 8748,
+ "dims_m": [
+  0.2328,
+  0.0508,
+  0.0133
+ ],
+ "texture": 1024,
+ "materials": [
+  "buyao_hairpin_mat",
+  "buyao_hairpin_mat",
+  "buyao_hairpin_mat"
+ ],
+ "glb_kb": 627,
+ "seconds": 38.5,
+ "t_build": 0,
+ "t_bake": 12,
+ "t_render": 26
+}

@@ -76,6 +76,13 @@
   "secs": 80,
   "tris": 3520
  },
+ "jade_dynasty/buyao_hairpin": {
+  "hash": "2e6a64ba9180",
+  "kb": 627,
+  "ok": true,
+  "secs": 39,
+  "tris": 8748
+ },
  "jade_dynasty/celadon_bowl": {
   "hash": "a7648c761b3a",
   "kb": 1487,
@@ -83,12 +90,47 @@
   "secs": 54,
   "tris": 37376
  },
+ "jade_dynasty/ding_censer": {
+  "hash": "e031bebc8f8e",
+  "kb": 1306,
+  "ok": true,
+  "secs": 181,
+  "tris": 10760
+ },
+ "jade_dynasty/folding_fan": {
+  "hash": "6c835d8de5de",
+  "kb": 1222,
+  "ok": true,
+  "secs": 80,
+  "tris": 6424
+ },
+ "jade_dynasty/jade_abacus": {
+  "hash": "b0e5201346a6",
+  "kb": 1892,
+  "ok": true,
+  "secs": 70,
+  "tris": 12308
+ },
  "jade_dynasty/jade_jian": {
   "hash": "7902aea0ad3d",
   "kb": 889,
   "ok": true,
   "secs": 50,
   "tris": 11552
+ },
+ "jade_dynasty/jade_seal": {
+  "hash": "da0f09310464",
+  "kb": 1107,
+  "ok": true,
+  "secs": 110,
+  "tris": 14904
+ },
+ "jade_dynasty/silk_lantern": {
+  "hash": "82f6a53db0dc",
+  "kb": 3707,
+  "ok": true,
+  "secs": 64,
+  "tris": 52640
  },
  "jade_dynasty/zisha_teapot": {
   "hash": "2bbc1e4b8cc6",

@@ -1,0 +1,25 @@
+{
+ "theme": "jade_dynasty",
+ "name": "silk_lantern",
+ "title": "Silk lantern",
+ "kind": "device",
+ "tris": 52640,
+ "dims_m": [
+  0.2944,
+  0.2944,
+  0.4328
+ ],
+ "texture": 2048,
+ "materials": [
+  "silk_lantern_mat",
+  "silk_lantern_mat",
+  "silk_lantern_mat",
+  "silk_lantern_mat",
+  "silk_lantern_mat"
+ ],
+ "glb_kb": 3707,
+ "seconds": 63.2,
+ "t_build": 1,
+ "t_bake": 38,
+ "t_render": 24
+}

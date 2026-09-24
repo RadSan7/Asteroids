@@ -1,0 +1,23 @@
+{
+ "theme": "jade_dynasty",
+ "name": "jade_seal",
+ "title": "Jade seal and cinnabar box",
+ "kind": "artifact",
+ "tris": 14904,
+ "dims_m": [
+  0.14,
+  0.1724,
+  0.1028
+ ],
+ "texture": 2048,
+ "materials": [
+  "jade_seal_mat",
+  "jade_seal_mat",
+  "jade_seal_mat"
+ ],
+ "glb_kb": 1107,
+ "seconds": 109.9,
+ "t_build": 0,
+ "t_bake": 80,
+ "t_render": 29
+}
