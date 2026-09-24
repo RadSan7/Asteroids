@@ -1,0 +1,22 @@
+{
+ "theme": "aztec",
+ "name": "tripod_bowl",
+ "title": "Tripod bowl",
+ "kind": "vessel",
+ "tris": 35152,
+ "dims_m": [
+  0.2823,
+  0.2823,
+  0.1059
+ ],
+ "texture": 2048,
+ "materials": [
+  "tripod_bowl_mat",
+  "tripod_bowl_mat"
+ ],
+ "glb_kb": 1831,
+ "seconds": 135.7,
+ "t_build": 1,
+ "t_bake": 102,
+ "t_render": 33
+}

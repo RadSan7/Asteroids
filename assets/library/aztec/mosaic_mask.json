@@ -1,0 +1,25 @@
+{
+ "theme": "aztec",
+ "name": "mosaic_mask",
+ "title": "Turquoise mosaic mask",
+ "kind": "artifact",
+ "tris": 8880,
+ "dims_m": [
+  0.16,
+  0.0868,
+  0.2
+ ],
+ "texture": 2048,
+ "materials": [
+  "mosaic_mask_mat",
+  "mosaic_mask_mat",
+  "mosaic_mask_mat",
+  "mosaic_mask_mat",
+  "mosaic_mask_mat"
+ ],
+ "glb_kb": 2436,
+ "seconds": 79.4,
+ "t_build": 0,
+ "t_bake": 54,
+ "t_render": 24
+}

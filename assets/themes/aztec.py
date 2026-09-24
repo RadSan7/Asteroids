@@ -62,8 +62,8 @@ def macuahuitl():
             h = 0.034 + 0.008 * rng.random()
             blade = G.poly2d([(0, -w / 2), (h * 0.8, -w / 2 + 0.004), (h, 0.0 + 0.004 * rng.normal()),
                               (h * 0.8, w / 2 - 0.004), (0, w / 2)])
-            b = G.extrude(f"obs{s}{i}", G.shape_polys(blade), 0.006, bev=0.0012, plane="XY", mat=obs)
-            G.xform(b, (s * 0.038, 0, z), rot=(0, -pi / 2, 0 if s > 0 else pi))
+            b = G.extrude(f"obs{s}{i}", G.shape_polys(blade), 0.006, bev=0.0012, plane="XZ", mat=obs)
+            G.xform(b, (s * 0.034, 0, z), rot=(0, 0, 0 if s > 0 else pi))
     leather = M.leather("wrist_thong", color=(0.2, 0.1, 0.05), scale=4)
     hel = [(0.022 * math.cos(t), 0.013 * math.sin(t), 0.02 + 0.2 * t / (16 * pi)) for t in np.linspace(0, 16 * pi, 500)]
     G.tube("wrap", hel, 0.0028, n=8, mat=leather)
@@ -146,9 +146,9 @@ def sun_stone():
             else:
                 c.line([(0.5 + 0.44 * math.cos(a), 0.5 + 0.44 * math.sin(a)),
                         (0.5 + 0.48 * math.cos(a + 0.04), 0.5 + 0.48 * math.sin(a + 0.04))], 0.006)
-    relief = c.blur(2).save("sunstone_relief")
-    st = basalt("sunstone_basalt", scale=2,
-                layers=[dict(mask=relief, height=1.0),
+    relief = c.grow(2).blur(1.2).save("sunstone_relief")
+    st = basalt("sunstone_basalt", scale=2, bump_strength=1.6,
+                layers=[dict(mask=relief, height=1.0, invert=True, color=(0.05, 0.048, 0.045)),
                         dict(mask=lambda nb: nb.mul(nb.ss(nb.noise(6, 8, 0.7), 0.55, 0.7), 0.5),
                              color=(0.35, 0.08, 0.03), rough=0.9)])
     disc = G.lathe("disc", [(0, 0), (0.29, 0), (0.3, 0.01), (0.3, 0.07), (0.29, 0.08), (0, 0.08)], segs=160,
@@ -161,32 +161,54 @@ def sun_stone():
 
 
 # ------------------------------------------------------------------ 4 ------
-@asset(res=2048, view=(-15, 5), pivot="bottom", kind="artifact", title="Turquoise mosaic mask")
+@asset(res=2048, view=(-18, 4), pivot="bottom", kind="artifact", title="Turquoise mosaic mask")
 def mosaic_mask():
-    ms = mosaic("turquoise_mosaic", [TURQ, (0.12, 0.5, 0.45), (0.05, 0.3, 0.3), (0.2, 0.55, 0.5), JADE], scale=260)
-    face = G.sphere("face", 1.0, segs=64, rings=48, scale=(0.08, 0.06, 0.1))
-    for v in face.data.vertices:
-        x, y, z = v.co
-        if y > 0:
-            v.co.y = y * 0.15
-        v.co.y -= 0.018 * math.exp(-((x / 0.012) ** 2) - ((z + 0.005) / 0.03) ** 2) * (y < 0)
-        v.co.y += 0.012 * math.exp(-((abs(x) - 0.03) / 0.02) ** 2 - ((z - 0.03) / 0.012) ** 2) * (y < 0)
-    G.set_mat(face, ms)
-    for s in (1, -1):
-        eye = G.sphere(f"eye_hole{s}", 0.016, loc=(s * 0.03, -0.06, 0.018), segs=24, rings=12, scale=(1.2, 1, 0.6))
-        G.boolean(face, eye)
-    mouth = G.box("mouth", (0.045, 0.1, 0.012), loc=(0, -0.06, -0.045), bev=0.004)
-    G.boolean(face, mouth)
-    shell = M.gem("shell_white", color=(0.75, 0.72, 0.62), veins=0.1, rough=0.3, scale=60)
-    for s in (1, -1):
-        G.sphere(f"eye_shell{s}", 0.016, loc=(s * 0.03, -0.045, 0.018), segs=24, rings=12, mat=shell,
-                 scale=(1.1, 0.5, 0.55))
-        G.sphere(f"pupil{s}", 0.006, loc=(s * 0.03, -0.053, 0.018), segs=16, rings=8, mat=obsidian("pupil"))
+    """Xiuhtecuhtli-style turquoise mosaic face (front shell, ~17 cm)."""
+    ms = mosaic("turquoise_mosaic", [TURQ, (0.12, 0.5, 0.45), (0.05, 0.3, 0.3), (0.2, 0.55, 0.5), JADE], scale=300)
+    nu, nv = 64, 72
+    verts, faces = [], []
+
+    def g(x, z, cx, cz, sx, sz):
+        return math.exp(-(((x - cx) / sx) ** 2) - (((z - cz) / sz) ** 2))
+    for j in range(nv + 1):
+        z = -0.09 + 0.18 * j / nv
+        for i in range(nu + 1):
+            a = -pi / 2 * 0.98 + pi * 0.98 * i / nu
+            wz = 0.078 * math.sqrt(max(1 - (z / 0.095) ** 2, 0.02)) * (1 - 0.18 * max(0, -z / 0.09))
+            x = wz * math.sin(a)
+            depth = 0.06 * math.cos(a) * math.sqrt(max(1 - (z / 0.1) ** 2, 0.05))
+            depth += 0.022 * g(x, z, 0, -0.005, 0.011, 0.03)            # nose
+            depth += 0.008 * g(abs(x), z, 0.028, 0.03, 0.03, 0.008)     # brow ridge
+            depth -= 0.012 * g(abs(x), z, 0.028, 0.012, 0.018, 0.011)   # eye sockets
+            depth -= 0.01 * g(x, z, 0, -0.045, 0.024, 0.01)             # mouth
+            depth += 0.006 * g(abs(x), z, 0.035, -0.025, 0.02, 0.02)    # cheeks
+            verts.append((x, -depth, z))
+    for j in range(nv):
+        for i in range(nu):
+            a = j * (nu + 1) + i
+            faces.append([a, a + 1, a + nu + 2, a + nu + 1])
+    face = G.mesh("face", verts, faces, None, ms)
+    G.solidify(face, 0.006, offset=1.0)
+    mouth = G.poly2d([(-0.022, -0.05), (0.022, -0.05), (0.018, -0.04), (-0.018, -0.04)]).buffer(0.003)
+    cut = G.extrude("mouth_cut", G.shape_polys(mouth), 0.2, plane="XZ")
+    G.xform(cut, (0, -0.05, 0))
+    G.boolean(face, cut)
+    shell = M.gem("shell_white", color=(0.72, 0.68, 0.58), veins=0.1, rough=0.3, scale=60)
+    pyr = M.metal("pyrite", "gold", color=(0.55, 0.45, 0.2), rough=0.25, wear=0.2, dirt=0.4, scale=40)
+    from shapely import affinity
+    for s_ in (1, -1):
+        eye = affinity.scale(G.circle2d(0, 0, 1, 48), 0.017, 0.0085)
+        e = G.extrude(f"eye{s_}", G.shape_polys(eye), 0.004, bev=0.0012, plane="XZ", mat=shell)
+        G.xform(e, (s_ * 0.028, -0.058, 0.012))
+        p = G.cyl(f"pupil{s_}", 0.0055, 0.002, loc=(0, 0, 0), rot=G.rotd(90, 0, 0), segs=24, bev=0.0006, mat=pyr)
+        G.xform(p, (s_ * 0.028, -0.0605, 0.012))
     teeth = M.gem("shell_teeth", color=(0.8, 0.76, 0.66), veins=0, rough=0.3, scale=80)
     for i in range(8):
-        x = -0.018 + 0.036 * i / 7
-        G.box(f"tooth{i}", (0.004, 0.006, 0.007), loc=(x, -0.052, -0.041), bev=0.0012, mat=teeth)
-    G.xform(G.join(G.all_meshes(), "mask"), rot=G.rotd(0, 0, 0))
+        x = -0.017 + 0.034 * i / 7
+        G.box(f"tooth{i}", (0.0036, 0.008, 0.007), loc=(x, -0.05, -0.0415), bev=0.001, mat=teeth)
+    for s_ in (1, -1):
+        G.cyl(f"ear{s_}", 0.012, 0.006, loc=(s_ * 0.079, -0.005, 0.0), rot=G.rotd(0, 90, 0), segs=24, bev=0.002,
+              mat=gold("ear_gold"))
 
 
 # ------------------------------------------------------------------ 5 ------
@@ -245,11 +267,13 @@ def metate_mano():
 @asset(res=2048, view=(0, 20), pose=(0, 0, 0), pivot="bottom", kind="weapon", title="Tecpatl ritual knife")
 def tecpatl():
     obs = obsidian("knife_flint")
-    fl = M.stone("flint", c1=(0.55, 0.45, 0.35), c2=(0.3, 0.22, 0.16), kind="limestone", rough=0.35, scale=20,
-                 chips=0.7, dirt=0.3, polish=0.3)
+    flake = dict(mask=lambda nb: nb.ss(nb.voronoi(40, feature="F1"), 0.15, 0.6), height=0.8)
+    fl = M.stone("flint", c1=(0.42, 0.36, 0.28), c2=(0.2, 0.16, 0.12), kind="marble", veins=(0.12, 0.1, 0.08),
+                 vein_amt=0.4, rough=0.3, scale=12, chips=0.6, dirt=0.3, polish=0.4, layers=[flake],
+                 bump_strength=0.8)
     blade = G.poly2d([(0, 0.0), (0.028, 0.03), (0.036, 0.09), (0.02, 0.17), (0.0, 0.2), (-0.02, 0.17),
                       (-0.036, 0.09), (-0.028, 0.03)])
-    b = G.extrude("blade", G.shape_polys(blade), 0.014, bev=0.0065, bres=3, plane="XZ", mat=fl)
+    b = G.extrude("blade", G.shape_polys(blade), 0.011, bev=0.005, bres=3, plane="XZ", mat=fl)
     G.xform(b, (0, 0, 0.1))
     _ = obs
     ms = mosaic("handle_mosaic", [TURQ, (0.7, 0.62, 0.5), RED, JADE, (0.05, 0.05, 0.05)], scale=300)
@@ -263,42 +287,47 @@ def tecpatl():
 
 
 # ------------------------------------------------------------------ 8 ------
-@asset(res=2048, view=(0, 12), pivot="bottom", kind="clothing", title="Quetzal feather headdress",
-       max_tris=90000)
+@asset(res=2048, view=(0, 10), pivot="bottom", kind="clothing", title="Quetzal feather headdress",
+       max_tris=100000)
 def feather_headdress():
+    """Penacho: quetzal tail feathers fanned above a gold-studded band."""
     au = gold("penacho_gold")
-    band = G.lathe("band", [(0.09, 0.0), (0.095, 0.0), (0.095, 0.06), (0.09, 0.06)], segs=96, mat=au,
-                   angle=pi * 1.1)
-    G.xform(band, rot=(0, 0, -0.55 * pi - pi / 2 + pi / 2 - pi * 0.05))
-    for k in range(9):
-        a = -pi / 2 - 0.9 + 1.8 * k / 8
-        G.sphere(f"disc{k}", 0.012, loc=(0.097 * math.cos(a), 0.097 * math.sin(a), 0.03), segs=20, rings=10, mat=au,
-                 scale=(1, 1, 1))
-    quetzal = M.feather("quetzal", c1=(0.01, 0.30, 0.10), c2=(0.02, 0.18, 0.22), tip=(0.02, 0.06, 0.15))
-    blue = M.feather("cotinga", c1=(0.02, 0.18, 0.5), c2=(0.03, 0.3, 0.6), tip=(0.01, 0.05, 0.2))
-    red = M.feather("spoonbill", c1=(0.55, 0.08, 0.1), c2=(0.6, 0.18, 0.2), tip=(0.3, 0.02, 0.03))
+    band_m = mosaic("band_mosaic", [TURQ, (0.08, 0.35, 0.33), (0.6, 0.45, 0.1)], scale=320)
+    band = G.lathe("band", [(0.092, 0.0), (0.1, 0.0), (0.1, 0.075), (0.092, 0.075)], segs=64, mat=band_m,
+                   angle=pi * 1.15)
+    G.xform(band, rot=(0, 0, -pi * 0.075))
+    for k in range(11):
+        a = -pi * 0.05 + pi * 1.05 * k / 10
+        G.cyl(f"disc{k}", 0.0105, 0.004, loc=(0.101 * math.cos(a), 0.101 * math.sin(a), 0.037),
+              rot=(pi / 2, 0, a + pi / 2), segs=24, bev=0.0012, mat=au)
+    quetzal = M.feather("quetzal", c1=(0.01, 0.20, 0.08), c2=(0.01, 0.12, 0.16), tip=(0.01, 0.06, 0.12))
+    blue = M.feather("cotinga", c1=(0.02, 0.13, 0.42), c2=(0.02, 0.22, 0.55), tip=(0.01, 0.05, 0.2))
+    red = M.feather("spoonbill", c1=(0.48, 0.07, 0.09), c2=(0.55, 0.16, 0.18), tip=(0.25, 0.02, 0.03))
+    brown = M.feather("squirrel_cuckoo", c1=(0.25, 0.1, 0.03), c2=(0.35, 0.18, 0.06), tip=(0.05, 0.03, 0.02))
     rng = np.random.default_rng(5)
-    for layer, (mat, L, n, rise, spread) in enumerate(((quetzal, 0.55, 23, 0.0, 1.35), (blue, 0.3, 19, 0.02, 1.2),
-                                                        (red, 0.18, 15, 0.04, 1.05))):
-        shape = G.poly2d([(0, -0.01)] + [(L * t, 0.028 * math.sin(pi * t) ** 0.6 * (1 - 0.3 * t) * (1 + layer * 0.3))
-                                         for t in np.linspace(0.02, 1, 20)] +
-                         [(L * t, -0.028 * math.sin(pi * t) ** 0.6 * (1 - 0.3 * t) * (1 + layer * 0.3))
-                          for t in np.linspace(1, 0.02, 20)])
-        tmpl = G.extrude(f"f{layer}", G.shape_polys(shape), 0.0016, bev=0.0005, plane="XY", mat=mat)
-        G.planar_uv(tmpl, "Z")
-        G.deform(tmpl, "BEND", angle=-25 - 10 * layer, axis="Y")
-        tr = []
+    layers = [(quetzal, 0.62, 0.028, 44, 0.02, 1.45), (blue, 0.32, 0.03, 36, 0.035, 1.35),
+              (red, 0.2, 0.026, 32, 0.05, 1.25), (brown, 0.11, 0.022, 28, 0.065, 1.15)]
+    for li, (mat, L, W, n, lift, spread) in enumerate(layers):
         for i in range(n):
-            t = i / (n - 1)
-            a = pi / 2 + spread * (t - 0.5) * 2
-            tilt = -0.25 - 0.1 * layer + rng.normal(0, 0.04)
-            tr.append(((0.08 * math.cos(a) * 0.3, 0.02 - 0.012 * layer, 0.05 + rise),
-                       (0, -(a - pi / 2), 0), None))
-            tr[-1] = ((0.02 * math.cos(a), 0.015 - 0.012 * layer, 0.05 + rise), (tilt, -a, 0), None)
-        G.scatter(tmpl, tr, f"feathers{layer}")
-    for o in G.all_meshes():
-        if o.name.startswith("feathers"):
-            G.xform(o, (0, 0, 0), rot=(0, 0, 0))
+            t = (i + 0.5 * rng.random()) / n
+            a = (t - 0.5) * 2 * spread
+            Li = L * (0.8 + 0.3 * rng.random()) * (1 - 0.15 * abs(t - 0.5))
+            w = W * (0.85 + 0.3 * rng.random())
+            pts = [(0.0, -w * 0.15)] + [(Li * u, w * math.sin(pi * min(u / 0.9, 1)) ** 0.7 * (1 - 0.35 * u) / 2 + 0.0)
+                                         for u in np.linspace(0.05, 1, 14)]
+            pts += [(Li * u, -w * math.sin(pi * min(u / 0.9, 1)) ** 0.7 * (1 - 0.35 * u) / 2)
+                    for u in np.linspace(1, 0.05, 14)] + [(0.0, w * 0.15)]
+            f = G.extrude(f"f{li}_{i}", G.shape_polys(G.poly2d(pts).buffer(0)), 0.0014, bev=0.0004, plane="XY",
+                          mat=mat)
+            G.planar_uv(f, "Z", stretch=True)
+            G.deform(f, "BEND", angle=-(20 + 25 * rng.random()) * (1.3 - 0.2 * li), axis="Y")
+            back = 0.35 + 0.12 * li + 0.08 * rng.normal()
+            G.xform(f, (0, 0, 0), rot=(0, -pi / 2, 0))
+            G.xform(f, (0, 0, 0), rot=(0, 0, pi / 2))
+            G.xform(f, (0, 0, 0), rot=(back, 0, 0))
+            G.xform(f, (0, 0, 0), rot=(0, a, 0))
+            G.xform(f, (0.0, 0.07 - 0.012 * li, 0.06 + lift))
+    G.cyl("shaft_bundle", 0.02, 0.05, loc=(0, 0.06, 0.05), segs=24, mat=au)
 
 
 # ------------------------------------------------------------------ 9 ------
@@ -330,44 +359,60 @@ def teponaztli():
 
 
 # ----------------------------------------------------------------- 10 ------
-@asset(res=2048, view=(0, 40), pivot="bottom", kind="artifact", title="Screenfold codex")
+@asset(res=2048, view=(-10, 38), pivot="bottom", kind="artifact", title="Screenfold codex")
 def codex():
-    pages = 5
-    W, H = 0.16, 0.2
-    c = D.Canvas(4096, 1024)
+    """Borgia-style screenfold: gesso on deerskin, painted day-sign panels, cover boards."""
+    pages, W, H = 6, 0.16, 0.2
     rng = np.random.default_rng(11)
+    layers = {k: D.Canvas(4096, 1024) for k in ("red", "yellow", "blue", "black", "turq")}
     for p in range(pages):
         u0 = p / pages
-        c.rect(u0 + 0.005, 0.02, u0 + 0.195, 0.025).rect(u0 + 0.005, 0.975, u0 + 0.195, 0.98)
-        for k in range(3):
-            v = 0.25 + 0.25 * k
-            u = u0 + 0.05 + 0.1 * rng.random()
-            c.circle(u, v + 0.08, 0.018)
-            c.line([(u, v + 0.06), (u, v - 0.05)], 0.008)
-            c.line([(u - 0.03, v + 0.02), (u + 0.03, v - 0.02)], 0.006)
-            for j in range(4):
-                c.circle(u0 + 0.14 + 0.012 * (j % 2), v - 0.08 + 0.05 * j / 2, 0.008)
-    ink = c.blur(0.8).save("codex_ink")
-    colr = D.Canvas(4096, 1024)
-    for p in range(pages):
-        u0 = p / pages
-        for k in range(3):
-            colr.rect(u0 + 0.12, 0.18 + 0.25 * k, u0 + 0.19, 0.3 + 0.25 * k)
-    fill = colr.save("codex_fill")
-    deer = M.paper("deerskin_gesso", color=(0.72, 0.66, 0.52), fibers="rice", stains=0.35, dirt=0.4,
-                   layers=[dict(mask=fill, color=RED, rough=0.9, opacity=0.8),
-                           dict(mask=ink, color=(0.02, 0.018, 0.015), opacity=0.95)])
+        pw = 1 / pages
+        R = lambda a, b, c, d, k="black": layers[k].rect(u0 + a * pw, b, u0 + c * pw, d)  # noqa: E731
+        R(0.03, 0.03, 0.97, 0.05, "red")
+        R(0.03, 0.95, 0.97, 0.97, "red")
+        for row in range(2):
+            v0 = 0.08 + row * 0.44
+            R(0.06, v0, 0.94, v0 + 0.4, "red")
+            R(0.08, v0 + 0.015, 0.92, v0 + 0.385, "yellow")
+            cx = u0 + pw * (0.35 + 0.2 * rng.random())
+            cy = v0 + 0.2
+            # stylised figure: headdress, head, body, limbs in codex palette
+            layers["turq"].poly([(cx - 0.012, cy + 0.1), (cx + 0.012, cy + 0.1), (cx + 0.02, cy + 0.16),
+                                 (cx - 0.02, cy + 0.16)])
+            layers["red"].circle(cx, cy + 0.075, 0.012)
+            layers["blue"].rect(cx - 0.01, cy - 0.03, cx + 0.01, cy + 0.06)
+            layers["black"].line([(cx - 0.01, cy + 0.04), (cx - 0.03, cy + 0.0), (cx - 0.025, cy - 0.02)], 0.003)
+            layers["black"].line([(cx + 0.01, cy + 0.04), (cx + 0.032, cy + 0.07)], 0.003)
+            layers["black"].line([(cx - 0.006, cy - 0.03), (cx - 0.012, cy - 0.12)], 0.004)
+            layers["black"].line([(cx + 0.006, cy - 0.03), (cx + 0.016, cy - 0.12)], 0.004)
+            layers["black"].circle(cx + 0.004, cy + 0.08, 0.003)
+            for d in range(int(rng.integers(3, 9))):
+                layers["red"].circle(u0 + pw * (0.75 + 0.1 * (d % 2)), v0 + 0.05 + 0.04 * (d // 2), 0.006)
+                layers["black"].circle(u0 + pw * (0.75 + 0.1 * (d % 2)), v0 + 0.05 + 0.04 * (d // 2), 0.006,
+                                       fill=None, outline=255, width=0.001)
+            for f in range(3):
+                layers["black"].poly([(u0 + pw * (0.2 + 0.2 * f), v0 + 0.03), (u0 + pw * (0.24 + 0.2 * f), v0 + 0.03),
+                                      (u0 + pw * (0.23 + 0.2 * f), v0 + 0.06), (u0 + pw * (0.21 + 0.2 * f), v0 + 0.06)])
+    cols = dict(red=(0.42, 0.03, 0.02), yellow=(0.55, 0.38, 0.06), blue=(0.04, 0.12, 0.35),
+                turq=(0.05, 0.3, 0.26), black=(0.015, 0.012, 0.01))
+    lay = [dict(mask=layers[k].blur(0.6).save(f"codex_{k}"), color=cols[k], rough=0.85, opacity=0.92)
+           for k in ("yellow", "red", "blue", "turq", "black")]
+    deer = M.paper("deerskin_gesso", color=(0.66, 0.60, 0.46), fibers="rice", stains=0.4, dirt=0.45, layers=lay)
     verts, faces, uvs = [], [], []
+    ang = math.radians(28)
+    x = 0.0
     for i in range(pages + 1):
-        x = i * W * 0.92
-        z = 0.0 if i % 2 == 0 else 0.03
+        z = 0.0 if i % 2 == 0 else W * math.sin(ang)
         verts += [(x, 0.0, z), (x, H, z)]
+        x += W * math.cos(ang)
     for i in range(pages):
         a, b = i * 2, (i + 1) * 2
         faces.append([a, b, b + 1, a + 1])
         uvs.append([(i / pages, 0), ((i + 1) / pages, 0), ((i + 1) / pages, 1), (i / pages, 1)])
     sh = G.mesh("pages", verts, faces, uvs, deer)
-    G.solidify(sh, 0.0025)
-    wood = M.wood("codex_cover", light=(0.2, 0.1, 0.05), dark=(0.07, 0.035, 0.015), axis="X", paint=(0.04, 0.2, 0.18),
-                  paint_wear=0.6)
-    G.box("cover", (W * 0.95, H * 1.02, 0.008), loc=(-W * 0.48, H / 2, 0.004), bev=0.002, mat=wood)
+    G.solidify(sh, 0.003)
+    cover = M.wood("codex_cover", light=(0.2, 0.1, 0.05), dark=(0.07, 0.035, 0.015), axis="X",
+                   paint=(0.05, 0.28, 0.24), paint_wear=0.5)
+    G.box("cover_a", (0.005, H * 1.03, W * 0.98), loc=(-0.004, H / 2, W * 0.49), bev=0.0015, mat=cover)
+    G.box("cover_b", (0.005, H * 1.03, W * 0.98), loc=(x + 0.004, H / 2, W * 0.49), bev=0.0015, mat=cover)

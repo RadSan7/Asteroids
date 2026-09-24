@@ -1,0 +1,22 @@
+{
+ "theme": "aztec",
+ "name": "codex",
+ "title": "Screenfold codex",
+ "kind": "artifact",
+ "tris": 152,
+ "dims_m": [
+  0.8888,
+  0.204,
+  0.0326
+ ],
+ "texture": 2048,
+ "materials": [
+  "codex_mat",
+  "codex_mat"
+ ],
+ "glb_kb": 531,
+ "seconds": 81.8,
+ "t_build": 1,
+ "t_bake": 54,
+ "t_render": 27
+}

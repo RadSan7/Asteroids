@@ -1,10 +1,73 @@
 {
+ "aztec/chimalli": {
+  "hash": "b6e0c5d88956",
+  "kb": 1217,
+  "ok": true,
+  "secs": 51,
+  "tris": 7332
+ },
+ "aztec/codex": {
+  "hash": "f3550f50d7cd",
+  "kb": 531,
+  "ok": true,
+  "secs": 82,
+  "tris": 152
+ },
+ "aztec/feather_headdress": {
+  "hash": "c4825a51b74d",
+  "kb": 2776,
+  "ok": true,
+  "secs": 88,
+  "tris": 40068
+ },
  "aztec/macuahuitl": {
   "hash": "f89c63e4ce43",
   "kb": 1406,
   "ok": true,
   "secs": 65,
   "tris": 12052
+ },
+ "aztec/metate_mano": {
+  "hash": "b8f1daea131f",
+  "kb": 1353,
+  "ok": true,
+  "secs": 130,
+  "tris": 7488
+ },
+ "aztec/mosaic_mask": {
+  "hash": "c537a756215c",
+  "kb": 2436,
+  "ok": true,
+  "secs": 80,
+  "tris": 8880
+ },
+ "aztec/sun_stone": {
+  "hash": "a99fe5c097a3",
+  "kb": 2319,
+  "ok": true,
+  "secs": 79,
+  "tris": 23040
+ },
+ "aztec/tecpatl": {
+  "hash": "df971716923b",
+  "kb": 1590,
+  "ok": true,
+  "secs": 82,
+  "tris": 4828
+ },
+ "aztec/teponaztli": {
+  "hash": "facc8a4fb902",
+  "kb": 1270,
+  "ok": true,
+  "secs": 101,
+  "tris": 11062
+ },
+ "aztec/tripod_bowl": {
+  "hash": "fb1b4c898cd0",
+  "kb": 1831,
+  "ok": true,
+  "secs": 136,
+  "tris": 35152
  },
  "egypt/ankh": {
   "hash": "3b06c3b46ab6",

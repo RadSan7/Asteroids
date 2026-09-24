@@ -1,0 +1,23 @@
+{
+ "theme": "aztec",
+ "name": "chimalli",
+ "title": "Chimalli feather shield",
+ "kind": "weapon",
+ "tris": 7332,
+ "dims_m": [
+  0.6962,
+  0.021,
+  0.7904
+ ],
+ "texture": 2048,
+ "materials": [
+  "chimalli_mat",
+  "chimalli_mat",
+  "chimalli_mat"
+ ],
+ "glb_kb": 1217,
+ "seconds": 50.6,
+ "t_build": 0,
+ "t_bake": 24,
+ "t_render": 26
+}

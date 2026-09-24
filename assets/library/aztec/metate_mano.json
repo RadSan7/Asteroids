@@ -1,0 +1,22 @@
+{
+ "theme": "aztec",
+ "name": "metate_mano",
+ "title": "Metate and mano",
+ "kind": "tool",
+ "tris": 7488,
+ "dims_m": [
+  0.46,
+  0.3009,
+  0.2
+ ],
+ "texture": 2048,
+ "materials": [
+  "metate_mano_mat",
+  "metate_mano_mat"
+ ],
+ "glb_kb": 1353,
+ "seconds": 129.5,
+ "t_build": 0,
+ "t_bake": 98,
+ "t_render": 31
+}

@@ -1,0 +1,21 @@
+{
+ "theme": "aztec",
+ "name": "sun_stone",
+ "title": "Sun stone",
+ "kind": "artifact",
+ "tris": 23040,
+ "dims_m": [
+  0.5978,
+  0.0896,
+  0.5978
+ ],
+ "texture": 2048,
+ "materials": [
+  "sun_stone_mat"
+ ],
+ "glb_kb": 2319,
+ "seconds": 79.0,
+ "t_build": 1,
+ "t_bake": 50,
+ "t_render": 28
+}

@@ -1,0 +1,23 @@
+{
+ "theme": "aztec",
+ "name": "tecpatl",
+ "title": "Tecpatl ritual knife",
+ "kind": "weapon",
+ "tris": 4828,
+ "dims_m": [
+  0.0852,
+  0.0645,
+  0.3181
+ ],
+ "texture": 2048,
+ "materials": [
+  "tecpatl_mat",
+  "tecpatl_mat",
+  "tecpatl_mat"
+ ],
+ "glb_kb": 1590,
+ "seconds": 81.8,
+ "t_build": 0,
+ "t_bake": 54,
+ "t_render": 27
+}
