@@ -5,7 +5,7 @@
  "kind": "device",
  "tris": 16216,
  "dims_m": [
-  0.2984,
+  0.2979,
   0.2226,
   0.1532
  ],
@@ -19,9 +19,9 @@
   "telephone_mat",
   "telephone_mat"
  ],
- "glb_kb": 1680,
- "seconds": 79.8,
+ "glb_kb": 1752,
+ "seconds": 72.9,
  "t_build": 1,
- "t_bake": 46,
- "t_render": 33
+ "t_bake": 43,
+ "t_render": 29
 }

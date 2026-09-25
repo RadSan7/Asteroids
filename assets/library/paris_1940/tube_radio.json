@@ -3,7 +3,7 @@
  "name": "tube_radio",
  "title": "Art deco tube radio",
  "kind": "device",
- "tris": 10884,
+ "tris": 10932,
  "dims_m": [
   0.376,
   0.247,
@@ -19,9 +19,9 @@
   "tube_radio_mat",
   "tube_radio_mat"
  ],
- "glb_kb": 1549,
- "seconds": 62.6,
+ "glb_kb": 1770,
+ "seconds": 64.8,
  "t_build": 0,
- "t_bake": 33,
- "t_render": 29
+ "t_bake": 36,
+ "t_render": 28
 }

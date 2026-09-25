@@ -143,10 +143,10 @@ A comfortable bourgeois apartment: devices, tableware, furniture.
 | Felt fedora | `paris_1940/fedora.glb` | 0.33 x 0.29 x 0.15 | 13,696 | 2048 px | 1.2 MB |
 | Horn gramophone | `paris_1940/gramophone.glb` | 0.52 x 0.72 x 0.83 | 23,356 | 2048 px | 1.8 MB |
 | Art deco table lamp | `paris_1940/table_lamp.glb` | 0.35 x 0.35 x 0.47 | 20,412 | 2048 px | 1.8 MB |
-| Bakelite telephone | `paris_1940/telephone.glb` | 0.30 x 0.22 x 0.15 | 16,216 | 2048 px | 1.6 MB |
-| Art deco tube radio | `paris_1940/tube_radio.glb` | 0.38 x 0.25 x 0.41 | 10,884 | 2048 px | 1.5 MB |
+| Bakelite telephone | `paris_1940/telephone.glb` | 0.30 x 0.22 x 0.15 | 16,216 | 2048 px | 1.7 MB |
+| Art deco tube radio | `paris_1940/tube_radio.glb` | 0.38 x 0.25 x 0.41 | 10,932 | 2048 px | 1.7 MB |
 | Portable typewriter | `paris_1940/typewriter.glb` | 0.38 x 0.31 x 0.29 | 32,578 | 2048 px | 2.7 MB |
-| Walther P38 | `paris_1940/walther_p38.glb` | 0.21 x 0.04 x 0.14 | 6,632 | 2048 px | 1.2 MB |
+| Walther P38 | `paris_1940/walther_p38.glb` | 0.23 x 0.04 x 0.15 | 22,788 | 2048 px | 1.8 MB |
 | Bordeaux bottle and glass | `paris_1940/wine_and_glass.glb` | 0.22 x 0.13 x 0.32 | 25,940 | 2048 px | 1.3 MB |
 
 ## Aztec jungle

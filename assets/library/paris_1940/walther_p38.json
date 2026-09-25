@@ -3,20 +3,20 @@
  "name": "walther_p38",
  "title": "Walther P38",
  "kind": "weapon",
- "tris": 6632,
+ "tris": 22788,
  "dims_m": [
-  0.2063,
-  0.039,
-  0.1402
+  0.2305,
+  0.0432,
+  0.1452
  ],
  "texture": 2048,
  "materials": [
   "walther_p38_mat",
   "walther_p38_mat"
  ],
- "glb_kb": 1217,
- "seconds": 144.1,
- "t_build": 0,
- "t_bake": 120,
- "t_render": 24
+ "glb_kb": 1882,
+ "seconds": 122.1,
+ "t_build": 1,
+ "t_bake": 98,
+ "t_render": 23
 }
